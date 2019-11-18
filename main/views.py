@@ -34,5 +34,6 @@ def image_upload(request: HttpRequest) -> HttpResponse:
         return redirect("main:index")
 
     data = request.FILES["data"].read()
-    image = Image.objects.create(data=data, user=user)
+    name = request.FILES["data"].name
+    image = Image.objects.create(data=data, user=user, name=name)
     return redirect(image)

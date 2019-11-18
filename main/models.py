@@ -49,6 +49,7 @@ class Image(models.Model):
         max_length=30, primary_key=True, default=generate_short_id, editable=False
     )
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="images")
+    name = models.CharField(max_length=200, blank=True)
     data = models.BinaryField()
     format = models.CharField(max_length=100, blank=True)
     size = models.IntegerField(default=0)
