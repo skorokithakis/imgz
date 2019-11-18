@@ -1,9 +1,448 @@
-{% extends "base.html" %}
+{% load i18n staticfiles %}<!DOCTYPE html>
+<html lang="zxx">
 
-{% load i18n %}
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
 
-{% block title %}{% trans "Home" %}{% endblock %}
+    <title>{{ request.site.name }} - Share images. No bullshit.</title>
 
-{% block content %}
-<p>{% trans "Hello!" %}</p>
-{% endblock %}
+    <!-- Loading Bootstrap -->
+    <link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet">
+    <link href="{% static "css/landing.css" %}" rel="stylesheet">
+    <link href="{% static "css/all.min.css" %}" rel="stylesheet">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Dosis:500,600" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300i,400,400i,600,700" rel="stylesheet">
+
+    <!-- favicons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static "images/icons/apple-touch-icon.png" %}">
+    <link rel="icon" type="image/png" href="{% static "images/icons/favicon-32x32.png" %}" sizes="32x32">
+    <link rel="icon" type="image/png" href="{% static "images/icons/favicon-16x16.png" %}" sizes="16x16">
+    <link rel="manifest" href="{% static "images/icons/manifest.json" %}">
+    <link rel="mask-icon" href="{% static "images/icons/safari-pinned-tab.svg" %}" color="#33759F">
+    <link rel="shortcut icon" href="{% static "images/icons/favicon.ico" %}">
+    <meta name="msapplication-config" content="{% static "images/icons/browserconfig.xml" %}">
+    <script>
+        window.addEventListener('DOMContentLoaded', (event) => {
+            [...document.querySelectorAll('[data-toggle]')].forEach((toggler) => {
+                toggler.addEventListener('click', function(e) {
+                    document.querySelector(this.dataset.target).classList.toggle('show');
+                });
+            });
+        });
+    </script>
+</head>
+
+<body>
+
+    <!--begin header -->
+    <header class="header">
+
+        <!--begin navbar-fixed-top -->
+        <nav class="navbar navbar-default navbar-fixed-top">
+
+            <!--begin container -->
+            <div class="container">
+
+                <!--begin navbar -->
+                <nav class="navbar navbar-expand-lg">
+
+                    <!--begin logo -->
+                    <a class="navbar-brand" href="#"><img src="{% static "images/logo.png" %}"/> {{ request.site.name }}</a>
+                    <!--end logo -->
+
+                    <!--begin navbar-toggler -->
+                    <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"><i class="fas fa-bars"></i></span>
+                    </button>
+                    <!--end navbar-toggler -->
+
+                    <!--begin navbar-collapse -->
+                    <div class="navbar-collapse collapse" id="navbarCollapse" style="">
+
+                        <!--begin navbar-nav -->
+                        <ul class="navbar-nav ml-auto">
+
+                            <li class="discover-link"><a href="#login" class="external discover-btn">Log in</a></li>
+
+                        </ul>
+                        <!--end navbar-nav -->
+
+                    </div>
+                    <!--end navbar-collapse -->
+
+                </nav>
+                <!--end navbar -->
+
+            </div>
+    		<!--end container -->
+
+        </nav>
+    	<!--end navbar-fixed-top -->
+
+    </header>
+    <!--end header -->
+
+    {% if messages %}
+    <section class="section-white" style="padding: 120px 0 0px 0">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="benefits">
+                    {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}><i class="fa fa-circle-notch"></i> {{ message }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    </section>
+    {% endif %}
+
+    <!--begin home section -->
+    <section class="home-section" id="home">
+
+        <!--begin container -->
+        <div class="container">
+
+            <!--begin row -->
+            <div class="row">
+
+                <!--begin col-md-7-->
+                <div class="col-md-7 padding-top-70">
+
+                    <h1>Want to share images?</h1>
+
+                    <p>
+                    Looking for a dead-simple way to share some images but are ashamed of what Imgur has become? Don't
+                    want your simple and amazing image host to turn into a bullshit social network? Then pay for your
+                    shit!
+                    </p>
+
+                    <p>
+                    {{ request.site.name }} is paid-only. It's no-hassle, one-click, super easy image uploads, and it's
+                    cheap. So cheap, the only way to pay will be yearly, because it's too cheap to pay monthly.
+                    </p>
+
+                    <p>
+                    Keep the bullshit away. Pay for what you use.
+                    </p>
+                </div>
+                <!--end col-md-7-->
+
+                <!--begin col-md-5-->
+                <div class="col-md-5 wow bounceIn">
+
+                    <!--begin register-form-wrapper-->
+                    <div class="register-form-wrapper wow bounceIn" data-wow-delay="0.1s" style="visibility: visible; animation-delay: 0.1s; animation-name: bounceIn;">
+
+                        <h3>Sign up now</h3>
+
+                        <!--begin form-->
+                        <div>
+                            <p style="color: #7c8595">You will receive an email with a secure login link.</p>
+
+                            <form id="register-form" class="register-form register" action="{% url "tokenauth:login" %}?next={{ request.GET.next }}" method="post">{% csrf_token %}
+
+                                <input class="register-input white-input" required="" name="email" placeholder="Enter your email address" type="email">
+
+                                <input value="Sign up" class="register-submit" type="submit">
+
+                            </form>
+                            <!--end register form -->
+
+                        </div>
+                        <!--end form-->
+
+                    </div>
+                    <!--end register-form-wrapper-->
+
+                </div>
+                <!--end col-md-5-->
+
+            </div>
+            <!--end row -->
+
+        </div>
+        <!--end container -->
+
+    </section>
+    <!--end home section -->
+
+  	<!--begin services section -->
+    <section class="section-grey section-top-border" id="features">
+
+        <!--begin container -->
+        <div class="container">
+
+            <!--begin row -->
+            <div class="row">
+
+                <!--begin col-md-12-->
+                <div class="col-md-12 text-center padding-bottom-10">
+
+                    <h2 class="section-title">Listen up</h2>
+
+                    <p class="section-subtitle">
+                    These are the features.
+                    </p>
+
+                </div>
+                <!--end col-md-12 -->
+
+            </div>
+            <!--end row -->
+
+            <!--begin row -->
+            <div class="row">
+
+                <div class="col-md-4">
+                    <div class="feature-box">
+                        <i class="fab fa-rocketchat"></i>
+                        <h4>This is my project</h4>
+                        <p>
+                        You are a guest here. You can use {{ request.site.name }}, and it'll always be great, because
+                        I'm great. I've even open-sourced it.
+                        </p>
+                    </div>
+                </div>
+
+                <!--begin col-md-4-->
+                <div class="col-md-4">
+
+                    <div class="feature-box">
+                        <i class="fas fa-chart-line"></i>
+                        <h4>That's right</h4>
+                        <p>
+                        I've <a href="https://gitlab.com/stavros/imgz/">open-sourced it</a>, it's all open.
+                        If you need anything, let me know, or just write it yourself.
+                        </p>
+                    </div>
+                </div>
+                <!--end col-md-4 -->
+
+                <!--begin col-md 4-->
+                <div class="col-md-4">
+
+                    <div class="feature-box">
+
+                        <i class="fas fa-desktop"></i>
+
+                        <h4>Desktop client</h4>
+
+                        <p>
+                        There isn't one. There's a command-line client or just use the webpage. It's simple, what do you
+                        want.
+                        </p>
+
+                    </div>
+                </div>
+                <!--end col-md-4 -->
+
+            </div>
+            <!--end row -->
+
+            <!--begin row -->
+            <div class="row">
+
+                <!--begin col-md-4-->
+                <div class="col-md-4">
+
+                    <div class="feature-box">
+
+                        <i class="fas fa-hand-holding-usd"></i>
+
+                        <h4>Cheap</h4>
+
+                        <p>
+                        It's super cheap. I don't know how cheap yet, like $10/yr. And it includes lots of bandwidth.
+                        It'll be included in the price.
+                        </p>
+
+                    </div>
+                </div>
+                <!--end col-md-4 -->
+
+                <!--begin col-md-4-->
+                <div class="col-md-4">
+
+                    <div class="feature-box">
+
+                        <i class="fas fa-rocket"></i>
+
+                        <h4>Super fast</h4>
+
+                        <p>
+                        We have CDNs and Rust and all that fast crap. It's amazing. Better than Imgur for sure.
+                        </p>
+
+                    </div>
+                </div>
+                <!--end col-md-4 -->
+
+                <!--begin col-md-4-->
+                <div class="col-md-4">
+
+                    <div class="feature-box">
+
+                        <i class="fas fa-tachometer-alt"></i>
+
+                        <h4>Clocks</h4>
+
+                        <p>
+                        We have them. They symbolize how great {{ request.site.name }} is. It's pronounced "images", by
+                        the way.
+                        </p>
+
+                    </div>
+                </div>
+                <!--end col-md-4 -->
+
+
+            </div>
+            <!--end row -->
+
+        </div>
+        <!--end container -->
+
+    </section>
+    <!--end services section -->
+
+    <!--begin newsletter section -->
+    <section class="section-blue small-paddings" id="login">
+
+        <!--begin container -->
+        <div class="container">
+
+            <!--begin row -->
+            <div class="row">
+
+                <!--begin col-md-12 -->
+                <div class="col-md-12 text-center padding-top-50 padding-bottom-20">
+
+                    <h3 class="white-text">Already have an account?<br>No you don't.</h3>
+                    <p class="white-text">Log in below if you think you do anyway.</p>
+
+                </div>
+                <!--end col-md-12 -->
+
+                <!--begin col-md-12-->
+                <div class="col-md-12 padding-bottom-40">
+
+                    <!--begin newsletter_form_wrapper -->
+                    <div class="newsletter_form_wrapper">
+
+                        <!--begin newsletter_form_box -->
+                        <div class="newsletter_form_box">
+                            <!--begin newsletter-form -->
+                            <form id="newsletter-form" class="newsletter-form" action="{% url "tokenauth:login" %}?next={{ request.GET.next }}" method="post">{% csrf_token %}
+
+                                <input id="email_newsletter" type="email" name="email" placeholder="Enter your email address">
+
+                                <input type="submit" value="Log in" id="submit-button-newsletter">
+                            </form>
+                            <!--end newsletter-form -->
+
+                        </div>
+                        <!--end newsletter_form_box -->
+
+                    </div>
+                    <!--end newsletter_form_wrapper -->
+
+                </div>
+                <!--end col-md-12 -->
+
+            </div>
+            <!--end row -->
+
+        </div>
+        <!--end container -->
+
+    </section>
+    <!--end newsletter section -->
+
+	<!--begin section-white -->
+    <section class="section-white">
+
+        <!--begin container-->
+        <div class="container">
+
+            <!--begin row-->
+            <div class="row">
+
+                <!--begin col-md-6-->
+                <div class="col-md-6 padding-top-20">
+
+                	<h3>Host your images</h3>
+
+                    <p>
+                    If you want a simple image host that share images and get the fuck out of the way,
+                    {{ request.site.name }} is for you. The only catch is that you have to pay. Don't be a cheapskate!
+                    Ensure your future now!
+                    </p>
+
+                	<ul class="benefits">
+						<li><i class="fa fa-check"></i> Efficient, reliable and cheap.</li>
+						<li><i class="fa fa-check"></i> Pay for your shit.</li>
+						<li><i class="fa fa-check"></i> Here's a nice illustration of a Polaroid.</li>
+					</ul>
+
+                </div>
+                <!--end col-md-6-->
+
+                <!--begin col-md-6-->
+                <div class="col-md-6">
+
+                    <img src="{% static "images/polaroid.png" %}" class="hero-image width-100 box-shadow" alt="pic">
+
+                </div>
+                <!--end col-sm-6-->
+
+            </div>
+            <!--end row-->
+
+        </div>
+        <!--end container-->
+
+    </section>
+    <!--end section-white-->
+
+    <!--begin footer -->
+    <div class="footer">
+
+        <!--begin container -->
+        <div class="container">
+
+            <!--begin row -->
+            <div class="row">
+
+                <!--begin col-md-12 -->
+                <div class="col-md-12 text-center">
+
+                    <p>Made by <a href="https://www.stavros.io" target="new">Stavros</a>.</p>
+
+                    <!--begin footer_social -->
+                    <ul class="footer_social">
+                        <li><a href="mailto:hi@stavros.io?subject={{ request.site.name }}+questions"><i class="fas fa-envelope"></i></a></li>
+                        <li><a href="https://twitter.com/stavros"><i class="fab fa-twitter"></i></a></li>
+                    </ul>
+                    <!--end footer_social -->
+
+                </div>
+                <!--end col-md-6 -->
+
+            </div>
+            <!--end row -->
+
+        </div>
+        <!--end container -->
+
+    </div>
+    <!--end footer -->
+    {% include "analytics.html" %}
+</body>
+</html>

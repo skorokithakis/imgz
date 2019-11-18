@@ -9,10 +9,10 @@ https://docs.djangoproject.com/en/2.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.0/ref/settings/
 """
-
 import os
 import re
-from typing import Dict, Union  # noqa
+from typing import Dict
+from typing import Union
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -26,7 +26,11 @@ SECRET_KEY = os.getenv("SECRET_KEY", "override me")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True if os.getenv("NODEBUG") is None else False
 
-ALLOWED_HOSTS = ["web", os.getenv("ALLOWED_HOST", "localhost")] if os.getenv("NODEBUG") is None else [".imgz.org"]
+ALLOWED_HOSTS = (
+    ["web", os.getenv("ALLOWED_HOST", "localhost")]
+    if os.getenv("NODEBUG") is None
+    else [".imgz.org"]
+)
 
 DEFAULT_FROM_EMAIL = "hello@imgz.org"
 
@@ -43,6 +47,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django_extensions",
     "raven.contrib.django.raven_compat",
+    "tokenauth",
     "main",
 ]
 
@@ -78,6 +83,11 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "imgz.wsgi.application"
+
+AUTHENTICATION_BACKENDS = (
+    "tokenauth.auth_backends.EmailTokenBackend",
+    "django.contrib.auth.backends.ModelBackend",
+)
 
 AUTH_USER_MODEL = "main.User"
 
@@ -140,7 +150,12 @@ elif os.getenv("DATABASE_URL"):
     SESSION_COOKIE_AGE = 365 * 24 * 60 * 60
     SESSION_COOKIE_SECURE = True
 else:
-    DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": os.path.join(BASE_DIR, "db.sqlite3")}}
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+        }
+    }
 
 if os.getenv("EMAIL_HOST_PASSWORD", ""):
     EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
@@ -158,7 +173,9 @@ else:
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
+    {
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
+    },
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
@@ -185,7 +202,12 @@ LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
     "handlers": {"console": {"class": "logging.StreamHandler"}},
-    "loggers": {"django": {"handlers": ["console"], "level": os.getenv("DJANGO_LOG_LEVEL", "INFO")}},
+    "loggers": {
+        "django": {
+            "handlers": ["console"],
+            "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
+        }
+    },
 }
 
 # Static files (CSS, JavaScript, Images)
@@ -195,19 +217,3 @@ STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "_static")
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
-
-try:
-    from .local_settings import *  # noqa
-    from .local_settings import LOCAL_INSTALLED_APPS, LOCAL_MIDDLEWARE  # type: ignore
-except ImportError:
-    pass
-
-try:
-    INSTALLED_APPS += LOCAL_INSTALLED_APPS
-except:  # noqa
-    pass
-
-try:
-    MIDDLEWARE += LOCAL_MIDDLEWARE
-except:  # noqa
-    pass

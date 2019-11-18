@@ -1,0 +1,1178 @@
+html,
+body {
+    padding: 0;
+    background-color: #FFFCF7;
+    color: #787C7F;
+    font-family: "Helvetica Neue", sans-serif;
+    font-size: 20px;
+}
+body {
+    margin: 0;
+}
+p {
+    margin: 0 0 20px;
+}
+a {
+    outline: none;
+    color: #FF5400;
+    text-decoration: underline;
+}
+
+.button {
+    -webkit-appearance: none;
+    -webkit-border-radius: 0;
+    outline: none;
+    display: inline;
+    text-decoration: none;
+    font-weight: bold;
+    text-align: center;
+    margin: 0;
+    cursor: pointer;
+    font-size: 20px;
+    background-color: transparent;
+    color: #33759F;
+    border: 2px solid #33759F;
+    padding: 7px 30px;
+    border-radius: 30px;
+    display: inline-block;
+    box-shadow: none;
+}
+.button.prominent {
+    background-color: #33759F;
+    color: #fff;
+}
+.button.prominent:hover {
+    background-color: transparent;
+    color: #333;
+}
+
+/* burger button */
+.burger-button {
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    width: 60px;
+    height: 45px;
+    cursor: pointer;
+    display: inline-block;
+    vertical-align: middle;
+    display: block;
+    position: relative;
+}
+.burger-button-container {
+    transform: translate3d(0,-50%,0) scale3d(0.5,0.5,0.5);
+    position: absolute;
+    right: -5px;
+    top: 50%;
+}
+.burger-button span {
+  display: block;
+  position: absolute;
+  height: 5px;
+  width: 100%;
+  background: #33759F;
+  border-radius: 0px;
+  opacity: 1;
+  left: 0;
+  transform: rotate(0deg);
+  transition: .25s ease-in-out;
+}
+
+.burger-button span:nth-child(1) {
+  top: 0px;
+  transform-origin: left center;
+}
+
+.burger-button span:nth-child(2) {
+  top: 18px;
+  transform-origin: left center;
+}
+
+.burger-button span:nth-child(3) {
+  top: 36px;
+  transform-origin: left center;
+}
+
+.burger-button.open span:nth-child(1) {
+  transform: rotate(45deg);
+  top: -3px;
+  left: 8px;
+}
+
+.burger-button.open span:nth-child(2) {
+  width: 0%;
+  opacity: 0;
+}
+
+.burger-button.open span:nth-child(3) {
+  transform: rotate(-45deg);
+  top: 39px;
+  left: 8px;
+}
+
+
+
+
+h1 {
+    color: #33759F;
+    font-family: 'Play', sans-serif;
+    font-size: 100px;
+    margin: 0;
+}
+h1 a {
+    color: #33759F;
+    text-decoration: none;
+}
+header h1 a:hover {
+    text-decoration: none;
+}
+.authenticated h1 {
+    font-size: 75px;
+    margin-bottom: 0px;
+    display: inline-block;
+}
+
+/** Structure **/
+header {
+    text-align: center;
+    padding-bottom: 0;
+    margin: 10px 10px 0;
+}
+header .button:hover {
+    text-decoration: none;
+}
+header .button.newpin,
+header .button.topup {
+    padding: 5px 18px;
+    font-size: 20px;
+    font-weight: normal;
+    position: absolute;
+    top: 50%;
+    transform: translate3d(0,-50%,0);
+}
+header .button.topup {
+    right: 120px;
+}
+header .button.newpin {
+    right: 60px;
+    line-height: 26px;
+    font-size: 34px;
+    font-weight: 300;
+    padding: 0;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+}
+header .button.newpin:hover {
+    color: #333;
+    background-color: transparent;
+}
+header #header-menu {
+    display: none;
+}
+header #header-menu .close-header-menu-container,
+header #header-menu .username-menu-container {
+    display: none;
+}
+header #header-menu .username-menu-container {
+    padding: 10px;
+    text-align: center;
+}
+header #header-menu.open {
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: 320px;
+    transform: translate3d(0,-50%,0);
+    padding: 10px 0;
+}
+header #header-menu.open ul {
+    display: block;
+    padding: 0;
+}
+@keyframes popBottom {
+    0% { transform: translate3d(0,100%,0); }
+    100% { transform: translate3d(0,0%,0); }
+}
+header ul {
+    display: none;
+    list-style: none;
+    margin: 0;
+}
+header ul li {
+    display: inline-block;
+    margin-right: 20px;
+}
+header ul li:last-child {
+    margin-right: 0;
+}
+header ul a {
+    color: #FF5400;
+    text-decoration: none;
+}
+.authenticated header {
+    text-align: left;
+    position: relative;
+}
+header a:hover {
+    text-decoration: underline;
+}
+.user {
+    display: block;
+    transform: translate3d(0,-50%,0);
+    position: absolute;
+    right: 10px;
+    top: 50%;
+}
+.user em {
+    font-style: normal;
+}
+
+/* Text pages (help, api) */
+
+section.text {
+    margin: 0 auto;
+    max-width: 800px;
+}
+section.text h2 {
+    text-align: center;
+}
+section.text h3 {
+    color: #33759F;
+    padding-bottom: 5px;
+    border-bottom: 2px solid #33759F;
+    margin-bottom: 20px;
+}
+
+/* Account page */
+
+section.account #api-key,
+section.account #id_site_hash {
+    width: 100%;
+    font-size: 15px;
+    box-sizing: border-box;
+    background: #fff;
+    border-radius: 30px;
+    display: block;
+    text-align: center;
+    white-space: nowrap;
+    overflow-y: hidden;
+    overflow-x: auto;
+}
+section.account p {
+    line-height: 1.5em;
+}
+section.account form {
+    padding: 0;
+    margin: 20px 0;
+}
+section.account form p {
+    text-align: left;
+}
+
+section.account .helptext {
+    display: block;
+    font-size: 80%;
+    opacity: 0.8;
+    margin-top: 10px;
+}
+
+section.account .flex-form p {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+section.account .personal-site p {
+    position: relative;
+    padding-bottom: 30px;
+}
+section.account .flex-form p label {
+    min-width: 260px;
+    display: inline-block;
+    margin-right: 20px;
+}
+section.account .flex-form p input {
+    display: inline-block;
+    width: 400px;
+    flex-grow: 1;
+}
+section.account .flex-form p .helptext {
+    display: block;
+    position: absolute;
+    left: 280px;
+    right: 0;
+    bottom: 0;
+
+}
+
+/* Pin page */
+
+section.pin-info,
+section.pin-info code {
+    max-width: 800px;
+}
+
+section.pin-info {
+    text-align: center;
+    margin: 0 auto;
+}
+section.pin-info .primer {
+    background: #fff;
+    border: 1px solid #ddd;
+    margin-bottom: 20px;
+    text-align: left;
+}
+section.pin-info .primer h3 {
+    background: #999;
+    color: #fff;
+    padding: 5px 10px;
+}
+section.pin-info .primer p {
+    padding: 0 10px;
+}
+section.pin-info .primer p:last-child {
+}
+section.pin-info h3 {
+    font-weight: bold;
+    margin: 0 0 20px;
+    border: none;
+    padding: 0;
+}
+section.pin-info code {
+    padding: 10px;
+    border: 1px solid #ddd;
+    background: #fff;
+    border-radius: 30px;
+    display: block;
+    white-space: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    margin: 0 auto 20px;
+}
+section.pin-info .error {
+    display: none;
+}
+section.pin-info.has-error .error {
+    display: block;
+}
+section.pin-info.has-error .stats {
+    display: none;
+}
+section.pin-info .stats span {
+    font-weight: bold;
+}
+section.pin-info form {
+    padding: 20px 0 0;
+}
+
+article {
+    text-align: left;
+    margin: 20px 10px 0;
+    word-break: break-word;
+}
+article section h3 {
+    border-bottom: 2px solid rgba(0, 0, 0, .25);
+}
+article section h3 .button {
+    float: right;
+    border-radius: 50%;
+    padding: 0;
+    width: 25px;
+    height: 25px;
+    position: relative;
+    top: -3px;
+    font-size: 18px;
+}
+
+.pins-loading {
+    width: 100px;
+    height: 100px;
+    animation: rotate 0.5s infinite alternate;
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate3d(0,1,0, -90deg);
+    }
+    to {
+        transform: rotate3d(0,0,0, 0);
+    }
+}
+
+article .pins {
+    text-align: center;
+}
+article .no-pins {
+    padding: 20px 0;
+    color: #999;
+}
+article .pin-list {
+    text-align: left;
+    list-style: none;
+    padding: 0;
+    color: #999;
+    font-size: 13px;
+}
+article .pin-list li {
+    position: relative;
+    margin-bottom: 30px;
+}
+article .pin-list h5 {
+    margin: 0;
+    font-size: 15px;
+}
+article .pin-list li.inactive h5 {
+    opacity: 0.5;
+}
+article .pin-list li.inactive h5:after {
+    content: 'Inactive';
+    margin-left: 10px;
+}
+article .pin-list h5 a {
+    font-size: 20px;
+    word-break: break-all;
+}
+article .pin-list h5 em {
+    font-style: normal;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+article .pin-list p {
+    font-size: 16px;
+    display: inline-block;
+    margin: 0;
+}
+article .pin-list p span {
+    padding-left: 5px;
+    margin-left: 5px;
+    border-left: 1px solid #a9a9a9;
+}
+article .pin-list p span:first-child {
+    border-left: 0;
+    margin-left: 0;
+    padding-left: 0;
+}
+article .pin-list .button {
+    display: none;
+    border: none;
+}
+article .pin-list li:hover .button {
+    display: block;
+}
+article .pin-list .button.copy-clipboard {
+    right: 40px;
+    width: 35px;
+    height: 35px;
+}
+article .pin-list .button.copy-clipboard:active {
+    top: calc(50% + 1px);
+}
+
+[data-fulldate],
+[data-fullcost] {
+    position: relative;
+    cursor: help;
+}
+[data-fulldate]:hover:after { content: attr(data-fulldate); }
+[data-fullcost]:hover:after { content: attr(data-fullcost); }
+[data-fulldate]:hover:after,
+[data-fullcost]:hover:after {
+    position: absolute;
+    font-weight: normal;
+    top: calc(50% + 2px);
+    left: 50%;
+    border-radius: 10px;
+    font-size: 14px;
+    transform: translate3d(-50%,50%,0);
+    display: inline-block;
+    white-space: nowrap;
+    padding: 2px 7px;
+    color: #fff;
+    background-color: rgba(0, 0, 0, .95);
+    z-index: 2;
+}
+
+.truncated-hash {
+    display: none;
+}
+article .pin-list button {
+    display: block;
+    right: 0;
+    top: 50%;
+    padding: 0;
+    position: absolute;
+    transform: translate3d(0, -50%, 0);
+}
+article .button-container {
+    margin: 0;
+    padding: 20px 0;
+}
+
+footer {
+    font-size: 15px;
+    text-align: center;
+    margin: 40px 0 20px;
+}
+footer p {
+    margin: 0;
+}
+footer a {
+    color: #787C7F;
+}
+footer a:hover {
+    text-decoration: none;
+}
+
+#stripe-payment {
+    display: none;
+}
+
+form {
+    padding: 40px 0;
+    text-align: center;
+}
+form.login {
+    padding-top: 20px;
+}
+
+.button:hover,
+.button:focus,
+input:hover,
+input:focus {
+    border-color: #333;
+    color: #333;
+}
+
+.overlay {
+    display: none;
+}
+.overlay.open {
+    display: block;
+}
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: rgba(0,0,0,.6);
+    z-index: 3;
+}
+.overlay .overlay-body {
+    width: 600px;
+    background: #fff;
+    position: absolute;
+    left: 50%;
+    transform: translate3d(-50%, -50%, 0);
+    top: 50%;
+    text-align: center;
+    padding: 20px;
+    border-radius: 0px;
+    box-shadow: 0 12px 30px 0 rgba(0,0,0,.5), inset 0 1px 0 0 hsla(0,0%,100%,.65);
+    z-index: 4;
+}
+#new-pin-overlay .overlay-body {
+    padding: 0;
+}
+.overlay .overlay-body .tabs {
+    white-space: nowrap;
+    background: rgba(0,0,0,.1);
+    overflow: hidden;
+}
+.overlay .overlay-body .tab {
+    padding: 10px 0;
+    width: 50%;
+    display: inline-block;
+    box-sizing: border-box;
+    text-decoration: none;
+}
+.overlay .overlay-body .tabs .active {
+    color: #000;
+    background: #fff;
+    cursor: default;
+}
+.overlay .overlay-body [data-tabcontent] {
+    display: none;
+    padding: 20px;
+}
+.overlay .overlay-body [data-tabcontent].active {
+    display: block;
+}
+.overlay #upload {
+    margin: 0 0 20px;
+    display: inline-block;
+}
+.overlay #upload.uploading {
+    color: #33759F;
+    background-color: transparent;
+    cursor: default;
+}
+.overlay #upload.uploading:hover {
+    border-color: #33759F;
+}
+.overlay #background {
+    display: none;
+}
+.overlay .overlay-body h3 {
+    margin: 0 0 20px;
+    color: #33759F;
+    padding: 10px 10px 10px;
+    border-bottom: 2px solid #33759F;
+    text-align: left;
+}
+.overlay .pin-details {
+    padding: 10px;
+    overflow: hidden;
+}
+.overlay .pin-details button em {
+    font-style: normal;
+    margin-left: 10px;
+}
+.overlay .pin-details #save-name,
+.overlay .pin-details #save-tag {
+    display: none;
+}
+.overlay .pin-details .change-element {
+    cursor: pointer;
+    color: #FF5400;
+}
+.overlay .pin-details p.name input,
+.overlay .pin-details p.tag input {
+    display: none;
+    width: 300px;
+}
+.overlay .pin-details p.name input::placeholder,
+.overlay .pin-details p.tag input::placeholder {
+    color: #666;
+}
+
+.overlay .pin-details .tools {
+    text-align: center;
+}
+.overlay .pin-details .copy-clipboard {
+    margin-right: 10px;
+    position: relative;
+}
+.overlay .pin-details .copy-clipboard.copied:after {
+    color: rgb(242, 242, 242);
+    background-color: #33759F;
+    content: 'Copied';
+    position: absolute;
+    left: 50%;
+    top: -7px;
+    transform: translate3d(-50%, -50%, 0);
+    padding: 4px 10px;
+    border-radius: 25px;
+    font-size: 15px;
+    border: 4px solid #fff;
+}
+.overlay .pin-details button {
+    display: inline-block;
+    border: none;
+    background-color: rgba(0,0,0,.05);
+}
+.overlay .pin-details button:hover {
+    background-color: rgba(0,0,0,.1);
+}
+.overlay .pin-details p {
+    margin: 0 0 20px;
+    text-align: left;
+}
+.overlay .visit {
+    display: block;
+    margin-bottom: 20px;
+    font-weight: bold;
+    font-size: 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.overlay .fields {
+    text-align: left;
+    width: inherit;
+}
+.overlay .field {
+    margin-bottom: 35px;
+    position: relative;
+}
+.overlay .field:after {
+    display: none;
+    position: absolute;
+    top: 0px;
+    left: 50%;
+    transform: translate3d(-50%, 0,0 );
+    padding: 2px 9px;
+    margin: 0;
+}
+.overlay .field.error:after {
+    content: attr(data-err);
+    display: block;
+}
+.overlay label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.overlay input {
+    width: 100%;
+    margin: 0;
+}
+.overlay .pin-stats {
+    display: none;
+    position: absolute;
+    left: 50%;
+    transform: translate3d(-50%, 100%, 0);
+    font-size: 15px;
+    font-style: normal;
+    bottom: -10px;
+}
+.overlay .pin-stats.open {
+    display: block;
+}
+.overlay a.info {
+    margin: 0 5px;
+    display: inline-block;
+    background: #33759F;
+    color: #fff;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 20px;
+    transition: .25s ease-in-out;
+}
+.overlay a.info:hover {
+    background: #4496CA;
+}
+
+input {
+    outline: none;
+    margin: 0;
+    font-size: 20px;
+    display: inline;
+    border-radius: 30px;
+    padding: 8px 13px;
+    border: 2px solid #787C7F;
+    box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.25);
+    box-sizing: border-box;
+}
+input::placeholder {
+    color: #ccc;
+}
+
+.errorlist,
+.messages {
+    padding: 0;
+    margin: 20px auto;
+    list-style: none;
+    font-size: 15px;
+    color: #FFFCF7;
+    text-align: center;
+}
+.errorlist li {
+    display: inline-block;
+    background: rgba(255, 84, 0, 0.8);
+    padding: 10px 20px;
+    border-radius: 30px;
+}
+
+.messages:not(.persistent) li.debug,
+.messages:not(.persistent) li.info { background-color: rgba(217, 237, 247, 0.8); color: #31708f; }
+.messages:not(.persistent) li.warning { background-color: rgba(252, 248, 227, 0.8); color: #8a6d3b; }
+.messages:not(.persistent) li.error { background-color: rgba(242, 222, 222, 0.8); color: #a94442; }
+.messages:not(.persistent) li.success { background-color: rgba(223, 240, 216, 0.8); color: #3c763d; }
+
+.messages li.debug,
+.messages li.info { background-color: rgba(217, 237, 247, 1.0); color: #31708f; }
+.messages li.warning { background-color: rgba(252, 248, 227, 1.0); color: #8a6d3b; }
+.messages li.error { background-color: rgba(242, 222, 222, 1.0); color: #a94442; }
+.messages li.success { background-color: rgba(223, 240, 216, 1.0); color: #3c763d; }
+
+#form-messages p {
+    margin: 10px 0 0;
+    display: block;
+    padding: 10px 15px;
+}
+.overlay .field:after,
+#form-messages p {
+    background: red;
+    color: #fff;
+    font-size: 15px;
+    border-radius: 0px;
+}
+
+.message-container {
+    position: relative;
+}
+.message-container #close-message {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translate3d(0,-50%,0);
+    cursor: pointer;
+}
+.message-container #close-message:hover {
+    color: #000;
+}
+.messages {
+    margin: 0;
+    width: initial;
+    display: block;
+    right: 0;
+    padding: 0;
+    text-align: left;
+}
+.messages.persistent {
+    text-align: center;
+}
+.messages li {
+    left: 0;
+    display: block;
+    border-radius: 0;
+    padding: 10px;
+}
+.message-container .messages li {
+    padding-right: 40px;
+}
+
+/*
+    Payment page
+ **/
+
+.payment-container {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+}
+.payment-container form {
+    padding: 0;
+}
+.payment-container .form-group {
+    text-align: center;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-evenly;
+    padding: 0 20px;
+}
+.payment-container #topup-button {
+    width: 100%;
+    border-radius: 0;
+    background-color: #33759F;
+    border: none;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    color: rgb(242, 239, 234);
+    padding: 15px 0;
+    transition: .25s ease-in-out;
+}
+.payment-container #topup-button:hover {
+    background-color: rgba(0,0,0,.25);
+    box-shadow: inset 0px 3px 7px -5px black;
+    color: #33759F;
+}
+.payment-container .form-group input {
+    margin-right: 10px;
+}
+.payment-container h3 {
+    margin: 0 0 20px;
+    padding: 10px 0;
+    border-bottom-width: 1px;
+}
+.payment-container .pay {
+    border-radius: 20px;
+    margin: 40px auto;
+    background-color: rgba(0,0,0,.05);
+    max-width: 350px;
+    box-shadow: 0 6px 18px 0 rgba(0,0,0,.5), inset 0 1px 0 0 hsla(0,0%,100%,.65);
+}
+.payment-container .pins-loading {
+    display: block;
+    margin: 20px auto;
+}
+.payment-container .button {
+    margin: 0;
+}
+.payment-container #pay-amount {
+    width: 100px;
+}
+.payment-container input {
+    margin-left: 10px;
+}
+.payment-container .note {
+    text-align: left;
+}
+.payment-container .pay p {
+    font-weight: bold;
+}
+
+
+@keyframes popTopAndHide {
+    0% { transform: translate3d(0, -100%, 0); }
+    5% { transform: translate3d(0, 0, 0); }
+    95% { transform: translate3d(0, 0, 0); }
+    100% { transform: translate3d(0, -100%, 0); }
+}
+
+@media (max-width: 1000px) {
+
+    header #header-menu #close-header-menu {
+        cursor: pointer;
+        display: block;
+        text-align: center;
+        border: none;
+        margin-top: 20px;
+        border-radius: 0;
+        padding: 10px;
+        font-weight: normal;
+        margin: 0;
+        color: #33759F;
+        border: none;
+        border-top: 1px solid #ddd;
+    }
+    header #header-menu .close-header-menu-container,
+    header #header-menu .username-menu-container {
+        display: block;
+    }
+    header #header-menu.open {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, .6);
+        transform: none;
+        z-index: 3;
+    }
+    header #header-menu.open ul,
+    .overlay.open .overlay-body {
+        animation: popBottom 0.15s ease-in;
+        font-size: 18px;
+    }
+    header ul {
+        text-align: center;
+        transform: inherit;
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: #fff;
+        top: initial;
+        box-shadow: 0 0 22px 3px rgba(0, 0, 0, .25);
+        margin: 0;
+        padding: 0;
+        text-align: left;
+    }
+    header ul li {
+        float: none;
+        margin: 0 0 20px;
+        display: block;
+        margin: 0;
+    }
+    header ul li a {
+        display: block;
+        padding: 15px 20px;
+    }
+    header ul li a:hover {
+        text-decoration: none;
+        background-color: rgba(0, 0, 0, .05);
+    }
+}
+
+@media (max-width: 768px) {
+
+    .pin-title {
+        word-break: break-all;
+    }
+    h1 {
+        font-size: 50px;
+    }
+    .authenticated h1 {
+        font-size: 45px;
+        margin: 0;
+    }
+    form {
+        padding: 20px 0 40px;
+    }
+    form input {
+        margin-bottom: 10px;
+    }
+    article .pin-list .button {
+        display: block;
+    }
+    article .pin-list p span.cost:before {
+        content: 'Cost: ';
+    }
+    article .pin-list p span.size:before {
+        content: 'Size: ';
+    }
+    section.account .flex-form p {
+        display: block;
+    }
+    section.account .flex-form p label {
+        display: block;
+        margin-bottom: 20px;
+    }
+    section.account .flex-form p input {
+        width: 100%;
+        box-sizing: border-box;
+    }
+    section.account .flex-form p .helptext {
+        position: static;
+    }
+    section.account .personal-site p {
+        padding-bottom: 0;
+    }
+}
+@media (max-width: 650px) {
+    .user em {
+        display: none !important;
+    }
+    .messages li {
+        border-radius: 0;
+    }
+    article .pin-list li:hover p:after {
+        display: none;
+    }
+    .overlay .overlay-body {
+        width: 100%;
+        border: none;
+        border-radius: 0;
+        bottom: 0;
+        transform: none;
+        left: 0;
+        box-sizing: border-box;
+        top: initial;
+        padding: 0;
+    }
+    .overlay .pin-details button em {
+        display: none;
+    }
+    .overlay .pin-details p.name input,
+    .overlay .pin-details p.tag input {
+        width: 200px;
+    }
+    .overlay .fields {
+        padding: 20px 20px 0;
+        box-sizing: border-box;
+    }
+    .overlay .field {
+        margin-bottom: 20px;
+        white-space: nowrap;
+    }
+    .overlay .field:last-child {
+        margin: 0;
+    }
+    .overlay .button.newpin {
+        margin: 20px 0;
+    }
+    .authenticated h1 {
+        font-size: 35px;
+    }
+    .burger-button-container {
+        right: -14px;
+    }
+    header .button.newpin {
+        right: 50px;
+    }
+    header .button.topup {
+        right: 110px;
+    }
+    .overlay .button.closeoverlay {
+        display: block;
+        text-align: center;
+        border: none;
+        margin-top: 20px;
+        border-radius: 0;
+        padding: 10px;
+        font-weight: normal;
+        margin: 0;
+        color: #33759F;
+        border: none;
+        border-top: 1px solid #ddd;
+    }
+    .hash {
+        display: none;
+    }
+    .truncated-hash {
+        display: inline;
+    }
+}
+@media (max-width: 520px) {
+    article {
+        font-size: 18px;
+    }
+    footer {
+        margin-bottom: 80px;
+    }
+    header .button.topup {
+        right: 0px;
+        padding: 3px 10px;
+        font-size: 15px;
+    }
+    header .button.newpin {
+        position: fixed;
+        top: initial;
+        bottom: 15px;
+        right: 15px;
+        border-radius: 50%;
+        font-size: 44px;
+        width: 44px;
+        height: 44px;
+        line-height: 35px;
+        padding: 0;
+        border: none;
+        z-index: 1;
+        box-shadow: 0 2px 3px rgba(0,0,0,.25);
+        transform: none;
+        font-weight: 300;
+    }
+    .burger-button {
+        transform: scale3d(0.4,0.4,0.4);
+        left: -8px;
+    }
+    .burger-button span {
+        background-color: #fff;
+    }
+    .burger-button-container {
+        position: fixed;
+        bottom: 15px;
+        right: initial;
+        top: initial;
+        left: 15px;
+        transform: translate3d(0,0,0) scale3d(1,1,1);
+        background: #33759F;
+        border-radius: 50%;
+        width: 44px;
+        height: 44px;
+        text-align: center;
+        box-shadow: 0 2px 3px rgba(0,0,0,.25);
+        z-index: 2;
+    }
+    header .button.newpin:hover {
+        background-color: #33759F;
+        color: #fff;
+    }
+    section.pin-info .stats {
+        text-align: left;
+    }
+    .authenticated h1 {
+        font-size: 30px;
+    }
+    .overlay .overlay-body h3 {
+        margin-bottom: 10px;
+    }
+    .overlay .pin-details p.name input,
+    .overlay .pin-details p.tag input {
+        width: 150px;
+    }
+    .overlay .pin-details p.name .button,
+    .overlay .pin-details p.tag .button {
+        padding: 7px 10px;
+    }
+}

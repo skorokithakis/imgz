@@ -183,6 +183,14 @@ mypy = ">=0.730"
 typing-extensions = "*"
 
 [[package]]
+category = "main"
+description = "An authentication backend that uses tokens sent over email to authenticate users."
+name = "django-tokenauth"
+optional = false
+python-versions = "*"
+version = "0.3.0"
+
+[[package]]
 category = "dev"
 description = "Lightweight in-process concurrent programming"
 name = "greenlet"
@@ -654,7 +662,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["pathlib2", "contextlib2", "unittest2"]
 
 [metadata]
-content-hash = "25f8bbbb1454074bcbd94738cd4dd02414a7f9ffb72d31d4de1122650d703179"
+content-hash = "6310cad454b82269068040608d49f4a41e8b986f8a3fa59de986c2d147b0926c"
 python-versions = ">=3.7"
 
 [metadata.files]
@@ -763,6 +771,10 @@ django-redis = [
 django-stubs = [
     {file = "django-stubs-1.2.0.tar.gz", hash = "sha256:c0515576de547bb33057e24d1b0294d10a68e55150ee32fc964f1082192ab012"},
     {file = "django_stubs-1.2.0-py3-none-any.whl", hash = "sha256:ca565958a66c0772a11bf95e415d0bcd476eb59919a7ed1a417cc93315d68809"},
+]
+django-tokenauth = [
+    {file = "django-tokenauth-0.3.0.tar.gz", hash = "sha256:86964e440af41392dd404c0c335a3175f5b451e723eeb9a598df11e769f61098"},
+    {file = "django_tokenauth-0.3.0-py2.py3-none-any.whl", hash = "sha256:45baf2e9cdf9584e5f46c704e22cc9192e401b4aa38ed63fd5bce0aee0e04a36"},
 ]
 greenlet = [
     {file = "greenlet-0.4.15-cp27-cp27m-manylinux1_x86_64.whl", hash = "sha256:99a26afdb82ea83a265137a398f570402aa1f2b5dfb4ac3300c026931817b163"},

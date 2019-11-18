@@ -18,6 +18,7 @@ shortuuid = "*"
 uwsgi = "*"
 werkzeug = "*"
 whitenoise = "*"
+django-tokenauth = "^0.3.0"
 
 [tool.poetry.dev-dependencies]
 ipython = "*"
