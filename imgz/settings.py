@@ -194,6 +194,15 @@ USE_L10N = True
 
 USE_TZ = True
 
+
+TOKENAUTH_LOGIN_URL = "/"
+LOGOUT_REDIRECT_URL = LOGIN_REDIRECT_URL = "/"
+
+
+def TOKENAUTH_NORMALIZE_EMAIL(e):
+    return e.lower().strip()
+
+
 SITE_ID = 1
 
 RAVEN_CONFIG = {"dsn": os.getenv("RAVEN_DSN")}  # type: Dict[str, Union[None, str]]
