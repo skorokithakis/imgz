@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% load i18n staticfiles %}
+
+{% block content %}
+  	<!--begin services section -->
+    <section class="section-grey section-top-border" id="features">
+
+        <!--begin container -->
+        <div class="container">
+
+            <!--begin row -->
+            <div class="row">
+
+                <!--begin col-md-12-->
+                <div class="col-md-12 text-center padding-bottom-10">
+
+                    <h2 class="section-title">Congratulations, you're logged in.</h2>
+
+                    <p class="section-subtitle">
+                    There's nothing you can do. <br>
+                    On top of that, you're using {{ request.user.total_space_taken }} bytes
+                    of space.
+                    </p>
+
+                </div>
+                <!--end col-md-12 -->
+
+            </div>
+            <!--end row -->
+
+        </div>
+        <!--end container -->
+
+    </section>
+    <!--end services section -->
+{% endblock %}
