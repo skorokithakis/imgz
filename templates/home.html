@@ -23,6 +23,14 @@
                     of space.
                     </p>
 
+                    <form method="post" enctype="multipart/form-data" action="{% url "main:image-upload" %}">
+                        <input name="data" type="file" accept="image/*">
+                        <button type="submit">Upload!</button>
+                    </form>
+
+                    <p class="section-subtitle">
+                    Oh. I guess there's something you can do.
+                    </p>
                 </div>
                 <!--end col-md-12 -->
 

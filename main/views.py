@@ -5,7 +5,6 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
 from django.shortcuts import render
-from django.views.decorators.http import require_POST
 
 from .models import Image
 
@@ -25,9 +24,11 @@ def image_show(request: HttpRequest, image_id: str) -> HttpResponse:
     return response
 
 
-@require_POST
 @login_required
 def image_upload(request: HttpRequest) -> HttpResponse:
+    if request.method != "POST":
+        return redirect("main:index")
+
     user = request.user
     if not user.can_upload:
         messages.error(request, "You cannot upload files.")
