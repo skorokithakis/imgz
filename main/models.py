@@ -41,7 +41,7 @@ class User(AbstractUser):
         Return the total amount of space this users' images take.
         """
         total_size = self.images.aggregate(Sum("size"))["size__sum"]
-        return total_size
+        return total_size if total_size else 0
 
 
 class Image(models.Model):
