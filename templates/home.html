@@ -3,6 +3,33 @@
 {% load i18n staticfiles %}
 
 {% block content %}
+    <!--begin newsletter section -->
+    <section class="section-blue" id="login" style="padding-top: 120px">
+
+        <!--begin container -->
+        <div class="container">
+
+            <!--begin row -->
+            <div class="row">
+
+                <!--begin col-md-12 -->
+                <div class="col-md-12 text-center padding-top-50 padding-bottom-20">
+
+                    <h3 class="white-text">Congratulations, you're logged in,</h3>
+                    <p class="white-text">There's nothing you can do.</p>
+
+                </div>
+                <!--end col-md-12 -->
+
+            </div>
+            <!--end row -->
+
+        </div>
+        <!--end container -->
+
+    </section>
+    <!--end newsletter section -->
+
   	<!--begin services section -->
     <section class="section-grey section-top-border" id="features">
 
@@ -15,22 +42,30 @@
                 <!--begin col-md-12-->
                 <div class="col-md-12 text-center padding-bottom-10">
 
-                    <h2 class="section-title">Congratulations, you're logged in.</h2>
+                    <h2 class="section-title">Okay listen.</h2>
 
-                    <p class="section-subtitle">
-                    There's nothing you can do. <br>
-                    On top of that, you're using {{ request.user.total_space_taken }} bytes
-                    of space.
+                    <p class="section-subtitle" style="max-width: 500px; margin: 0 auto;">
+                    There's nothing you can do. {{ request.site.name }} isn't ready yet, I'm slowly adding more stuff.
+                    <br>
+                    However, if you're adventurous and want to get in on the bottom floor of this EXCITING OPPORTUNITY,
+                    send me some Bitcoin or Monero or something and I'll give you a lifetime upgrade with some generous
+                    limit like 1 GB.
+                    <br>
+                    Talk to me <a href="https://twitter.com/stavros">on Twitter</a> to arrange this.
                     </p>
 
+                    {% if request.user.can.upload %}
                     <form method="post" enctype="multipart/form-data" action="{% url "main:image-upload" %}">
                         <input name="data" type="file" accept="image/*">
                         <button type="submit">Upload!</button>
                     </form>
 
                     <p class="section-subtitle">
-                    Oh. I guess there's something you can do.
+                    Oh. I guess there's something you can do. Also, you're using {{ request.user.total_space_taken }}
+                    bytes of space.
                     </p>
+                    {% endif %}
+
                 </div>
                 <!--end col-md-12 -->
 

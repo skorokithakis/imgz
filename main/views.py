@@ -31,12 +31,7 @@ def image_upload(request: HttpRequest) -> HttpResponse:
 
     user = request.user
     if not user.can_upload:
-        messages.error(
-            request,
-            "You cannot upload files yet. Until I figure out payments, send me some "
-            "Bitcoin or Monero or whatever and mention me at @stavros and I'll give you"
-            " a lifetime upgrade manually.",
-        )
+        messages.error(request, "You cannot upload files, you need to pay. PAY!")
         return redirect("main:index")
 
     data = request.FILES["data"].read()
