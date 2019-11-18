@@ -11,8 +11,10 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 import os
 import re
-from typing import Dict
-from typing import Union
+
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -46,7 +48,6 @@ INSTALLED_APPS = [
     "whitenoise.runserver_nostatic",
     "django.contrib.staticfiles",
     "django_extensions",
-    "raven.contrib.django.raven_compat",
     "tokenauth",
     "main",
 ]
@@ -54,7 +55,6 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "imgz.stats_middleware.StatsMiddleware",
-    "raven.contrib.django.raven_compat.middleware.SentryResponseErrorIdMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -205,7 +205,9 @@ def TOKENAUTH_NORMALIZE_EMAIL(e):
 
 SITE_ID = 1
 
-RAVEN_CONFIG = {"dsn": os.getenv("RAVEN_DSN")}  # type: Dict[str, Union[None, str]]
+sentry_sdk.init(  # type: ignore
+    dsn=os.getenv("SENTRY_DSN"), integrations=[DjangoIntegration()]
+)
 
 LOGGING = {
     "version": 1,

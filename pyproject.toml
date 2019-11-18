@@ -13,12 +13,12 @@ django-redis = "*"
 psycopg2-binary = "*"
 pytest = "*"
 pytest-cov = "*"
-raven = "*"
 shortuuid = "*"
 uwsgi = "*"
 werkzeug = "*"
 whitenoise = "*"
 django-tokenauth = "^0.3.0"
+sentry-sdk = "^0.13.2"
 
 [tool.poetry.dev-dependencies]
 ipython = "*"
