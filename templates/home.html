@@ -66,6 +66,21 @@
                     Oh. I guess there's something you can do. <br> Also, you're using
                     {{ request.user.total_space_taken|intcomma }} bytes of space.
                     </p>
+
+                    <h3>Your images</h3>
+                    <table class="table">
+                        <tbody>
+                            {% for image in request.user.images.all %}
+                            <tr>
+                                <th scope="row"><a href="{{ image.get_absolute_url }}">{{ image.id }}</a></th>
+                                <td>{{ image.name }}</td>
+                                <td>{{ image.uploaded }}</td>
+                                <td>{{ image.format }}</td>
+                                <td>{{ image.size|intcomma }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                     {% endif %}
 
                 </div>
