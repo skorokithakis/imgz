@@ -11,6 +11,7 @@ from django.db import models
 from django.db.models import Sum
 from django.urls import reverse
 from PIL import Image as PILImage
+from PIL import ImageOps
 
 KB = 1024
 MB = 1024 * KB
@@ -123,13 +124,12 @@ class Image(models.Model):
         """
         with BytesIO(self.data) as inp:
             img = PILImage.open(inp)
+            thumb = ImageOps.fit(img, (512, 512), method=PILImage.ANTIALIAS)
 
-            img.thumbnail((512, 512))
-
-            with BytesIO() as outp:
-                img.save(outp, format=img.format)
-                outp.seek(0)
-                self.thumbnail_512 = outp.read()
+        with BytesIO() as outp:
+            thumb.save(outp, format=img.format)
+            outp.seek(0)
+            self.thumbnail_512 = outp.read()
 
     def save(self, *args, **kwargs):
         if not self.format:
