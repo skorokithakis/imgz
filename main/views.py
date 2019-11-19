@@ -22,7 +22,10 @@ def index(request: HttpRequest) -> HttpResponse:
 def image_show(request: HttpRequest, image_id: str) -> HttpResponse:
     """Show an image."""
     image = get_object_or_404(Image, pk=image_id)
-    response = HttpResponse(image.data, content_type=f"image/{image.format}")
+    # We cast to bytes here because this is a memoryview on Postgres
+    # but just bytes on SQLite.
+    data = bytes(image.data)
+    response = HttpResponse(data, content_type=f"image/{image.format}")
     response["Content-Length"] = len(image.data)
     return response
 
