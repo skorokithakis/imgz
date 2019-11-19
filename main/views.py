@@ -45,7 +45,21 @@ def image_upload(request: HttpRequest) -> HttpResponse:
 
 @require_POST
 def api_upload(request: HttpRequest) -> JsonResponse:
-    user = get_object_or_404(User, api_key=request.GET.get("api_key"))
+    user = User.objects.filter(api_key=request.GET.get("api_key")).first()
+    if not user:
+        response = JsonResponse(
+            {"error_code": 1, "error_message": "Invalid API key, I guess?"}
+        )
+        response.status_code = 422
+        return response
+
+    if not user.can_upload:
+        response = JsonResponse(
+            {"error_code": 2, "error_message": "No upload without money! Pay now!"}
+        )
+        response.status_code = 422
+        return response
+
     data = request.FILES["data"].read()
     name = request.FILES["data"].name
     image = Image.objects.create(data=data, user=user, name=name)
