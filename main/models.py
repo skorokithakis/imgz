@@ -1,22 +1,32 @@
 import datetime
 import imghdr
+from typing import Any
+from typing import Dict
 
 import shortuuid
 from django.contrib.auth.models import AbstractUser
-from django.db import models  # noqa
+from django.contrib.sites.models import Site
+from django.db import models
 from django.db.models import Sum
 from django.urls import reverse
 
 
-def generate_short_id() -> str:
-    """
-    Return a random string of length 7.
-    """
-    return shortuuid.ShortUUID().random(7)
+CURRENT_SITE = Site.objects.get_current()
+
+
+def generate_moderate_id() -> str:
+    return shortuuid.ShortUUID().random(12)
+
+
+def generate_image_id() -> str:
+    return "i" + shortuuid.ShortUUID().random(7)
 
 
 class User(AbstractUser):
     upgraded_until = models.DateField(default=datetime.date(1900, 1, 1))
+    api_key = models.CharField(
+        max_length=200, default=generate_moderate_id, db_index=True
+    )
 
     @property
     def can_upload(self) -> bool:
@@ -46,7 +56,7 @@ class User(AbstractUser):
 
 class Image(models.Model):
     id = models.CharField(
-        max_length=30, primary_key=True, default=generate_short_id, editable=False
+        max_length=30, primary_key=True, default=generate_image_id, editable=False
     )
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="images")
     name = models.CharField(max_length=200, blank=True)
@@ -63,6 +73,16 @@ class Image(models.Model):
         self.format = format if format else ""
         self.size = len(self.data)
         super().save(*args, **kwargs)
+
+    def as_dict(self) -> Dict[str, Any]:
+        return {
+            "id": self.id,
+            "url": f"https://{CURRENT_SITE}{self.get_absolute_url()}",
+            "size": self.size,
+            "name": self.name,
+            "format": self.format,
+            "uploaded": self.uploaded.strftime("%Y-%m-%d %H:%M:S"),
+        }
 
     def __str__(self) -> str:
         return self.id

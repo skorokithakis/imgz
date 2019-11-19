@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
                 (
                     "id",
                     models.CharField(
-                        default=main.models.generate_short_id,
+                        default=main.models.generate_image_id,
                         editable=False,
                         max_length=30,
                         primary_key=True,

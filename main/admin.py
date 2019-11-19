@@ -16,7 +16,7 @@ class ImageAdmin(admin.ModelAdmin):
 @admin.register(User)
 class MyUserAdmin(UserAdmin):
     fieldsets = (
-        ("Credentials", {"fields": ("username", "email", "password")}),
+        ("Credentials", {"fields": ("username", "email", "password", "api_key")}),
         ("Personal info", {"fields": ("first_name", "last_name")}),
         ("Permissions", {"fields": ("is_active", "is_staff", "is_superuser")}),
         (
