@@ -10,7 +10,12 @@ urlpatterns = [
     path("upload/", views.image_upload, name="image-upload"),
     re_path(r"^(?P<image_id>i[a-zA-Z0-9]{7})/$", views.image_page, name="image-page"),
     re_path(
-        r"^(?P<image_id>i[a-zA-Z0-9]{7})(?P<extension>\.\w+|/)$",
+        r"^(?P<image_id>i[a-zA-Z0-9]{7})_(?P<size>\d+)\.(?P<extension>\w+)$",
+        views.image_show_thumbnail,
+        name="image-show-thumb",
+    ),
+    re_path(
+        r"^(?P<image_id>i[a-zA-Z0-9]{7})\.(?P<extension>\w+)$",
         views.image_show,
         name="image-show",
     ),

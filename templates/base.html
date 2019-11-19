@@ -7,7 +7,7 @@
     <meta name="keywords" content="">
     <meta name="description" content="">
 
-    <title>{% block title %}Share images. No bullshit.{% endblock %} - {{ request.site.name }}</title>
+    <title>{% block title %}Image sharing. No bullshit.{% endblock %} - {{ request.site.name }}</title>
 
     <!-- Loading Bootstrap -->
     <link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet">
@@ -28,6 +28,25 @@
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="msapplication-config" content="{% static "images/icons/browserconfig.xml" %}">
     <meta name="theme-color" content="#ffffff">
+
+    {% if image %}
+    <link rel="canonical" href="https://{{ request.site.domain }}{{ image.get_absolute_url }}" />
+
+    <meta property="og:title" content="{{ image.name }}">
+    <meta property="og:site_name" content="{{ request.site.name }}">
+    <meta property="og:url" content="https://{{ request.site.domain }}">
+    <meta property="og:description" content="IMGZ shares images.">
+    <meta property="og:type" content="object">
+    <meta property="og:image" content="https://{{ request.site.domain }}{{ image.get_thumbnail_url }}">
+    {% else %}
+    <meta property="og:title" content="Image sharing. No bullshit.">
+    <meta property="og:site_name" content="{{ request.site.name }}">
+    <meta property="og:url" content="https://{{ request.site.domain }}">
+    <meta property="og:description" content="IMGZ shares images.">
+    <meta property="og:type" content="object">
+    <meta property="og:image" content="{% static "images/icons/android-chrome-512x512.png" %}">
+    {% endif %}
+
     <script>
         window.addEventListener('DOMContentLoaded', (event) => {
             [...document.querySelectorAll('[data-toggle]')].forEach((toggler) => {
@@ -53,7 +72,7 @@
                 <nav class="navbar navbar-expand-lg">
 
                     <!--begin logo -->
-                    <a class="navbar-brand" href="#"><img src="{% static "images/logo.png" %}"/> {{ request.site.name }}</a>
+                    <a class="navbar-brand" href="/"><img src="{% static "images/logo.png" %}"/> {{ request.site.name }}</a>
                     <!--end logo -->
 
                     <!--begin navbar-toggler -->

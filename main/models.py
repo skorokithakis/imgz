@@ -1,5 +1,6 @@
 import datetime
 import imghdr
+from io import BytesIO
 from typing import Any
 from typing import Dict
 
@@ -9,6 +10,7 @@ from django.contrib.sites.models import Site
 from django.db import models
 from django.db.models import Sum
 from django.urls import reverse
+from PIL import Image as PILImage
 
 KB = 1024
 MB = 1024 * KB
@@ -74,6 +76,8 @@ class Image(models.Model):
     size = models.IntegerField(default=0)
     uploaded = models.DateTimeField(auto_now_add=True)
 
+    thumbnail_512 = models.BinaryField(default=b"")
+
     @property
     def extension(self) -> str:
         """
@@ -102,14 +106,42 @@ class Image(models.Model):
         Return the URL to the image itself.
         """
         return reverse(
-            "main:image-show",
-            kwargs={"image_id": self.id, "extension": "." + self.extension},
+            "main:image-show", kwargs={"image_id": self.id, "extension": self.extension}
         )
 
+    def get_thumbnail_url(self, size: int = 512) -> str:
+        return reverse(
+            "main:image-show-thumb",
+            kwargs={"image_id": self.id, "size": size, "extension": self.extension},
+        )
+
+    def generate_thumbnails(self) -> None:
+        """
+        Generate and store this image's thumbnails.
+
+        It does not save the Image object.
+        """
+        with BytesIO(self.data) as inp:
+            img = PILImage.open(inp)
+
+            img.thumbnail((512, 512))
+
+            with BytesIO() as outp:
+                img.save(outp, format=img.format)
+                outp.seek(0)
+                self.thumbnail_512 = outp.read()
+
     def save(self, *args, **kwargs):
-        format = imghdr.what(None, h=self.data)
-        self.format = format if format else ""
-        self.size = len(self.data)
+        if not self.format:
+            format = imghdr.what(None, h=self.data)
+            self.format = format if format else ""
+
+        if not self.size:
+            self.size = len(self.data)
+
+        if not bytes(self.thumbnail_512):
+            self.generate_thumbnails()
+
         super().save(*args, **kwargs)
 
     def as_dict(self) -> Dict[str, Any]:
@@ -119,7 +151,9 @@ class Image(models.Model):
             "urls": {
                 "page": f"https://{site.domain}{self.get_absolute_url()}",
                 "image": f"https://{site.domain}{self.get_image_url()}",
-                "thumbnail": None,
+                "thumbnails": {
+                    512: f"https://{site.domain}{self.get_thumbnail_url(512)}"
+                },
             },
             "size": self.size,
             "name": self.name,

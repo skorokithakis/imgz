@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest
 from django.http import HttpResponse
+from django.http import HttpResponseNotFound
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
@@ -32,6 +33,22 @@ def image_page(
     return render(request, "image.html", {"image": image})
 
 
+def image_show_thumbnail(
+    request: HttpRequest, image_id: str, size: str, extension: Optional[str] = None
+) -> HttpResponse:
+    """
+    Show a bare image.
+    """
+    image = get_object_or_404(Image, pk=image_id)
+    if size != "512":
+        return HttpResponseNotFound("Thumbnail not found.")
+
+    data = bytes(image.thumbnail_512)
+    response = HttpResponse(data, content_type=f"image/{image.format}")
+    response["Content-Length"] = len(data)
+    return response
+
+
 def image_show(
     request: HttpRequest, image_id: str, extension: Optional[str] = None
 ) -> HttpResponse:
@@ -43,7 +60,7 @@ def image_show(
     # but just bytes on SQLite.
     data = bytes(image.data)
     response = HttpResponse(data, content_type=f"image/{image.format}")
-    response["Content-Length"] = len(image.data)
+    response["Content-Length"] = len(data)
     return response
 
 
