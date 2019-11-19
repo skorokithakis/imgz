@@ -19,9 +19,9 @@ werkzeug = "*"
 whitenoise = "*"
 django-tokenauth = "^0.3.0"
 sentry-sdk = "^0.13.2"
+ipython = "*"
 
 [tool.poetry.dev-dependencies]
-ipython = "*"
 bpython = "*"
 pudb = "*"
 django-stubs = "^1.1.0"
