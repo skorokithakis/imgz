@@ -538,7 +538,7 @@ iframe {
 }
 
 /* Footer Social Icons */
-ul.footer_social{
+ul.footer_contact{
 	width:100%;
 	max-width:1140px;
 	display:block;
@@ -547,13 +547,13 @@ ul.footer_social{
 	text-align:center;
 }
 
-ul.footer_social li{
+ul.footer_contact li{
 	display:inline-block;
     margin:0 ;
 	line-height:100%!important;
 }
 
-ul.footer_social li a i {
+ul.footer_contact li a i {
   display: inline-block;
   margin:0 8px;
   padding:0;
@@ -565,7 +565,7 @@ ul.footer_social li a i {
   -webkit-transition: all .25s ease-in-out;
 }
 
-ul.footer_social li a i:hover {
+ul.footer_contact li a i:hover {
 	color:#b2d8fd;
 }
 
