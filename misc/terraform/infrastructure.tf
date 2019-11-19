@@ -92,7 +92,7 @@ resource "cloudflare_record" "mxb" {
 
 resource "cloudflare_page_rule" "cache_images" {
   zone_id = var.zone
-  target = "https://imgz.org/i*"
+  target = "https://imgz.org/*.*"
   priority = 1
 
   actions {

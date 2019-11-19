@@ -57,6 +57,10 @@ def image_upload(request: HttpRequest) -> HttpResponse:
         messages.error(request, "You cannot upload files, you need to pay. PAY!")
         return redirect("main:index")
 
+    if "data" not in request.FILES:
+        messages.error(request, "You need to specify an image to upload.")
+        return redirect("main:index")
+
     data = request.FILES["data"].read()
     name = request.FILES["data"].name
     image = Image.objects.create(data=data, user=user, name=name)
