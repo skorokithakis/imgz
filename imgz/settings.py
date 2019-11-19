@@ -98,6 +98,8 @@ SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
 # Keep connections in the pool for an hour.
 CONN_MAX_AGE = 60 * 60
 
+MAX_IMAGE_SIZE = 20 * 1024 * 1024  # 20 MB
+
 if os.getenv("IN_DOCKER"):
     DATABASES = {
         "default": {

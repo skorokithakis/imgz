@@ -5,6 +5,7 @@ from typing import Any
 from typing import Dict
 
 import shortuuid
+from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.contrib.sites.models import Site
 from django.db import models
@@ -66,6 +67,21 @@ class User(AbstractUser):
         return self.storage_space - self.total_space_taken
 
 
+class ImageManager(models.Manager):  # type: ignore
+    def create(self, *args, **kwargs) -> "Image":
+        if len(kwargs.get("name", "")) > self.model._meta.get_field("name").max_length:
+            raise ValueError(
+                "This image's name is huge. Try uploading the abridged version."
+            )
+
+        if len(kwargs.get("data", "")) > settings.MAX_IMAGE_SIZE:
+            raise ValueError(
+                "Whoa there, Ansel Adams, try resizing your photos to a smaller size."
+            )
+
+        return super().create(*args, **kwargs)
+
+
 class Image(models.Model):
     id = models.CharField(
         max_length=30, primary_key=True, default=generate_image_id, editable=False
@@ -78,6 +94,8 @@ class Image(models.Model):
     uploaded = models.DateTimeField(auto_now_add=True)
 
     thumbnail_512 = models.BinaryField(default=b"")
+
+    objects = ImageManager()
 
     @property
     def extension(self) -> str:

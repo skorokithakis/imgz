@@ -128,6 +128,8 @@ def api_image_upload(request: HttpRequest) -> JsonResponse:
         return construct_error_response(
             3, "That image file was straight trash. Get a good one."
         )
+    except ValueError as e:
+        return construct_error_response(4, str(e))
 
     return JsonResponse(
         image.as_dict(), json_dumps_params={"indent": 2, "sort_keys": True}
