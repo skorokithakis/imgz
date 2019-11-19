@@ -11,9 +11,6 @@ from django.db.models import Sum
 from django.urls import reverse
 
 
-CURRENT_SITE = Site.objects.get_current()
-
-
 def generate_moderate_id() -> str:
     return shortuuid.ShortUUID().random(12)
 
@@ -75,9 +72,10 @@ class Image(models.Model):
         super().save(*args, **kwargs)
 
     def as_dict(self) -> Dict[str, Any]:
+        site = Site.objects.get_current()
         return {
             "id": self.id,
-            "url": f"https://{CURRENT_SITE}{self.get_absolute_url()}",
+            "url": f"https://{site.domain}{self.get_absolute_url()}",
             "size": self.size,
             "name": self.name,
             "format": self.format,
