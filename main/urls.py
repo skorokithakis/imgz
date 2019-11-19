@@ -8,11 +8,14 @@ app_name = "main"
 urlpatterns = [
     path("", views.index, name="index"),
     path("upload/", views.image_upload, name="image-upload"),
-    re_path(r"^(?P<image_id>i[a-zA-Z0-9]{7})/$", views.image_show, name="image-show"),
+    re_path(r"^(?P<image_id>i[a-zA-Z0-9]{7})/$", views.image_page, name="image-page"),
     re_path(
-        r"^(?P<image_id>i[a-zA-Z0-9]{7})(\.\w+|/)$",
+        r"^(?P<image_id>i[a-zA-Z0-9]{7})(?P<extension>\.\w+|/)$",
         views.image_show,
-        name="image-show-ext",
+        name="image-show",
     ),
-    path("api/upload/", views.api_upload, name="api-upload"),
+]
+urlpatterns += [
+    path("api/images/", views.api_image_upload, name="api-image-upload"),
+    path("api/images/<image_id>/", views.api_image_detail, name="api-image-detail"),
 ]

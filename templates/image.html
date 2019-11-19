@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% load humanize %}
+
+{% block content %}
+    <section class="section-grey section-top-border" id="features" style="margin-top: 40px">
+
+        <!--begin container -->
+        <div class="container">
+
+            <!--begin row -->
+            <div class="row">
+
+                <!--begin col-md-12-->
+                <div class="col-md-12 text-center padding-bottom-10">
+
+                    <h2 class="section-title">{{ image.name }}</h2>
+                    <a href="{{ image.get_image_url }}"><img src="{{ image.get_image_url }}" /></a>
+
+                </div>
+                <!--end col-md-12 -->
+
+            </div>
+            <!--end row -->
+
+        </div>
+        <!--end container -->
+
+    </section>
+{% endblock %}

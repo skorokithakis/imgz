@@ -1,3 +1,5 @@
+from typing import Optional
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest
@@ -6,6 +8,7 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
 from django.shortcuts import render
+from django.views.decorators.http import require_GET
 from django.views.decorators.http import require_POST
 
 from .models import Image
@@ -19,8 +22,22 @@ def index(request: HttpRequest) -> HttpResponse:
         return render(request, "index.html")
 
 
-def image_show(request: HttpRequest, image_id: str) -> HttpResponse:
-    """Show an image."""
+def image_page(
+    request: HttpRequest, image_id: str, extension: Optional[str] = None
+) -> HttpResponse:
+    """
+    Show an image page.
+    """
+    image = get_object_or_404(Image, pk=image_id)
+    return render(request, "image.html", {"image": image})
+
+
+def image_show(
+    request: HttpRequest, image_id: str, extension: Optional[str] = None
+) -> HttpResponse:
+    """
+    Show a bare image.
+    """
     image = get_object_or_404(Image, pk=image_id)
     # We cast to bytes here because this is a memoryview on Postgres
     # but just bytes on SQLite.
@@ -47,7 +64,7 @@ def image_upload(request: HttpRequest) -> HttpResponse:
 
 
 @require_POST
-def api_upload(request: HttpRequest) -> JsonResponse:
+def api_image_upload(request: HttpRequest) -> JsonResponse:
     user = User.objects.filter(api_key=request.GET.get("api_key")).first()
     if not user:
         response = JsonResponse(
@@ -69,3 +86,16 @@ def api_upload(request: HttpRequest) -> JsonResponse:
     return JsonResponse(
         image.as_dict(), json_dumps_params={"indent": 2, "sort_keys": True}
     )
+
+
+@require_GET
+def api_image_detail(request: HttpRequest, image_id: str) -> JsonResponse:
+    image = Image.objects.filter(id=image_id).first()
+    if not image:
+        response = JsonResponse({"error_code": 1, "error_message": "Image not found."})
+        response.status_code = 404
+    else:
+        return JsonResponse(
+            image.as_dict(), json_dumps_params={"indent": 2, "sort_keys": True}
+        )
+    return response

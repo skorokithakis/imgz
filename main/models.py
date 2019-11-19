@@ -74,8 +74,37 @@ class Image(models.Model):
     size = models.IntegerField(default=0)
     uploaded = models.DateTimeField(auto_now_add=True)
 
+    @property
+    def extension(self) -> str:
+        """
+        Return the image's extension, based on its format.
+        """
+        extension = self.format
+        if extension == "jpeg":
+            extension = "jpg"
+        return extension
+
+    @property
+    def filename(self) -> str:
+        """
+        Return the image's filename (i.e. image ID + extension).
+        """
+        return f"{self.id}.{self.extension}"
+
     def get_absolute_url(self) -> str:
-        return reverse("main:image-show", kwargs={"image_id": self.id})
+        """
+        Return the URL to the image page.
+        """
+        return reverse("main:image-page", kwargs={"image_id": self.id})
+
+    def get_image_url(self) -> str:
+        """
+        Return the URL to the image itself.
+        """
+        return reverse(
+            "main:image-show",
+            kwargs={"image_id": self.id, "extension": "." + self.extension},
+        )
 
     def save(self, *args, **kwargs):
         format = imghdr.what(None, h=self.data)
@@ -87,7 +116,11 @@ class Image(models.Model):
         site = Site.objects.get_current()
         return {
             "id": self.id,
-            "url": f"https://{site.domain}{self.get_absolute_url()}",
+            "urls": {
+                "page": f"https://{site.domain}{self.get_absolute_url()}",
+                "image": f"https://{site.domain}{self.get_image_url()}",
+                "thumbnail": None,
+            },
             "size": self.size,
             "name": self.name,
             "format": self.format,
