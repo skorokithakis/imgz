@@ -16,6 +16,19 @@ from .models import Image
 from .models import User
 
 
+def construct_error_response(
+    error_code: int, error_message: str, status_code: int = 422
+) -> JsonResponse:
+    """
+    Construct a JsonResponse error message.
+
+    This is just a boilerplate-saving class.
+    """
+    response = JsonResponse({"error_code": error_code, "error_message": error_message})
+    response.status_code = status_code
+    return response
+
+
 def index(request: HttpRequest) -> HttpResponse:
     if request.user.is_authenticated:
         return render(request, "home.html")
@@ -80,7 +93,14 @@ def image_upload(request: HttpRequest) -> HttpResponse:
 
     data = request.FILES["data"].read()
     name = request.FILES["data"].name
-    image = Image.objects.create(data=data, user=user, name=name)
+    try:
+        image = Image.objects.create(data=data, user=user, name=name)
+    except OSError:
+        messages.error(
+            request, "That file was straight trash, try uploading something else."
+        )
+        return redirect("main:index")
+
     return redirect(image)
 
 
@@ -88,22 +108,27 @@ def image_upload(request: HttpRequest) -> HttpResponse:
 def api_image_upload(request: HttpRequest) -> JsonResponse:
     user = User.objects.filter(api_key=request.GET.get("api_key")).first()
     if not user:
-        response = JsonResponse(
-            {"error_code": 1, "error_message": "Invalid API key, I guess?"}
+        return construct_error_response(
+            1, "Invalid API key, I guess? I don't know what you're trying to do."
         )
-        response.status_code = 422
-        return response
 
     if not user.can_upload:
-        response = JsonResponse(
-            {"error_code": 2, "error_message": "No upload without money! Pay now!"}
+        return construct_error_response(2, "No upload without money! Pay now!")
+
+    if "data" not in request.FILES:
+        return construct_error_response(
+            4, "You're trying to do something funky there but I don't know what."
         )
-        response.status_code = 422
-        return response
 
     data = request.FILES["data"].read()
     name = request.FILES["data"].name
-    image = Image.objects.create(data=data, user=user, name=name)
+    try:
+        image = Image.objects.create(data=data, user=user, name=name)
+    except OSError:
+        return construct_error_response(
+            3, "That image file was straight trash. Get a good one."
+        )
+
     return JsonResponse(
         image.as_dict(), json_dumps_params={"indent": 2, "sort_keys": True}
     )
@@ -113,8 +138,7 @@ def api_image_upload(request: HttpRequest) -> JsonResponse:
 def api_image_detail(request: HttpRequest, image_id: str) -> JsonResponse:
     image = Image.objects.filter(id=image_id).first()
     if not image:
-        response = JsonResponse({"error_code": 1, "error_message": "Image not found."})
-        response.status_code = 404
+        response = construct_error_response(1, "Image not found.", status_code=404)
     else:
         return JsonResponse(
             image.as_dict(), json_dumps_params={"indent": 2, "sort_keys": True}
