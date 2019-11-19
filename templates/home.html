@@ -54,7 +54,7 @@
                     Talk to me <a href="https://twitter.com/stavros">on Twitter</a> to arrange this.
                     </p>
 
-                    {% if request.user.can_upload %}
+                    {% if request.user.is_paying %}
                     <p>
                     <form method="post" enctype="multipart/form-data" action="{% url "main:image-upload" %}">
                         <input name="data" type="file" accept="image/*">
@@ -64,7 +64,7 @@
 
                     <p class="section-subtitle">
                     Oh. I guess there's something you can do. <br> Also, you're using
-                    {{ request.user.total_space_taken|intcomma }} bytes of space.
+                    {{ request.user.total_space_taken|intcomma }}/{{ request.user.storage_space|intcomma }} bytes of space.
                     </p>
 
                     <h3>Your images</h3>

@@ -19,10 +19,8 @@ class MyUserAdmin(UserAdmin):
         ("Credentials", {"fields": ("username", "email", "password", "api_key")}),
         ("Personal info", {"fields": ("first_name", "last_name")}),
         ("Permissions", {"fields": ("is_active", "is_staff", "is_superuser")}),
-        (
-            "Important dates",
-            {"fields": ("last_login", "date_joined", "upgraded_until")},
-        ),
+        ("Important dates", {"fields": ("last_login", "date_joined")}),
+        ("Quotas", {"fields": ("upgraded_until", "storage_space")}),
     )
     list_display = ("email", "upgraded_until", "is_staff", "date_joined")
     search_fields = ("email",)

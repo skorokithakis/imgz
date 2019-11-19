@@ -10,6 +10,10 @@ from django.db import models
 from django.db.models import Sum
 from django.urls import reverse
 
+KB = 1024
+MB = 1024 * KB
+GB = 1024 * MB
+
 
 def generate_moderate_id() -> str:
     return shortuuid.ShortUUID().random(12)
@@ -21,6 +25,7 @@ def generate_image_id() -> str:
 
 class User(AbstractUser):
     upgraded_until = models.DateField(default=datetime.date(1900, 1, 1))
+    storage_space = models.PositiveIntegerField(default=500 * MB)
     api_key = models.CharField(
         max_length=200, default=generate_moderate_id, db_index=True
     )
@@ -33,7 +38,7 @@ class User(AbstractUser):
         The user might not be able to upload new files if they have not paid or if
         they've reached their storage quota.
         """
-        return self.is_paying
+        return self.is_paying and self.total_space_left > 0
 
     @property
     def is_paying(self) -> bool:
@@ -49,6 +54,13 @@ class User(AbstractUser):
         """
         total_size = self.images.aggregate(Sum("size"))["size__sum"]
         return total_size if total_size else 0
+
+    @property
+    def total_space_left(self) -> int:
+        """
+        Return the total space the user has left on their account.
+        """
+        return self.storage_space - self.total_space_taken
 
 
 class Image(models.Model):
