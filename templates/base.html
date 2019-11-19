@@ -38,6 +38,8 @@
     <meta property="og:description" content="IMGZ shares images.">
     <meta property="og:type" content="object">
     <meta property="og:image" content="https://{{ request.site.domain }}{{ image.get_thumbnail_url }}">
+    <meta property="og:image:width" content="512">
+    <meta property="og:image:height" content="512">
     {% else %}
     <meta property="og:title" content="Image sharing. No bullshit.">
     <meta property="og:site_name" content="{{ request.site.name }}">
@@ -45,6 +47,8 @@
     <meta property="og:description" content="IMGZ shares images.">
     <meta property="og:type" content="object">
     <meta property="og:image" content="{% static "images/icons/android-chrome-512x512.png" %}">
+    <meta property="og:image:width" content="512">
+    <meta property="og:image:height" content="512">
     {% endif %}
 
     <script>
