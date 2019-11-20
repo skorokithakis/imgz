@@ -14,6 +14,7 @@ from django.views.decorators.http import require_POST
 
 from .models import Image
 from .models import User
+from .utils import process_upload
 
 
 def construct_error_response(
@@ -96,21 +97,13 @@ def image_upload(request: HttpRequest) -> HttpResponse:
         messages.error(request, "You cannot upload files, you need to pay. PAY!")
         return redirect("main:index")
 
-    if "data" not in request.FILES:
-        messages.error(request, "You need to specify an image to upload.")
-        return redirect("main:index")
-
-    data = request.FILES["data"].read()
-    name = request.FILES["data"].name
     try:
-        image = Image.objects.create(data=data, user=user, name=name)
-    except OSError:
-        messages.error(
-            request, "That file was straight trash, try uploading something else."
-        )
+        image = process_upload(request.FILES, user)
+    except ValueError as e:
+        messages.error(request, str(e))
         return redirect("main:index")
-
-    return redirect(image)
+    else:
+        return redirect(image)
 
 
 @require_POST
@@ -124,25 +117,14 @@ def api_image_upload(request: HttpRequest) -> JsonResponse:
     if not user.can_upload:
         return construct_error_response(2, "No upload without money! Pay now!")
 
-    if "data" not in request.FILES:
-        return construct_error_response(
-            4, "You're trying to do something funky there but I don't know what."
-        )
-
-    data = request.FILES["data"].read()
-    name = request.FILES["data"].name
     try:
-        image = Image.objects.create(data=data, user=user, name=name)
-    except OSError:
-        return construct_error_response(
-            3, "That image file was straight trash. Get a good one."
-        )
+        image = process_upload(request.FILES, user)
     except ValueError as e:
-        return construct_error_response(4, str(e))
-
-    return JsonResponse(
-        image.as_dict(), json_dumps_params={"indent": 2, "sort_keys": True}
-    )
+        return construct_error_response(3, str(e))
+    else:
+        return JsonResponse(
+            image.as_dict(), json_dumps_params={"indent": 2, "sort_keys": True}
+        )
 
 
 @require_GET
