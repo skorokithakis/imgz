@@ -1,5 +1,8 @@
 import datetime
 import imghdr
+import os
+import subprocess
+import tempfile
 from io import BytesIO
 from typing import Any
 from typing import Dict
@@ -149,7 +152,26 @@ class Image(models.Model):
             outp.seek(0)
             self.thumbnail_512 = outp.read()
 
+    def strip_exif(self) -> None:
+        """
+        Strip EXIF data from the image and auto-orient it.
+
+        Does not save the Image object.
+        """
+        fd, filename = tempfile.mkstemp()
+        with open(filename, "wb") as f:
+            f.write(self.data)
+
+        subprocess.run(["mogrify", "-auto-orient", "-strip", f.name])
+        with open(filename, "rb") as f:
+            self.data = f.read()
+
+        os.close(fd)
+        os.remove(filename)
+
     def save(self, *args, **kwargs):
+        self.strip_exif()
+
         if not self.format:
             format = imghdr.what(None, h=self.data)
             self.format = format if format else ""

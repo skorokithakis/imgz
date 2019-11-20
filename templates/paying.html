@@ -30,7 +30,7 @@
                     <h3>Your images</h3>
 
                     <div class="row">
-                        {% for image in request.user.images.all %}
+                        {% for image in images %}
                         <div class="col-xs-6 col-md-3">
                             <div class="card">
                                 <a href="{{ image.get_absolute_url  }}">

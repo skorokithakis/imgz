@@ -1,7 +1,7 @@
 FROM python:3.7
 ENV PYTHONUNBUFFERED 1
 RUN apt-get update
-RUN apt-get install -y swig libssl-dev dpkg-dev netcat
+RUN apt-get install -y swig libssl-dev dpkg-dev netcat imagemagick
 
 RUN pip install -U --pre pip poetry
 ADD poetry.lock /code/

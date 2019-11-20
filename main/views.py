@@ -32,7 +32,11 @@ def construct_error_response(
 def index(request: HttpRequest) -> HttpResponse:
     if request.user.is_authenticated:
         if request.user.is_paying:
-            template = "paying.html"
+            return render(
+                request,
+                "paying.html",
+                {"images": request.user.images.order_by("-uploaded")},
+            )
         else:
             template = "home.html"
     else:
