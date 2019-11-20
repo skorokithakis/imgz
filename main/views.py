@@ -1,5 +1,6 @@
 from typing import Optional
 
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest
@@ -11,12 +12,19 @@ from django.shortcuts import redirect
 from django.shortcuts import render
 from django.views.decorators.http import require_GET
 from django.views.decorators.http import require_POST
+from loginas.utils import restore_original_login
 
 from .models import Image
 from .models import User
 from .utils import construct_error_response
 from .utils import process_upload
 from .utils import UploadError
+
+
+@login_required
+def logout(request):
+    restore_original_login(request)
+    return redirect(settings.LOGOUT_REDIRECT_URL)
 
 
 def index(request: HttpRequest) -> HttpResponse:

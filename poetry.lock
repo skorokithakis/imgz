@@ -159,6 +159,14 @@ six = ">=1.2"
 
 [[package]]
 category = "main"
+description = "An app to add a \"Log in as user\" button in the Django user admin page."
+name = "django-loginas"
+optional = false
+python-versions = "*"
+version = "0.3.6"
+
+[[package]]
+category = "main"
 description = "Full featured redis cache backend for Django."
 name = "django-redis"
 optional = false
@@ -686,7 +694,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["pathlib2", "contextlib2", "unittest2"]
 
 [metadata]
-content-hash = "2687c9f4812e1e687d9d47c8e3dff55c1677ac515206474652e71d2e199689d5"
+content-hash = "f0609bd70fffd6b08a873335549e01e19143f1f13017e92f1f1dac8ec32c8342"
 python-versions = ">=3.7"
 
 [metadata.files]
@@ -787,6 +795,10 @@ django-dotenv = [
 django-extensions = [
     {file = "django-extensions-2.2.5.tar.gz", hash = "sha256:b58320d3fe3d6ae7d1d8e38959713fa92272f4921e662d689058d942a5b444f7"},
     {file = "django_extensions-2.2.5-py2.py3-none-any.whl", hash = "sha256:a9db7c56a556d244184f589f2437b4228de86ee45e5ebb837fb20c6d54e95ea5"},
+]
+django-loginas = [
+    {file = "django-loginas-0.3.6.tar.gz", hash = "sha256:bd72331883954836e0e78df63e4e49e928c284d0f889f40cd227f892b1d26eff"},
+    {file = "django_loginas-0.3.6-py2.py3-none-any.whl", hash = "sha256:d45ef6d67414526aae3020948ad9ac2f5e5f806a3f2d197dbdc148ce685b147a"},
 ]
 django-redis = [
     {file = "django-redis-4.10.0.tar.gz", hash = "sha256:af0b393864e91228dd30d8c85b5c44d670b5524cb161b7f9e41acc98b6e5ace7"},

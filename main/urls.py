@@ -7,6 +7,7 @@ from . import views
 app_name = "main"
 urlpatterns = [
     path("", views.index, name="index"),
+    path("logout", views.logout, name="logout"),
     path("upload/", views.image_upload, name="image-upload"),
     re_path(r"^(?P<image_id>i[a-zA-Z0-9]{7})/$", views.image_page, name="image-page"),
     re_path(

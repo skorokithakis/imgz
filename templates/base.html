@@ -93,7 +93,7 @@
 
                             {% if request.user.is_authenticated %}
                             <li><a href="{% url "main:image-upload" %}">Upload</a></li>
-                            <li><a href="{% url "tokenauth:logout" %}">Log out</a></li>
+                            <li><a href="{% url "main:logout" %}">Log out</a></li>
                             {% else %}
                             <li class="discover-link"><a href="#login" class="external discover-btn">Log in</a></li>
                             {% endif %}

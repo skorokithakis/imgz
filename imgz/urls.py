@@ -19,6 +19,7 @@ from django.urls import path
 
 urlpatterns = [
     path("narnia/", admin.site.urls),
+    path("narnia/", include("loginas.urls")),
     path("", include("main.urls")),
     path("auth/", include("tokenauth.urls", namespace="tokenauth")),
 ]

@@ -22,6 +22,7 @@ sentry-sdk = "^0.13.2"
 ipython = "*"
 pillow = "^6.2.1"
 "hurry.filesize" = "^0.9"
+django-loginas = "^0.3.6"
 
 [tool.poetry.dev-dependencies]
 bpython = "*"

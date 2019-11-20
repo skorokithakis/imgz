@@ -15,6 +15,7 @@ class ImageAdmin(admin.ModelAdmin):
 
 @admin.register(User)
 class MyUserAdmin(UserAdmin):
+    change_form_template = "loginas/change_form.html"
     fieldsets = (
         ("Credentials", {"fields": ("username", "email", "password", "api_key")}),
         ("Personal info", {"fields": ("first_name", "last_name")}),
