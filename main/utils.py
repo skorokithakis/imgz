@@ -32,9 +32,8 @@ def process_upload(request_files: Any, user: "main.models.User") -> "main.models
     data = request_files["data"].read()
     name = request_files["data"].name
 
-    from django.db.models.loading import get_model
+    from .models import Image
 
-    Image = get_model("main", "Image")
     try:
         image = Image.objects.create(data=data, user=user, name=name)
     except OSError:

@@ -176,7 +176,7 @@ iframe {
 
 .section-grey{
 	background: #fafbfc;
-	padding: 90px 0 100px 0;
+	padding: 40px 0 100px 0;
 }
 
 .section-blue{
@@ -591,7 +591,7 @@ ul.footer_contact li a i:hover {
 	z-index: 999;
 	overflow: hidden;
 	position: relative;
-  	padding-top: 140px;
+  	padding-top: 40px;
   	padding-bottom: 80px;
   	background-color: var(--color-1);
 }
