@@ -1,5 +1,8 @@
 from typing import Any
+from typing import List
 
+import requests
+from django.conf import settings
 from django.http import JsonResponse
 
 from .models import Image
@@ -49,3 +52,15 @@ def construct_error_response(
     response = JsonResponse({"error_code": error_code, "error_message": error_message})
     response.status_code = status_code
     return response
+
+
+def purge_cloudflare_cache_urls(urls: List[str]) -> None:
+    if not settings.CLOUDFLARE_ZONE_ID:
+        return
+
+    r = requests.post(
+        f"https://api.cloudflare.com/client/v4/zones/{settings.CLOUDFLARE_ZONE_ID}/purge_cache",
+        headers={"Authorization": f"Bearer {settings.CLOUDFLARE_CACHE_TOKEN}"},
+        json={"files": urls},
+    )
+    assert r.status_code == 200

@@ -23,6 +23,7 @@ ipython = "*"
 pillow = "^6.2.1"
 "hurry.filesize" = "^0.9"
 django-loginas = "^0.3.6"
+requests = "^2.22.0"
 
 [tool.poetry.dev-dependencies]
 bpython = "*"
