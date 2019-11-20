@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% load humanize %}
+
+{% block content %}
+  	<!--begin services section -->
+    <section class="section-grey section-top-border" id="features" style="padding-top: 160px">
+
+        <!--begin container -->
+        <div class="container">
+
+            <!--begin row -->
+            <div class="row">
+
+                <!--begin col-md-12-->
+                <div class="col-md-12 text-center padding-bottom-10">
+                    {% if request.user.is_paying %}
+                    <p>
+                    <form method="post" enctype="multipart/form-data" action="{% url "main:image-upload" %}">
+                        <input name="data" type="file" accept="image/*">
+                        <button type="submit">Upload!</button>
+                    </form>
+                    </p>
+
+                    <p class="section-subtitle">
+                    Hah, I didn't think anyone would pay yet! <br> Also, you're using
+                    {{ request.user.total_space_taken|intcomma }}/{{ request.user.storage_space|intcomma }} bytes of space.
+                    </p>
+
+                    <h3>Your images</h3>
+
+                    <div class="row">
+                        {% for image in request.user.images.all %}
+                        <div class="col-xs-6 col-md-3">
+                            <div class="card">
+                                <a href="{{ image.get_absolute_url  }}">
+                                    <img src="{{ image.get_thumbnail_url }}" class="card-img-top" alt="{{ image.name }}">
+                                </a>
+                                <div class="card-body">
+                                    <a href="{{ image.get_absolute_url  }}">
+                                        <h5 class="card-title">{{ image.name }}</h5>
+                                    </a>
+                                </div>
+                                <div class="card-footer">
+                                    <small class="text-muted">{{ image.uploaded }}</small>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    {% endif %}
+
+                </div>
+                <!--end col-md-12 -->
+
+            </div>
+            <!--end row -->
+
+        </div>
+        <!--end container -->
+
+    </section>
+    <!--end services section -->
+{% endblock %}
