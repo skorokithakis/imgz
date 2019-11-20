@@ -1,6 +1,7 @@
 """The main application's URLs."""
 from django.urls import path
 from django.urls import re_path
+from django.views.generic import TemplateView
 
 from . import api
 from . import views
@@ -8,8 +9,9 @@ from . import views
 app_name = "main"
 urlpatterns = [
     path("", views.index, name="index"),
-    path("logout", views.logout, name="logout"),
     path("upload/", views.image_upload, name="image-upload"),
+    path("logout", views.logout, name="logout"),
+    path("help/faq/", TemplateView.as_view(template_name="faq.html"), name="faq"),
     re_path(r"^(?P<image_id>i[a-zA-Z0-9]{7})/$", views.image_page, name="image-page"),
     re_path(
         r"^(?P<image_id>i[a-zA-Z0-9]{7})/delete/$",
