@@ -31,6 +31,13 @@
                                 </div>
                             </div>
                         </div>
+                        {% empty %}
+                        <div class="col-md-12">
+                        <p style="text-align: center">
+                        You have no images. What's the use of an image sharing service with no images? Go <a
+                            href="{% url "main:image-upload" %}">upload some</a>!
+                        </p>
+                        </div>
                         {% endfor %}
                     </div>
 

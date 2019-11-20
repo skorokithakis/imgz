@@ -16,14 +16,22 @@
                 <div class="col-md-12 text-center padding-bottom-10">
                     {% if request.user.is_paying %}
                     <p>
+                    You can upload an image using this shitty form:
+                    </p>
+
+                    <p>
                     <form method="post" enctype="multipart/form-data" action="{% url "main:image-upload" %}">
                         <input name="data" type="file" accept="image/*">
                         <button type="submit">Upload!</button>
                     </form>
                     </p>
 
+                    <p>
+                    I'm going to fix it soon, I can't stand it any more than you can.
+                    </p>
+
                     <p class="section-subtitle">
-                    You're using
+                    Meanwhile, you're using
                     {{ request.user.total_space_taken|human_size }} / {{ request.user.storage_space|human_size }} of space
                         and your
                     {% if request.user.has_ever_paid %}
