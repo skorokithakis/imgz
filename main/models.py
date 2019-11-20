@@ -28,6 +28,7 @@ def generate_image_id() -> str:
 
 class User(AbstractUser):
     upgraded_until = models.DateField(default=datetime.date(1900, 1, 1))
+    last_payment = models.DateField(default=datetime.date(1900, 1, 1))
     storage_space = models.PositiveIntegerField(default=settings.DEFAULT_USER_SPACE)
     api_key = models.CharField(
         max_length=200, default=generate_moderate_id, db_index=True
@@ -42,6 +43,13 @@ class User(AbstractUser):
         they've reached their storage quota.
         """
         return self.is_paying and self.has_space_left
+
+    @property
+    def has_ever_paid(self) -> bool:
+        """
+        Return whether this user has ever paid or if they've only ever been on the trial.
+        """
+        return self.last_payment != datetime.date(1900, 1, 1)
 
     @property
     def has_space_left(self) -> bool:
