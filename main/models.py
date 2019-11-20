@@ -17,6 +17,8 @@ from django.urls import reverse
 from PIL import Image as PILImage
 from PIL import ImageOps
 
+from .utils import purge_cloudflare_cache_urls
+
 
 def generate_moderate_id() -> str:
     return shortuuid.ShortUUID().random(12)
@@ -207,17 +209,23 @@ class Image(models.Model):
 
         self.strip_exif()
 
-        if not self.format:
-            format = imghdr.what(None, h=self.data)
-            self.format = format if format else ""
+        format = imghdr.what(None, h=self.data)
+        self.format = format if format else ""
 
-        if not self.size:
-            self.size = len(self.data)
-
-        if not bytes(self.thumbnail_512):
-            self.generate_thumbnails()
-
+        self.size = len(self.data)
+        self.generate_thumbnails()
         self.processed = True
+
+    def purge_cache(self) -> None:
+        """
+        Purge this image's URL and all thumbnails from all caches.
+        """
+        image_dict = self.as_dict()
+        image_urls = [
+            image_dict["urls"]["image"],
+            *image_dict["urls"]["thumbnails"].values(),
+        ]
+        purge_cloudflare_cache_urls(image_urls)
 
     def save(self, *args, **kwargs) -> None:
         self.process()

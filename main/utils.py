@@ -5,8 +5,7 @@ import requests
 from django.conf import settings
 from django.http import JsonResponse
 
-from .models import Image
-from .models import User
+import main
 
 
 class UploadError(Exception):
@@ -17,7 +16,7 @@ class UploadError(Exception):
     pass
 
 
-def process_upload(request_files: Any, user: User) -> Image:
+def process_upload(request_files: Any, user: "main.models.User") -> "main.models.Image":
     """
     Process an uploaded file from request.FILES.
     """
@@ -32,6 +31,10 @@ def process_upload(request_files: Any, user: User) -> Image:
 
     data = request_files["data"].read()
     name = request_files["data"].name
+
+    from django.db.models.loading import get_model
+
+    Image = get_model("main", "Image")
     try:
         image = Image.objects.create(data=data, user=user, name=name)
     except OSError:
