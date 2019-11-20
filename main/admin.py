@@ -7,7 +7,7 @@ from .models import User
 
 @admin.register(Image)
 class ImageAdmin(admin.ModelAdmin):
-    list_display = ["id", "name", "user", "uploaded"]
+    list_display = ["id", "name", "user", "uploaded", "processed"]
     search_fields = ["id"]
     list_filter = ["uploaded"]
     ordering = ["-uploaded"]

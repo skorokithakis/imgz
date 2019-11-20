@@ -11,6 +11,7 @@ class Command(BaseCommand):
         for image in Image.objects.filter(processed=False):
             print(f"Processing {image.id}...")
             image.process()
+            image.save()
             counter += 1
 
         print(f"Processed {counter} images.")
