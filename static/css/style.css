@@ -2,6 +2,7 @@
   --color-1: #3a506b;
   --color-2: #eca72c;
   --color-3: var(--color-1);
+  --color-4: var(--color-1); /* Footer */
   --logo-color: var(--color-2);
   --color-p: #5d5e60;
 }
@@ -535,8 +536,8 @@ iframe {
 	overflow: hidden;
     display: block;
     margin-top: 30px;
-    padding: 60px 0 55px 0;
-    background-color: var(--color-1);
+    padding: 30px 0;
+    background-color: var(--color-4);
 }
 
 .footer p {
