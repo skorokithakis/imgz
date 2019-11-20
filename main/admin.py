@@ -20,7 +20,10 @@ class MyUserAdmin(UserAdmin):
         ("Personal info", {"fields": ("first_name", "last_name")}),
         ("Permissions", {"fields": ("is_active", "is_staff", "is_superuser")}),
         ("Important dates", {"fields": ("last_login", "date_joined")}),
-        ("Quotas", {"fields": ("upgraded_until", "storage_space")}),
+        (
+            "Payment stuff",
+            {"fields": ("last_payment", "upgraded_until", "storage_space")},
+        ),
     )
     list_display = ("email", "upgraded_until", "is_staff", "date_joined")
     search_fields = ("email",)
