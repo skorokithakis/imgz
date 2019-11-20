@@ -14,20 +14,9 @@ from django.views.decorators.http import require_POST
 
 from .models import Image
 from .models import User
+from .utils import construct_error_response
 from .utils import process_upload
-
-
-def construct_error_response(
-    error_code: int, error_message: str, status_code: int = 422
-) -> JsonResponse:
-    """
-    Construct a JsonResponse error message.
-
-    This is just a boilerplate-saving class.
-    """
-    response = JsonResponse({"error_code": error_code, "error_message": error_message})
-    response.status_code = status_code
-    return response
+from .utils import UploadError
 
 
 def index(request: HttpRequest) -> HttpResponse:
@@ -90,16 +79,11 @@ def image_show(
 @login_required
 def image_upload(request: HttpRequest) -> HttpResponse:
     if request.method != "POST":
-        return redirect("main:index")
-
-    user = request.user
-    if not user.can_upload:
-        messages.error(request, "You cannot upload files, you need to pay. PAY!")
-        return redirect("main:index")
+        return render(request, "upload.html")
 
     try:
-        image = process_upload(request.FILES, user)
-    except ValueError as e:
+        image = process_upload(request.FILES, request.user)
+    except UploadError as e:
         messages.error(request, str(e))
         return redirect("main:index")
     else:
@@ -114,12 +98,9 @@ def api_image_upload(request: HttpRequest) -> JsonResponse:
             1, "Invalid API key, I guess? I don't know what you're trying to do."
         )
 
-    if not user.can_upload:
-        return construct_error_response(2, "No upload without money! Pay now!")
-
     try:
         image = process_upload(request.FILES, user)
-    except ValueError as e:
+    except UploadError as e:
         return construct_error_response(3, str(e))
     else:
         return JsonResponse(

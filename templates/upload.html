@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% load human_size %}
+
+{% block content %}
+  	<!--begin services section -->
+    <section class="section-grey section-top-border" id="features" style="padding-top: 160px">
+
+        <!--begin container -->
+        <div class="container">
+
+            <!--begin row -->
+            <div class="row">
+
+                <!--begin col-md-12-->
+                <div class="col-md-12 text-center padding-bottom-10">
+                    {% if request.user.is_paying %}
+                    <p>
+                    <form method="post" enctype="multipart/form-data" action="{% url "main:image-upload" %}">
+                        <input name="data" type="file" accept="image/*">
+                        <button type="submit">Upload!</button>
+                    </form>
+                    </p>
+
+                    <p class="section-subtitle">
+                    Hah, I didn't think anyone would pay yet! <br> Also, you're using
+                    {{ request.user.total_space_taken|human_size }} / {{ request.user.storage_space|human_size }} of space.
+                    </p>
+                    {% else %}
+                    <p>
+                    You can't do anything until you pay! Go back.
+                    </p>
+                    {% endif %}
+                </div>
+                <!--end col-md-12 -->
+
+            </div>
+            <!--end row -->
+
+        </div>
+        <!--end container -->
+
+    </section>
+    <!--end services section -->
+{% endblock %}

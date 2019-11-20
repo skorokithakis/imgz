@@ -1,7 +1,5 @@
 {% extends "base.html" %}
 
-{% load humanize %}
-
 {% block content %}
   	<!--begin services section -->
     <section class="section-grey section-top-border" id="features" style="padding-top: 160px">
@@ -14,19 +12,6 @@
 
                 <!--begin col-md-12-->
                 <div class="col-md-12 text-center padding-bottom-10">
-                    {% if request.user.is_paying %}
-                    <p>
-                    <form method="post" enctype="multipart/form-data" action="{% url "main:image-upload" %}">
-                        <input name="data" type="file" accept="image/*">
-                        <button type="submit">Upload!</button>
-                    </form>
-                    </p>
-
-                    <p class="section-subtitle">
-                    Hah, I didn't think anyone would pay yet! <br> Also, you're using
-                    {{ request.user.total_space_taken|intcomma }}/{{ request.user.storage_space|intcomma }} bytes of space.
-                    </p>
-
                     <h3>Your images</h3>
 
                     <div class="row">
@@ -48,8 +33,6 @@
                         </div>
                         {% endfor %}
                     </div>
-
-                    {% endif %}
 
                 </div>
                 <!--end col-md-12 -->

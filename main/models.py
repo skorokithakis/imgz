@@ -17,10 +17,6 @@ from django.urls import reverse
 from PIL import Image as PILImage
 from PIL import ImageOps
 
-KB = 1024
-MB = 1024 * KB
-GB = 1024 * MB
-
 
 def generate_moderate_id() -> str:
     return shortuuid.ShortUUID().random(12)
@@ -32,7 +28,7 @@ def generate_image_id() -> str:
 
 class User(AbstractUser):
     upgraded_until = models.DateField(default=datetime.date(1900, 1, 1))
-    storage_space = models.PositiveIntegerField(default=500 * MB)
+    storage_space = models.PositiveIntegerField(default=settings.DEFAULT_USER_SPACE)
     api_key = models.CharField(
         max_length=200, default=generate_moderate_id, db_index=True
     )
@@ -45,7 +41,14 @@ class User(AbstractUser):
         The user might not be able to upload new files if they have not paid or if
         they've reached their storage quota.
         """
-        return self.is_paying and self.total_space_left > 0
+        return self.is_paying and self.has_space_left
+
+    @property
+    def has_space_left(self) -> bool:
+        """
+        Return whether the user has space left.
+        """
+        return self.total_space_left > 0
 
     @property
     def is_paying(self) -> bool:

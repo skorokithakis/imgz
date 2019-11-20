@@ -199,6 +199,17 @@ python-versions = "*"
 version = "0.4.15"
 
 [[package]]
+category = "main"
+description = "A simple Python library for human readable file sizes (or anything sized in bytes)."
+name = "hurry.filesize"
+optional = false
+python-versions = "*"
+version = "0.9"
+
+[package.dependencies]
+setuptools = "*"
+
+[[package]]
 category = "dev"
 description = "Internationalized Domain Names in Applications (IDNA)"
 name = "idna"
@@ -675,7 +686,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["pathlib2", "contextlib2", "unittest2"]
 
 [metadata]
-content-hash = "1858ef561c794896269b7480757ce4602bad15bc597484a2c27cd5a50e7a079d"
+content-hash = "2687c9f4812e1e687d9d47c8e3dff55c1677ac515206474652e71d2e199689d5"
 python-versions = ">=3.7"
 
 [metadata.files]
@@ -809,6 +820,9 @@ greenlet = [
     {file = "greenlet-0.4.15-cp37-cp37m-win32.whl", hash = "sha256:81fcd96a275209ef117e9ec91f75c731fa18dcfd9ffaa1c0adbdaa3616a86043"},
     {file = "greenlet-0.4.15-cp37-cp37m-win_amd64.whl", hash = "sha256:37c9ba82bd82eb6a23c2e5acc03055c0e45697253b2393c9a50cef76a3985304"},
     {file = "greenlet-0.4.15.tar.gz", hash = "sha256:9416443e219356e3c31f1f918a91badf2e37acf297e2fa13d24d1cc2380f8fbc"},
+]
+"hurry.filesize" = [
+    {file = "hurry.filesize-0.9.tar.gz", hash = "sha256:f5368329adbef86accd3bc9490522340bb79260455ae89b1a42c10f63801b9a6"},
 ]
 idna = [
     {file = "idna-2.8-py2.py3-none-any.whl", hash = "sha256:ea8b7f6188e6fa117537c3df7da9fc686d485087abf6ac197f9c46432f7e4a3c"},
