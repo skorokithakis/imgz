@@ -17,7 +17,14 @@
                 <div class="col-md-12 text-center padding-bottom-10">
 
                     <h2 class="section-title">{{ image.name }}</h2>
+
+                    <p>
                     <a href="{{ image.get_image_url }}"><img style="max-width: 100%" src="{{ image.get_image_url }}" /></a>
+                    </p>
+
+                    <p>
+                    Viewed {{ image.views }} times.
+                    </p>
 
                 </div>
                 <!--end col-md-12 -->

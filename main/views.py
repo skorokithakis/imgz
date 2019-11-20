@@ -35,16 +35,6 @@ def index(request: HttpRequest) -> HttpResponse:
     return render(request, template)
 
 
-def image_page(
-    request: HttpRequest, image_id: str, extension: Optional[str] = None
-) -> HttpResponse:
-    """
-    Show an image page.
-    """
-    image = get_object_or_404(Image, pk=image_id)
-    return render(request, "image.html", {"image": image})
-
-
 def image_show_thumbnail(
     request: HttpRequest, image_id: str, size: str, extension: Optional[str] = None
 ) -> HttpResponse:
@@ -59,6 +49,17 @@ def image_show_thumbnail(
     response = HttpResponse(data, content_type=f"image/{image.format}")
     response["Content-Length"] = len(data)
     return response
+
+
+def image_page(
+    request: HttpRequest, image_id: str, extension: Optional[str] = None
+) -> HttpResponse:
+    """
+    Show an image page.
+    """
+    image = get_object_or_404(Image, pk=image_id)
+    image.increment_views()
+    return render(request, "image.html", {"image": image})
 
 
 def image_show(

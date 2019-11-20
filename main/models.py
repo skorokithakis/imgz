@@ -98,6 +98,14 @@ class Image(models.Model):
     format = models.CharField(max_length=100, blank=True)
     size = models.IntegerField(default=0)
     uploaded = models.DateTimeField(auto_now_add=True)
+    views = models.PositiveIntegerField(default=0)
+
+    processed = models.BooleanField(
+        default=False,
+        db_index=True,
+        help_text="Indicate whether this image has been processed (gone through "
+        "thumbnail generation, rotation, etc) after upload.",
+    )
 
     thumbnail_512 = models.BinaryField(default=b"")
 
@@ -172,7 +180,23 @@ class Image(models.Model):
         os.close(fd)
         os.remove(filename)
 
-    def save(self, *args, **kwargs):
+    def increment_views(self) -> None:
+        """
+        Increment the image's views by one.
+
+        Saves the Image object.
+        """
+        self.views += 1
+        self.save()
+
+    def process(self) -> None:
+        """
+        Run various computationally-heavy processes, such as rotation,
+        thumbnail generation, etc.
+        """
+        if self.processed:
+            return
+
         self.strip_exif()
 
         if not self.format:
@@ -185,7 +209,11 @@ class Image(models.Model):
         if not bytes(self.thumbnail_512):
             self.generate_thumbnails()
 
-        super().save(*args, **kwargs)
+        self.processed = True
+
+    def save(self, *args, **kwargs) -> None:
+        self.process()
+        return super().save(*args, **kwargs)
 
     def as_dict(self) -> Dict[str, Any]:
         site = Site.objects.get_current()
