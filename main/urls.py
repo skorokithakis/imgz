@@ -2,6 +2,7 @@
 from django.urls import path
 from django.urls import re_path
 
+from . import api
 from . import views
 
 app_name = "main"
@@ -10,6 +11,11 @@ urlpatterns = [
     path("logout", views.logout, name="logout"),
     path("upload/", views.image_upload, name="image-upload"),
     re_path(r"^(?P<image_id>i[a-zA-Z0-9]{7})/$", views.image_page, name="image-page"),
+    re_path(
+        r"^(?P<image_id>i[a-zA-Z0-9]{7})/delete/$",
+        views.image_delete,
+        name="image-delete",
+    ),
     re_path(
         r"^(?P<image_id>i[a-zA-Z0-9]{7})_(?P<size>\d+)\.(?P<extension>\w+)$",
         views.image_show_thumbnail,
@@ -22,6 +28,6 @@ urlpatterns = [
     ),
 ]
 urlpatterns += [
-    path("api/images/", views.api_image_upload, name="api-image-upload"),
-    path("api/images/<image_id>/", views.api_image_detail, name="api-image-detail"),
+    path("api/images/", api.image_upload, name="api-image-upload"),
+    path("api/images/<image_id>/", api.image_detail, name="api-image-detail"),
 ]

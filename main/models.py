@@ -6,6 +6,7 @@ import tempfile
 from io import BytesIO
 from typing import Any
 from typing import Dict
+from typing import Tuple
 
 import shortuuid
 from django.conf import settings
@@ -226,6 +227,10 @@ class Image(models.Model):
             *image_dict["urls"]["thumbnails"].values(),
         ]
         purge_cloudflare_cache_urls(image_urls)
+
+    def delete(self, *args, **kwargs) -> Tuple[int, Dict[str, int]]:
+        self.purge_cache()
+        return super().delete(*args, **kwargs)
 
     def save(self, *args, **kwargs) -> None:
         self.process()

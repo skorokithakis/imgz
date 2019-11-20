@@ -6,17 +6,13 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest
 from django.http import HttpResponse
 from django.http import HttpResponseNotFound
-from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
 from django.shortcuts import render
-from django.views.decorators.http import require_GET
 from django.views.decorators.http import require_POST
 from loginas.utils import restore_original_login
 
 from .models import Image
-from .models import User
-from .utils import construct_error_response
 from .utils import process_upload
 from .utils import UploadError
 
@@ -86,6 +82,16 @@ def image_show(
 
 
 @login_required
+@require_POST
+def image_delete(
+    request: HttpRequest, image_id: str, extension: Optional[str] = None
+) -> HttpResponse:
+    get_object_or_404(Image, pk=image_id, user=request.user).delete()
+    messages.success(request, "Okay, the image is gone. It was a dick pic, wasn't it?")
+    return redirect("main:index")
+
+
+@login_required
 def image_upload(request: HttpRequest) -> HttpResponse:
     if request.method != "POST":
         return render(request, "upload.html")
@@ -97,33 +103,3 @@ def image_upload(request: HttpRequest) -> HttpResponse:
         return redirect("main:index")
     else:
         return redirect(image)
-
-
-@require_POST
-def api_image_upload(request: HttpRequest) -> JsonResponse:
-    user = User.objects.filter(api_key=request.GET.get("api_key")).first()
-    if not user:
-        return construct_error_response(
-            1, "Invalid API key, I guess? I don't know what you're trying to do."
-        )
-
-    try:
-        image = process_upload(request.FILES, user)
-    except UploadError as e:
-        return construct_error_response(3, str(e))
-    else:
-        return JsonResponse(
-            image.as_dict(), json_dumps_params={"indent": 2, "sort_keys": True}
-        )
-
-
-@require_GET
-def api_image_detail(request: HttpRequest, image_id: str) -> JsonResponse:
-    image = Image.objects.filter(id=image_id).first()
-    if not image:
-        response = construct_error_response(1, "Image not found.", status_code=404)
-    else:
-        return JsonResponse(
-            image.as_dict(), json_dumps_params={"indent": 2, "sort_keys": True}
-        )
-    return response
