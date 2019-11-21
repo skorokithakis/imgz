@@ -11,8 +11,6 @@ django-extensions = "*"
 django-dotenv = "*"
 django-redis = "*"
 psycopg2-binary = "*"
-pytest = "*"
-pytest-cov = "*"
 shortuuid = "*"
 uwsgi = "*"
 werkzeug = "*"
@@ -30,6 +28,7 @@ bpython = "*"
 pudb = "*"
 django-stubs = "^1.1.0"
 mypy = "^0.740"
+django-nose = "^1.4.6"
 
 [build-system]
 requires = ["poetry>=0.12"]

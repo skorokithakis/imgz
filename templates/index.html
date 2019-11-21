@@ -48,7 +48,7 @@
 
                             <form id="register-form" class="register-form register" action="{% url "tokenauth:login" %}?next={{ request.GET.next }}" method="post">{% csrf_token %}
 
-                                <input class="register-input white-input" required="" name="email" placeholder="Enter your email address" type="email" autofocus>
+                                <input class="register-input white-input" required="" name="email" placeholder="Enter your email address" type="email">
 
                                 <input value="Sign up! Free shit!" class="register-submit" type="submit">
 

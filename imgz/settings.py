@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.humanize",
     "django_extensions",
+    "django_nose",
     "loginas",
     "tokenauth",
     "main",
@@ -203,6 +204,10 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+TEST_RUNNER = "django_nose.NoseTestSuiteRunner"
+
+NOSE_ARGS = ["--with-coverage"]
 
 CLOUDFLARE_ZONE_ID = os.getenv("CLOUDFLARE_ZONE_ID")
 CLOUDFLARE_CACHE_TOKEN = os.getenv("CLOUDFLARE_CACHE_TOKEN")
