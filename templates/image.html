@@ -2,7 +2,7 @@
 
 {% load humanize %}
 
-{% block title %}{{ image.name }}{% endblock %}
+{% block title %}{{ image.title }}{% endblock %}
 
 {% block content %}
     <section class="section-grey section-top-border" id="features">
@@ -16,7 +16,7 @@
                 <!--begin col-md-12-->
                 <div class="col-md-12 text-center padding-bottom-10">
 
-                    <h2 class="section-title">{{ image.name }}</h2>
+                    <h2 class="section-title">{{ image.title }}</h2>
 
                     <p>
                     <a href="{{ image.get_image_url }}"><img style="max-width: 100%" src="{{ image.get_image_url }}" /></a>

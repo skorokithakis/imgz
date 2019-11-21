@@ -32,7 +32,7 @@
     {% if image %}
     <link rel="canonical" href="https://{{ request.site.domain }}{{ image.get_absolute_url }}" />
 
-    <meta property="og:title" content="{{ image.name }}">
+    <meta property="og:title" content="{{ image.title }}">
     <meta property="og:site_name" content="{{ request.site.name }}">
     <meta property="og:url" content="https://{{ request.site.domain }}{{ image.get_absolute_url }}">
     <meta property="og:description" content="A sublime image, viewed {{ image.views }} times.">

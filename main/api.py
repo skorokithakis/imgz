@@ -19,7 +19,7 @@ def image_upload(request: HttpRequest) -> JsonResponse:
         )
 
     try:
-        image = process_upload(request.FILES, user)
+        image = process_upload(request.FILES, user, title=request.POST.get("title"))
     except UploadError as e:
         return construct_error_response(3, str(e))
     else:

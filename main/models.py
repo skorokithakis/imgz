@@ -86,9 +86,12 @@ class User(AbstractUser):
 
 class ImageManager(models.Manager):  # type: ignore
     def create(self, *args, **kwargs) -> "Image":
-        if len(kwargs.get("name", "")) > self.model._meta.get_field("name").max_length:
+        if (
+            len(kwargs.get("title", ""))
+            > self.model._meta.get_field("title").max_length
+        ):
             raise ValueError(
-                "This image's name is huge. Try uploading the abridged version."
+                "This image's title is huge. Try uploading the abridged version."
             )
 
         if len(kwargs.get("data", "")) > settings.MAX_IMAGE_SIZE:
@@ -104,7 +107,7 @@ class Image(models.Model):
         max_length=30, primary_key=True, default=generate_image_id, editable=False
     )
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="images")
-    name = models.CharField(max_length=200, blank=True)
+    title = models.CharField(max_length=200, blank=True)
     data = models.BinaryField()
     format = models.CharField(max_length=100, blank=True)
     size = models.IntegerField(default=0)
@@ -248,7 +251,7 @@ class Image(models.Model):
                 },
             },
             "size": self.size,
-            "name": self.name,
+            "title": self.title,
             "format": self.format,
             "uploaded": self.uploaded.strftime("%Y-%m-%d %H:%M:S"),
         }

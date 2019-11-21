@@ -1,5 +1,6 @@
 from typing import Optional
 
+from django import forms
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -19,6 +20,11 @@ from .utils import UploadError
 
 @login_required
 def logout(request):
+    """
+    Log the user out.
+
+    This is a custom logout view that restores the original user with django-loginas.
+    """
     restore_original_login(request)
     return redirect(settings.LOGOUT_REDIRECT_URL)
 
@@ -93,13 +99,24 @@ def image_delete(
 
 @login_required
 def image_upload(request: HttpRequest) -> HttpResponse:
-    if request.method != "POST":
-        return render(request, "upload.html")
+    class ImageUploadForm(forms.Form):
+        title = forms.CharField(
+            max_length=200, help_text="The title of the image.", required=False
+        )
+        image = forms.FileField()
 
-    try:
-        image = process_upload(request.FILES, request.user)
-    except UploadError as e:
-        messages.error(request, str(e))
-        return redirect("main:index")
+    if request.method == "POST":
+        form = ImageUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            try:
+                image = process_upload(
+                    request.FILES, request.user, title=form.cleaned_data["title"]
+                )
+            except UploadError as e:
+                messages.error(request, str(e))
+                return redirect("main:index")
+            else:
+                return redirect(image)
     else:
-        return redirect(image)
+        form = ImageUploadForm()
+    return render(request, "upload.html", {"form": form})
