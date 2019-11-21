@@ -66,6 +66,11 @@
                     {% endif %}
                     </p>
 
+                    <p>
+                    And, by the way, if you want to use the API, your <code>api_key</code> is
+                    <code>{{ request.user.api_key }}</code>.
+                    </p>
+
                     {% else %}
                     <p>
                     You can't do anything until you pay! Go back.
