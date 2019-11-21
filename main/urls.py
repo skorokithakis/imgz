@@ -30,6 +30,6 @@ urlpatterns = [
     ),
 ]
 urlpatterns += [
-    path("api/images/", api.image_upload, name="api-image-upload"),
-    path("api/images/<image_id>/", api.image_detail, name="api-image-detail"),
+    path("api/image/", api.image_upload, name="api-image-upload"),
+    path("api/image/<image_id>/", api.image_detail, name="api-image-detail"),
 ]
