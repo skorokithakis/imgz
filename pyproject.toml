@@ -5,6 +5,7 @@ description = ""
 authors = []
 
 [tool.poetry.dependencies]
+python = "^3.7"
 django = ">=2.2"
 django-dotenv = "*"
 django-extensions = "*"
@@ -16,7 +17,6 @@ django-tokenauth = "^0.3.0"
 ipython = "*"
 pillow = "^6.2.1"
 psycopg2-binary = "*"
-python = ">=3.7"
 requests = "^2.22.0"
 sentry-sdk = "^0.13.2"
 shortuuid = "*"
@@ -29,6 +29,7 @@ bpython = "*"
 django-stubs = "^1.1.0"
 mypy = "^0.740"
 pudb = "*"
+coverage = "^4.5.4"
 
 [build-system]
 requires = ["poetry>=0.12"]
