@@ -188,6 +188,10 @@ class ViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn(b"My image", response.content)
 
+        # Get a missing image detail page.
+        response = self.client.get(reverse("main:api-image-detail", args=["ihoooo"]))
+        self.assertEqual(response.status_code, 404)
+
         # Delete the image with the wrong API key.
         response = self.client.delete(
             reverse("main:api-image-detail", args=[image.id])
