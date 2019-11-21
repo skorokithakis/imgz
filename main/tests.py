@@ -27,17 +27,27 @@ class ViewTests(TestCase):
         self.user1 = User.objects.create(
             username="hi", email="hi@hi.com", password="hi"
         )
-        self.assertTrue(self.user1.is_paying)
+        self.assertTrue(self.user1.is_upgraded)
         self.assertFalse(self.user1.has_ever_paid)
 
-        self.user2 = User.objects.create(
+        self.expired = User.objects.create(
             username="hi2", email="hi@hi.com", password="hi"
         )
-        self.user2.upgraded_until = datetime.date(1900, 1, 1)
-        self.user2.save()
+        self.expired.upgraded_until = datetime.date(1900, 1, 1)
+        self.expired.save()
 
-        self.assertFalse(self.user2.is_paying)
-        self.assertFalse(self.user2.has_ever_paid)
+        self.assertFalse(self.expired.is_upgraded)
+        self.assertFalse(self.expired.has_ever_paid)
+
+        self.no_space = User.objects.create(
+            username="hi3", email="hi@hi.com", password="hi"
+        )
+        self.no_space.storage_space = 0
+        self.no_space.save()
+
+        self.assertTrue(self.no_space.is_upgraded)
+        self.assertFalse(self.no_space.has_ever_paid)
+        self.assertEqual(self.no_space.total_space_left, 0)
 
     def test_compile_templates(self):
         for template_dir in settings.TEMPLATES[0]["DIRS"]:  # type: ignore
@@ -57,7 +67,7 @@ class ViewTests(TestCase):
         response = self.client.get(reverse("main:index"))
         self.assertEqual(response.status_code, 200)
 
-        self.client.force_login(self.user2)  # type: ignore
+        self.client.force_login(self.expired)  # type: ignore
 
         response = self.client.get(reverse("main:index"))
         self.assertEqual(response.status_code, 200)
@@ -69,7 +79,7 @@ class ViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_invalid_user(self):
-        self.client.force_login(self.user2)  # type: ignore
+        self.client.force_login(self.expired)  # type: ignore
 
         # Try to upload a valid image.
         png = BytesIO(PNG)
@@ -146,9 +156,9 @@ class ViewTests(TestCase):
         response = self.client.get(image.get_thumbnail_url(513))
         self.assertEqual(response.status_code, 404)
 
-        # Let user2 try to delete user1's image.
+        # Let expired try to delete user1's image.
         c2 = Client()
-        c2.force_login(self.user2)  # type: ignore
+        c2.force_login(self.expired)  # type: ignore
         response = c2.post(reverse("main:image-delete", args=[image.id]))
         self.assertEqual(response.status_code, 404)
         self.assertEqual(Image.objects.count(), 2)
@@ -194,8 +204,15 @@ class ViewTests(TestCase):
 
         # Delete the image with the wrong API key.
         response = self.client.delete(
+            reverse("main:api-image-detail", args=[image.id]) + f"?api_key=heyo"
+        )
+        self.assertEqual(response.status_code, 422)
+        self.assertEqual(Image.objects.count(), 1)
+
+        # Delete the image with another user's API key.
+        response = self.client.delete(
             reverse("main:api-image-detail", args=[image.id])
-            + f"?api_key={self.user2.api_key}"
+            + f"?api_key={self.expired.api_key}"
         )
         self.assertEqual(response.status_code, 422)
         self.assertEqual(Image.objects.count(), 1)
@@ -206,4 +223,29 @@ class ViewTests(TestCase):
             + f"?api_key={self.user1.api_key}"
         )
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(Image.objects.count(), 0)
+
+    def test_failure_modes(self):
+        # Upload an image when there's no space left.
+        png = BytesIO(PNG)
+        response = self.client.post(
+            reverse("main:api-image-upload") + f"?api_key={self.no_space.api_key}",
+            {"title": "My image", "image": png},
+        )
+        self.assertEqual(response.status_code, 422)
+        self.assertIn(b"used up all your space", response.content)
+
+        response = self.client.post(
+            reverse("main:api-image-upload") + f"?api_key={self.user1.api_key}"
+        )
+        self.assertEqual(response.status_code, 422)
+        self.assertIn(b"forgot to give us", response.content)
+
+        response = self.client.post(
+            reverse("main:api-image-upload") + f"?api_key={self.user1.api_key}",
+            {"title": "My image", "image": BytesIO(b"hi")},
+        )
+        self.assertEqual(response.status_code, 422)
+        self.assertIn(b"straight trash", response.content)
+
         self.assertEqual(Image.objects.count(), 0)

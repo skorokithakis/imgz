@@ -23,7 +23,7 @@ def process_upload(
     """
     Process an uploaded file from request.FILES.
     """
-    if not user.is_paying:
+    if not user.is_upgraded:
         raise UploadError("You cannot upload files, you need to pay. PAY!")
 
     if not user.has_space_left:

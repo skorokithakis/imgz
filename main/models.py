@@ -45,7 +45,7 @@ class User(AbstractUser):
         The user might not be able to upload new files if they have not paid or if
         they've reached their storage quota.
         """
-        return self.is_paying and self.has_space_left
+        return self.is_upgraded and self.has_space_left
 
     @property
     def has_ever_paid(self) -> bool:
@@ -62,7 +62,7 @@ class User(AbstractUser):
         return self.total_space_left > 0
 
     @property
-    def is_paying(self) -> bool:
+    def is_upgraded(self) -> bool:
         """
         Return whether this is a paying user.
         """

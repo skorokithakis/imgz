@@ -31,7 +31,7 @@ def logout(request):
 
 def index(request: HttpRequest) -> HttpResponse:
     if request.user.is_authenticated:
-        if request.user.is_paying:
+        if request.user.is_upgraded:
             return render(
                 request,
                 "paying.html",
