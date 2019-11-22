@@ -39,19 +39,15 @@ def latest(request: HttpRequest) -> HttpResponse:
 
 
 def index(request: HttpRequest) -> HttpResponse:
-    if request.user.is_authenticated:
-        if request.user.is_upgraded:
-            return render(
-                request,
-                "paying.html",
-                {"images": request.user.images.order_by("-uploaded")},
-            )
-        else:
-            template = "home.html"
-    else:
-        template = "index.html"
+    if not request.user.is_authenticated:
+        return render(request, "index.html")
 
-    return render(request, template)
+    if not request.user.is_upgraded:
+        return render(request, "unpaid.html")
+
+    return render(
+        request, "home.html", {"images": request.user.images.order_by("-uploaded")}
+    )
 
 
 def image_show_thumbnail(

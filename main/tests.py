@@ -8,12 +8,12 @@ from django.conf import settings
 from django.template import Template
 from django.test import Client
 from django.test import TestCase
+from shortuuid import ShortUUID as SU
 from django.urls import reverse
 
 from .models import Image
 from .models import User
 
-# Create your tests here.
 
 # A valid PNG image, the smallest possible PNG.
 # From https://garethrees.org/2007/11/14/pngcrush/.
@@ -264,3 +264,29 @@ class ViewTests(TestCase):
         self.assertIn(b"straight trash", response.content)
 
         self.assertEqual(Image.objects.count(), 0)
+
+    def test_upgrade(self):
+        # Try a simple upgrade of a user on trial.
+        u = User.objects.create(username=SU(), email="hi@hi.com", password="hi")
+        self.assertTrue(u.is_upgraded)
+        self.assertFalse(u.has_ever_paid)
+        self.assertTrue(u.storage_space < 1_000_000_000)
+
+        u.upgrade()
+
+        self.assertTrue(u.is_upgraded)
+        self.assertTrue(u.has_ever_paid)
+        self.assertTrue(u.storage_space > 1_000_000_000)
+        self.assertTrue(u.upgraded_until > datetime.date.today() + datetime.timedelta(385))
+
+        # Upgrade someone who already has lots of space.
+        u = User.objects.create(username=SU(), email="hi@hi.com", password="hi")
+        u.storage_space = 1.5 * settings.GB
+        self.assertTrue(u.is_upgraded)
+        self.assertFalse(u.has_ever_paid)
+
+        u.upgrade()
+
+        self.assertTrue(u.is_upgraded)
+        self.assertTrue(u.has_ever_paid)
+        self.assertTrue(u.storage_space > 1_500_000_000)

@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% load humanize %}
+
+{% block title %}What now?{% endblock %}
+
+{% block content %}
+    <!--begin newsletter section -->
+    <section class="section-blue" id="login">
+
+        <!--begin container -->
+        <div class="container">
+
+            <!--begin row -->
+            <div class="row">
+
+                <!--begin col-md-12 -->
+                <div class="col-md-12 text-center padding-top-50 padding-bottom-20">
+
+                    <h3 class="white-text">Congratulations, your trial expired.</h3>
+                    <p class="white-text">There's nothing you can do here.</p>
+
+                </div>
+                <!--end col-md-12 -->
+
+            </div>
+            <!--end row -->
+
+        </div>
+        <!--end container -->
+
+    </section>
+    <!--end newsletter section -->
+
+  	<!--begin services section -->
+    <section class="section-grey section-top-border" id="features">
+
+        <!--begin container -->
+        <div class="container">
+
+            <!--begin row -->
+            <div class="row">
+
+                <!--begin col-md-12-->
+                <div class="col-md-8 offset-md-2 text-center padding-bottom-10">
+
+                    <h2 class="section-title">Okay listen.</h2>
+
+                    <p class="section-subtitle text-left">
+                    Your {{ request.site.name }} trial has expired. It's time for you to take out your wallet and
+                    <a href="{% url "main:money" %}">pay for what you use</a> like a normal, non-cheap person.
+                    </p>
+
+                    <p class="section-subtitle text-left">
+                    Head over to the <a href="{% url "main:money" %}">money page</a> and give me yours. Then I will
+                    release your images. If you fail to do this, your images may get deleted soon to make room for
+                    people who aren't cheapskates.
+                    </p>
+
+                    <p class="section-subtitle text-left">
+                    Go back to Facebook or some other "free" website.
+                    </p>
+                </div>
+                <!--end col-md-12 -->
+
+            </div>
+            <!--end row -->
+
+        </div>
+        <!--end container -->
+
+    </section>
+    <!--end services section -->
+{% endblock %}

@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% load staticfiles human_size %}
+
+{% block title %}Money{% endblock %}
+
+{% block content %}
+
+{% if stripe_session_id %}
+<script src="https://js.stripe.com/v3/"></script>
+
+<script>
+    var stripe = Stripe('{{ settings.STRIPE_PUBLIC_KEY }}');
+
+    stripe.redirectToCheckout({
+      sessionId: '{{ stripe_session_id }}'
+    }).then(function (result) {
+      alert(result.error.message);
+    });
+</script>
+{% endif %}
+
+  	<!--begin services section -->
+    <section class="section-grey section-top-border" id="features">
+
+        <!--begin container -->
+        <div class="container">
+
+            <!--begin row -->
+            <div class="row">
+
+                <div class="col-md-8 offset-md-2 text-center padding-bottom-10 left-text">
+                    <h3>Money</h3>
+
+                    {% if not request.user.is_paying %}
+                    <p>
+                    Let's talk money. As you may have noticed from the subtle but effective messaging, this service
+                    isn't free. That's because we want to avoid having to sell photos of your vagina to shady Russian
+                    oligarchs to pay for our servers and cocaine.
+                    </p>
+
+                    <p>
+                    Right now all you can pay for is 1 GB of storage space, which should hold you until I build the rest
+                    of the tiers. If you need more space, contact me and we'll... figure something out.
+                    </p>
+
+                    <p>
+                    Oh, by the way, the price goes up the more users there are. No rush.
+                    </p>
+
+                </div>
+                <!--end col-md-12 -->
+
+                <div class="col-md-6 offset-md-3" style="text-align: center">
+                    <p style="font-size: 120%; font-weight: bold">
+                    ONE YEAR OF {{ request.site.name }}
+                    </p>
+
+                    <p style="font-size: 80%">
+                    That will be
+                    </p>
+
+                    <p style="font-size: 200%; font-weight: bold">
+                    ${{ price|floatformat:2 }} U.S. BUCKS
+                    </p>
+
+                    <p style="font-size: 80%; margin-bottom: 40px">
+                    ...for now.
+                    </p>
+
+                    <p><a href="{% url "main:stripe-redirect" %}"><img src="{% static "images/stripe.png" %}"></a></p>
+                    <p><a href="{% url "main:btc-redirect" %}"><img src="{% static "images/btc.png" %}"></a></p>
+                    {% else %}
+                    <p>
+                    You've already paid, there's nothing for you here. Thanks, I guess.
+                    </p>
+
+                    <p>
+                    Never forget your place.
+                    </p>
+                    {% endif %}
+                </div>
+            </div>
+            <!--end row -->
+
+        </div>
+        <!--end container -->
+
+    </section>
+    <!--end services section -->
+{% endblock %}

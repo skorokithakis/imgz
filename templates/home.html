@@ -1,37 +1,8 @@
 {% extends "base.html" %}
 
-{% load humanize %}
-
-{% block title %}What now?{% endblock %}
+{% block title %}Your images{% endblock %}
 
 {% block content %}
-    <!--begin newsletter section -->
-    <section class="section-blue" id="login">
-
-        <!--begin container -->
-        <div class="container">
-
-            <!--begin row -->
-            <div class="row">
-
-                <!--begin col-md-12 -->
-                <div class="col-md-12 text-center padding-top-50 padding-bottom-20">
-
-                    <h3 class="white-text">Congratulations, you're logged in,</h3>
-                    <p class="white-text">There's nothing you can do.</p>
-
-                </div>
-                <!--end col-md-12 -->
-
-            </div>
-            <!--end row -->
-
-        </div>
-        <!--end container -->
-
-    </section>
-    <!--end newsletter section -->
-
   	<!--begin services section -->
     <section class="section-grey section-top-border" id="features">
 
@@ -43,18 +14,20 @@
 
                 <!--begin col-md-12-->
                 <div class="col-md-12 text-center padding-bottom-10">
+                    <h3>Your images</h3>
 
-                    <h2 class="section-title">Okay listen.</h2>
-
-                    <p class="section-subtitle" style="max-width: 500px; margin: 0 auto;">
-                    {{ request.site.name }} isn't ready yet, I'm slowly adding more stuff.
-                    <br>
-                    However, if you're adventurous and want to get in on the bottom floor of this EXCITING OPPORTUNITY,
-                    send me some Bitcoin or Monero or something and I'll give you a lifetime upgrade with some generous
-                    limit like 1 GB.
-                    <br>
-                    Talk to me <a href="https://twitter.com/stavros">on Twitter</a> to arrange this.
-                    </p>
+                    <div class="row">
+                        {% for image in images %}
+                            {% include "fragments/image_card.html" %}
+                        {% empty %}
+                        <div class="col-md-12">
+                        <p style="text-align: center">
+                        You have no images. What's the use of an image sharing service with no images? Go <a
+                            href="{% url "main:image-upload" %}">upload some</a>!
+                        </p>
+                        </div>
+                        {% endfor %}
+                    </div>
 
                 </div>
                 <!--end col-md-12 -->

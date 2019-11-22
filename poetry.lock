@@ -137,6 +137,14 @@ six = ">=1.2"
 
 [[package]]
 category = "main"
+description = "A Django utility application that returns client's real IP address"
+name = "django-ipware"
+optional = false
+python-versions = "*"
+version = "2.1.0"
+
+[[package]]
+category = "main"
 description = "An app to add a \"Log in as user\" button in the Django user admin page."
 name = "django-loginas"
 optional = false
@@ -468,6 +476,19 @@ version = "0.3.0"
 
 [[package]]
 category = "main"
+description = "Python bindings for the Stripe API"
+name = "stripe"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+version = "2.40.0"
+
+[package.dependencies]
+[package.dependencies.requests]
+python = ">=3.0"
+version = ">=2.20"
+
+[[package]]
+category = "main"
 description = "Traitlets Python config system"
 name = "traitlets"
 optional = false
@@ -567,7 +588,7 @@ version = "4.1.4"
 brotli = ["brotli"]
 
 [metadata]
-content-hash = "99373e02b8431cd0a3e956eb5d1911785af67bf587f0683c9defd20a7f740c19"
+content-hash = "4e116a359ab06e71c078f82b87745a17455dec0a40d57a4884bde5986885db43"
 python-versions = "^3.7"
 
 [metadata.files]
@@ -652,6 +673,9 @@ django-dotenv = [
 django-extensions = [
     {file = "django-extensions-2.2.5.tar.gz", hash = "sha256:b58320d3fe3d6ae7d1d8e38959713fa92272f4921e662d689058d942a5b444f7"},
     {file = "django_extensions-2.2.5-py2.py3-none-any.whl", hash = "sha256:a9db7c56a556d244184f589f2437b4228de86ee45e5ebb837fb20c6d54e95ea5"},
+]
+django-ipware = [
+    {file = "django-ipware-2.1.0.tar.gz", hash = "sha256:a7c7a8fd019dbdc9c357e6e582f65034e897572fc79a7e467674efa8aef9d00b"},
 ]
 django-loginas = [
     {file = "django-loginas-0.3.6.tar.gz", hash = "sha256:bd72331883954836e0e78df63e4e49e928c284d0f889f40cd227f892b1d26eff"},
@@ -818,8 +842,6 @@ psycopg2-binary = [
     {file = "psycopg2_binary-2.8.4-cp38-cp38-macosx_10_9_x86_64.macosx_10_9_intel.macosx_10_10_intel.macosx_10_10_x86_64.whl", hash = "sha256:4c3c09fb674401f630626310bcaf6cd6285daf0d5e4c26d6e55ca26a2734e39b"},
     {file = "psycopg2_binary-2.8.4-cp38-cp38-manylinux1_i686.whl", hash = "sha256:18ca813fdb17bc1db73fe61b196b05dd1ca2165b884dd5ec5568877cabf9b039"},
     {file = "psycopg2_binary-2.8.4-cp38-cp38-manylinux1_x86_64.whl", hash = "sha256:50446fae5681fc99f87e505d4e77c9407e683ab60c555ec302f9ac9bffa61103"},
-    {file = "psycopg2_binary-2.8.4-cp38-cp38-win32.whl", hash = "sha256:98e10634792ac0e9e7a92a76b4991b44c2325d3e7798270a808407355e7bb0a1"},
-    {file = "psycopg2_binary-2.8.4-cp38-cp38-win_amd64.whl", hash = "sha256:b8f490f5fad1767a1331df1259763b3bad7d7af12a75b950c2843ba319b2415f"},
 ]
 ptyprocess = [
     {file = "ptyprocess-0.6.0-py2.py3-none-any.whl", hash = "sha256:d7cc528d76e76342423ca640335bd3633420dc1366f258cb31d05e865ef5ca1f"},
@@ -858,6 +880,10 @@ six = [
 sqlparse = [
     {file = "sqlparse-0.3.0-py2.py3-none-any.whl", hash = "sha256:40afe6b8d4b1117e7dff5504d7a8ce07d9a1b15aeeade8a2d10f130a834f8177"},
     {file = "sqlparse-0.3.0.tar.gz", hash = "sha256:7c3dca29c022744e95b547e867cee89f4fce4373f3549ccd8797d8eb52cdb873"},
+]
+stripe = [
+    {file = "stripe-2.40.0-py2.py3-none-any.whl", hash = "sha256:babf70550ec710e2588bdd748f021ccb0c150a1baec715c68f57c198608b3345"},
+    {file = "stripe-2.40.0.tar.gz", hash = "sha256:eeacf35f828a7795660cff0d3da6ca60ee3db15d1b9ef227aaeacfe232a52999"},
 ]
 traitlets = [
     {file = "traitlets-4.3.3-py2.py3-none-any.whl", hash = "sha256:70b4c6a1d9019d7b4f6846832288f86998aa3b9207c6821f3578a6a6a467fe44"},

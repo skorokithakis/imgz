@@ -23,6 +23,8 @@ shortuuid = "*"
 uwsgi = "*"
 werkzeug = "*"
 whitenoise = "*"
+stripe = "^2.40.0"
+django-ipware = "^2.1.0"
 
 [tool.poetry.dev-dependencies]
 bpython = "*"

@@ -57,7 +57,8 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "imgz.stats_middleware.StatsMiddleware",
+    "imgz.middleware.StatsMiddleware",
+    "imgz.middleware.RealIPMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -80,6 +81,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "imgz.context_processors.settings",
             ]
         },
     }
@@ -106,7 +108,8 @@ GB = 1024 * MB
 
 # Maximum allowed image size.
 MAX_IMAGE_SIZE = 20 * MB
-DEFAULT_USER_SPACE = 1 * GB
+ANNUAL_USER_SPACE = 1 * GB
+ANNUAL_PRICE_PER_GB = 5
 
 if os.getenv("IN_DOCKER"):
     DATABASES = {
@@ -211,6 +214,12 @@ NOSE_ARGS = ["--with-coverage"]
 
 CLOUDFLARE_ZONE_ID = os.getenv("CLOUDFLARE_ZONE_ID")
 CLOUDFLARE_CACHE_TOKEN = os.getenv("CLOUDFLARE_CACHE_TOKEN")
+
+STRIPE_PUBLIC_KEY = os.getenv("STRIPE_PUBLIC_KEY", "")
+STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY", "")
+STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET", "")
+
+OPENNODE_API_KEY = os.getenv("OPENNODE_API_KEY", "")
 
 TOKENAUTH_LOGIN_URL = "/"
 LOGOUT_REDIRECT_URL = LOGIN_REDIRECT_URL = "/"

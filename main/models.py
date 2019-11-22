@@ -32,7 +32,7 @@ def generate_image_id() -> str:
 class User(AbstractUser):
     upgraded_until = models.DateField(default=datetime.date(1900, 1, 1))
     last_payment = models.DateField(default=datetime.date(1900, 1, 1))
-    storage_space = models.PositiveIntegerField(default=settings.DEFAULT_USER_SPACE)
+    storage_space = models.PositiveIntegerField(default=0)
     api_key = models.CharField(
         max_length=200, default=generate_moderate_id, db_index=True
     )
@@ -69,6 +69,13 @@ class User(AbstractUser):
         return self.upgraded_until >= datetime.date.today()
 
     @property
+    def is_paying(self) -> bool:
+        """
+        Return whether the user is currently paying, i.e. is upgraded and not on trial.
+        """
+        return self.is_upgraded and self.has_ever_paid
+
+    @property
     def total_space_taken(self) -> int:
         """
         Return the total amount of space this users' images take.
@@ -82,6 +89,17 @@ class User(AbstractUser):
         Return the total space the user has left on their account.
         """
         return self.storage_space - self.total_space_taken
+
+    def upgrade(self) -> None:
+        """
+        Upgrade the user's account for a year.
+        """
+        self.storage_space = max(self.storage_space, 1 * settings.GB)
+        self.upgraded_until = max(
+            datetime.date.today(), self.upgraded_until
+        ) + datetime.timedelta(365)
+        self.last_payment = datetime.date.today()
+        self.save()
 
 
 class ImageManager(models.Manager):  # type: ignore
