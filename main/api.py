@@ -53,8 +53,10 @@ class APIView(View):
                     "Invalid API key, I guess? I don't know what you're trying to do.",
                 )
 
-            assert self.image
-            if getattr(self, "image", None) and self.image.user != self.user:
+            if (
+                getattr(self, "image", None)
+                and self.image.user != self.user  # type: ignore
+            ):
                 return self._construct_error_response(
                     2, "That's not your image, quit playing."
                 )
