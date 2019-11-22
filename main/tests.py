@@ -176,6 +176,7 @@ class ViewTests(TestCase):
 
         # Check that superuser can delete another user's image.
         image = Image.objects.all().order_by("uploaded").first()
+        assert image
         c3 = Client()
         c3.force_login(self.superuser)  # type: ignore
         response = c3.post(reverse("main:image-delete", args=[image.id]))
