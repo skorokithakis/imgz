@@ -13,6 +13,7 @@ urlpatterns = [
     path("latest/", views.latest, name="latest"),
     path("logout", views.logout, name="logout"),
     path("help/faq/", TemplateView.as_view(template_name="faq.html"), name="faq"),
+    path("help/terms/", TemplateView.as_view(template_name="terms.html"), name="terms"),
     re_path(r"^(?P<image_id>i[a-zA-Z0-9]{7})/$", views.image_page, name="image-page"),
     re_path(
         r"^(?P<image_id>i[a-zA-Z0-9]{7})/delete/$",

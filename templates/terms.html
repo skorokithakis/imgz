@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% load human_size %}
+
+{% block title %}Frequently asked questions{% endblock %}
+
+{% block content %}
+  	<!--begin services section -->
+    <section class="section-grey section-top-border" id="features">
+
+        <!--begin container -->
+        <div class="container">
+
+            <!--begin row -->
+            <div class="row">
+
+                <!--begin col-md-12-->
+                <div class="col-md-12 text-center padding-bottom-10">
+                    <h3>Terms and conditions</h3>
+
+                    <p>
+                    This is my project, and I make no promises at all, even though you're paying money! I'm not even
+                    promising I'll host your images. I don't believe in stealing your money or compromising your
+                    privacy, but even those aren't promises either.
+                    </p>
+
+                    <p>
+                    You're here because {{ request.site.name }} is new and exciting and unlike any other service you've
+                    used before. It's mysterious and alluring, and maybe it beats you from time to time, but it doesn't
+                    really mean it, deep down you know it loves you and if only you weren't such an annoying user, it
+                    wouldn't have to do that.
+                    </p>
+
+                    <p>
+                    If you want a safe and predictable image hosting service, go to Imgur, with its nine-to-five job and
+                    its selling of your dick pics to the highest bidder. Did you know you can't even upload images to
+                    Imgur any more? No, it's all "make a post" now and "get on the front page" and whatever else social
+                    crap they have, I don't know, I don't use it.
+                    </p>
+
+                    <p>
+                    Anyway, where was I? Oh, yes, domestic violence metaphors. Get an account, pay some money, host some
+                    images. It's great. When your friends ask, you'll be able to say "yes, I had an
+                    {{ request.site.name }} account before it was cool". We're lowering the temperature by one degree
+                    a month, so it'll eventually be true.
+                    </p>
+
+                    <p>
+                    So yeah, get an account, it's cheap and you'll love it. Just don't get on my nerves.
+                    </p>
+               </div>
+                <!--end col-md-12 -->
+
+            </div>
+            <!--end row -->
+
+        </div>
+        <!--end container -->
+
+    </section>
+    <!--end services section -->
+{% endblock %}
