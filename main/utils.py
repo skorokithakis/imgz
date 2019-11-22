@@ -4,7 +4,6 @@ from typing import Optional
 
 import requests
 from django.conf import settings
-from django.http import JsonResponse
 
 import main
 
@@ -44,19 +43,6 @@ def process_upload(
     except ValueError as e:
         raise UploadError(str(e))
     return image
-
-
-def construct_error_response(
-    error_code: int, error_message: str, status_code: int = 422
-) -> JsonResponse:
-    """
-    Construct a JsonResponse error message.
-
-    This is just a boilerplate-saving class.
-    """
-    response = JsonResponse({"error_code": error_code, "error_message": error_message})
-    response.status_code = status_code
-    return response
 
 
 def purge_cloudflare_cache_urls(urls: List[str]) -> None:

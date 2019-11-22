@@ -32,8 +32,8 @@ urlpatterns = [
 ]
 
 urlpatterns += [
-    path("api/image/", api.image_upload, name="api-image-upload"),
-    path("api/image/<image_id>/", api.image_detail, name="api-image-detail"),
+    path("api/image/", api.ImageView.as_view(), name="api-image"),
+    path("api/image/<image_id>/", api.ImageView.as_view(), name="api-image-detail"),
 ]
 
 urlpatterns += [

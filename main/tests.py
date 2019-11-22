@@ -187,7 +187,7 @@ class ViewTests(TestCase):
         # Upload an image with an invalid API key.
         png = BytesIO(PNG)
         response = self.client.post(
-            reverse("main:api-image-upload") + f"?api_key=hello",
+            reverse("main:api-image") + f"?api_key=hello",
             {"title": "My image", "image": png},
         )
         self.assertEqual(response.status_code, 422)
@@ -195,7 +195,7 @@ class ViewTests(TestCase):
         # Upload an image with a valid API key.
         png = BytesIO(PNG)
         response = self.client.post(
-            reverse("main:api-image-upload") + f"?api_key={self.user1.api_key}",
+            reverse("main:api-image") + f"?api_key={self.user1.api_key}",
             {"title": "My image", "image": png},
         )
         self.assertEqual(response.status_code, 200)
@@ -216,6 +216,17 @@ class ViewTests(TestCase):
         # Get a missing image detail page.
         response = self.client.get(reverse("main:api-image-detail", args=["ihoooo"]))
         self.assertEqual(response.status_code, 404)
+
+        # Change the title.
+        response = self.client.put(
+            reverse("main:api-image-detail", args=[image.id])
+            + f"?api_key={self.user1.api_key}",
+            {"title": "A new title"},
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 200)
+        image.refresh_from_db()
+        self.assertEqual(image.title, "A new title")
 
         # Delete the image with the wrong API key.
         response = self.client.delete(
@@ -244,20 +255,20 @@ class ViewTests(TestCase):
         # Upload an image when there's no space left.
         png = BytesIO(PNG)
         response = self.client.post(
-            reverse("main:api-image-upload") + f"?api_key={self.no_space.api_key}",
+            reverse("main:api-image") + f"?api_key={self.no_space.api_key}",
             {"title": "My image", "image": png},
         )
         self.assertEqual(response.status_code, 422)
         self.assertIn(b"used up all your space", response.content)
 
         response = self.client.post(
-            reverse("main:api-image-upload") + f"?api_key={self.user1.api_key}"
+            reverse("main:api-image") + f"?api_key={self.user1.api_key}"
         )
         self.assertEqual(response.status_code, 422)
         self.assertIn(b"forgot to give us", response.content)
 
         response = self.client.post(
-            reverse("main:api-image-upload") + f"?api_key={self.user1.api_key}",
+            reverse("main:api-image") + f"?api_key={self.user1.api_key}",
             {"title": "My image", "image": BytesIO(b"hi")},
         )
         self.assertEqual(response.status_code, 422)
