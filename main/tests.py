@@ -8,8 +8,8 @@ from django.conf import settings
 from django.template import Template
 from django.test import Client
 from django.test import TestCase
-from shortuuid import ShortUUID as SU
 from django.urls import reverse
+from shortuuid import ShortUUID as SU
 
 from .models import Image
 from .models import User
@@ -277,7 +277,9 @@ class ViewTests(TestCase):
         self.assertTrue(u.is_upgraded)
         self.assertTrue(u.has_ever_paid)
         self.assertTrue(u.storage_space > 1_000_000_000)
-        self.assertTrue(u.upgraded_until > datetime.date.today() + datetime.timedelta(385))
+        self.assertTrue(
+            u.upgraded_until > datetime.date.today() + datetime.timedelta(385)
+        )
 
         # Upgrade someone who already has lots of space.
         u = User.objects.create(username=SU(), email="hi@hi.com", password="hi")
