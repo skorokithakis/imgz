@@ -4,7 +4,7 @@ from django import forms
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import HttpRequest
+from django.http import HttpRequest, Http404
 from django.http import HttpResponse
 from django.http import HttpResponseNotFound
 from django.shortcuts import get_object_or_404
@@ -27,6 +27,12 @@ def logout(request):
     """
     restore_original_login(request)
     return redirect(settings.LOGOUT_REDIRECT_URL)
+
+
+def latest(request: HttpRequest) -> HttpResponse:
+    if not request.user.is_superuser:
+        raise Http404()
+    return render(request, "latest.html", {"images": Image.objects.order_by("-uploaded")[:50]})
 
 
 def index(request: HttpRequest) -> HttpResponse:

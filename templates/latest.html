@@ -14,7 +14,12 @@
 
                 <!--begin col-md-12-->
                 <div class="col-md-12 text-center padding-bottom-10">
-                    <h3>Your images</h3>
+                    <h3>Latest images</h3>
+
+                    <p>
+                    For the purposes of monitoring illegal content, here are the latest {{ images|length }} images uploaded
+                    by anyone.
+                    </p>
 
                     <div class="row">
                         {% for image in images %}

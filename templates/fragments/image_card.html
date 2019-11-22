@@ -1,0 +1,25 @@
+<div class="col-xs-6 col-md-3">
+    <div class="card">
+        <a href="{{ image.get_absolute_url  }}">
+            <img src="{{ image.get_thumbnail_url }}" class="card-img-top" alt="{{ image.title }}">
+        </a>
+        <div class="card-body">
+            <a href="{{ image.get_absolute_url  }}">
+                <h5 class="card-title">{{ image.title }}</h5>
+            </a>
+        </div>
+        <div class="card-footer">
+            <small class="text-muted">
+                {{ image.uploaded }}
+
+                <form
+                    onsubmit="return confirm('Are you sure you want to delete this embarrassment of an image?');"
+                    method="post"
+                    action="{% url "main:image-delete" image.id %}"
+                    >
+                    <input type="submit" class="btn btn-danger btn-sm" style="margin-top: 5px" value="Delete">
+                </form>
+            </small>
+        </div>
+    </div>
+</div>
