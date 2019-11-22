@@ -49,6 +49,12 @@ class ViewTests(TestCase):
         self.assertFalse(self.no_space.has_ever_paid)
         self.assertEqual(self.no_space.total_space_left, 0)
 
+        self.superuser = User.objects.create(
+            username="super", email="hi@hi.com", password="hi"
+        )
+        self.superuser.is_superuser = self.superuser.is_staff = True
+        self.superuser.save()
+
     def test_compile_templates(self):
         for template_dir in settings.TEMPLATES[0]["DIRS"]:  # type: ignore
             for basepath, dirs, filenames in os.walk(template_dir):
@@ -167,6 +173,14 @@ class ViewTests(TestCase):
         response = self.client.post(reverse("main:image-delete", args=[image.id]))
         self.assertEqual(response.status_code, 302)
         self.assertEqual(Image.objects.count(), 1)
+
+        # Check that superuser can delete another user's image.
+        image = Image.objects.all().order_by("uploaded").first()
+        c3 = Client()
+        c3.force_login(self.superuser)  # type: ignore
+        response = c3.post(reverse("main:image-delete", args=[image.id]))
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(Image.objects.count(), 0)
 
     def test_api(self):
         # Upload an image with an invalid API key.

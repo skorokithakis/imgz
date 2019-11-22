@@ -1857,3 +1857,12 @@ ul.partners-mentions li img:hover {
 p a {
     text-decoration: underline;
 }
+
+.image-toolbar {
+    margin: 20px auto;
+}
+
+.image-toolbar > .btn-group {
+    margin-left: auto;
+    margin-right: 0;
+}

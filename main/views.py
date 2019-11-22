@@ -98,7 +98,10 @@ def image_show(
 def image_delete(
     request: HttpRequest, image_id: str, extension: Optional[str] = None
 ) -> HttpResponse:
-    get_object_or_404(Image, pk=image_id, user=request.user).delete()
+    image = get_object_or_404(Image, pk=image_id)
+    if image.user != request.user and not request.user.is_superuser:
+        raise Http404
+    image.delete()
     messages.success(request, "Okay, the image is gone. It was a dick pic, wasn't it?")
     return redirect("main:index")
 
