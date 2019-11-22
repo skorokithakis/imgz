@@ -1866,3 +1866,7 @@ p a {
     margin-left: auto;
     margin-right: 0;
 }
+
+.left-text p {
+    text-align: left;
+}
