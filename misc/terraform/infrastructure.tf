@@ -59,6 +59,13 @@ resource "cloudflare_record" "mg" {
   value="eu.mailgun.org"
 }
 
+resource "cloudflare_record" "brave_verification" {
+  zone_id=var.zone
+  type="TXT"
+  name="@"
+  value="brave-ledger-verification=95e73833c2e2d140ec37779d3c7ed5890199869a0f53341a859410c26e478f58"
+}
+
 resource "cloudflare_record" "spf" {
   zone_id=var.zone
   type="TXT"
