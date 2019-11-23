@@ -37,6 +37,9 @@ class User(AbstractUser):
         max_length=200, default=generate_moderate_id, unique=True
     )
 
+    def __str__(self) -> str:
+        return self.email
+
     @property
     def can_upload(self) -> bool:
         """
