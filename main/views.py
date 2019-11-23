@@ -30,6 +30,11 @@ def logout(request):
     return redirect(settings.LOGOUT_REDIRECT_URL)
 
 
+def api_docs(request: HttpRequest) -> HttpResponse:
+    api_key = request.user.api_key if request.user.is_authenticated else "y0uRAP1k3y"
+    return render(request, "api.html", {"api_key": api_key})
+
+
 def latest(request: HttpRequest) -> HttpResponse:
     if not request.user.is_superuser:
         raise Http404()

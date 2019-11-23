@@ -1,5 +1,7 @@
+import base64
 import json
 from typing import Any
+from typing import Optional
 
 from django.http import JsonResponse
 from django.views.generic import View
@@ -23,6 +25,22 @@ class APIView(View):
         response.status_code = status_code
         return response
 
+    def _get_auth(self) -> Optional[User]:
+        """
+        Check the basic auth headers and return a user if they're valid.
+        """
+        auth = self.request.META.get("HTTP_AUTHORIZATION", "").split()
+        if len(auth) != 2 or auth[0].lower() != "basic":
+            return None
+
+        try:
+            _, api_key = base64.b64decode(auth[1].encode()).split(b":")
+        except Exception:
+            return None
+
+        user = User.objects.filter(api_key=api_key.decode()).first()
+        return user
+
     def dispatch(self, *args, **kwargs):
         if self.request.method != "POST":
             self.image = Image.objects.filter(id=kwargs.get("image_id", "")).first()
@@ -44,15 +62,14 @@ class APIView(View):
         assert self.request.method
         handler = getattr(self, self.request.method.lower(), None)
         if getattr(handler, "needs_auth", True):
-            self.user = User.objects.filter(
-                api_key=self.request.GET.get("api_key")
-            ).first()
+            self.user = self._get_auth()
             if not self.user:
                 return self._construct_error_response(
                     1,
                     "Invalid API key, I guess? I don't know what you're trying to do.",
                 )
 
+            # Check that the image belongs to this user.
             if (
                 getattr(self, "image", None)
                 and self.image.user != self.user  # type: ignore

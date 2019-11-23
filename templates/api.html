@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% load human_size %}
+
+{% block title %}Frequently asked questions{% endblock %}
+
+{% block content %}
+  	<!--begin services section -->
+    <section class="section-grey section-top-border" id="features">
+
+        <!--begin container -->
+        <div class="container">
+
+            <!--begin row -->
+            <div class="row">
+
+                <!--begin col-md-8-->
+                <div class="col-md-8 offset-md-2 text-center padding-bottom-10 left-text">
+                    <h3>API documentation</h3>
+
+                    <p>
+                    Ugh, I didn't want to go into all this detail, but it's not like anyone is going to look at the
+                    publicly-available, amply-documented, simple code to figure out how the API works, so here we are.
+                    </p>
+
+                    <p>
+                    The API is pretty RESTful and non-surprising, you authenticate with your API key and it's all good.
+                    </p>
+
+
+                    <h4>Authentication</h4>
+
+                    <p>
+                    Authentication is easy enough that even you can do it. Just use your API key as your password in
+                    HTTP Basic auth.
+                    </p>
+
+
+                    <h4>Uploading an image</h4>
+
+                    <p>
+                    To upload an image, simply <code>POST</code> to
+                    <code>https://{{ request.site.domain }}{% url "main:api-image" %}</code> as a
+                    <code>multipart/form-data</code> content type, with your image in the <code>image</code> field and
+                    the title in the <code>title</code> field.
+                    </p>
+
+                    <p>
+                    Example:
+                    </p>
+
+                    <p>
+                    <code>
+                        curl https://:{{ api_key }}@{{ request.site.domain }}{% url "main:api-image" %} \<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;-F "image=@/some/image/path.png" \<br>
+                            &nbsp;&nbsp;&nbsp;-F "title=I am alone."
+                    </code>
+                    </p>
+
+
+                    <h4>Retrieving an image</h4>
+
+                    <p>
+                    This doesn't even need auth. Just make a <code>GET</code> request to
+                    <code>https://:{{ api_key }}@{{ request.site.domain }}{% url "main:api-image-detail" "image_id" %}</code>
+                    </p>
+
+                    <p>
+                    Example:
+                    </p>
+
+                    <p>
+                    <code>
+                        curl https://{{ request.site.domain }}{% url "main:api-image-detail" "iJKuc6HA" %}
+                    </code>
+                    </p>
+
+                    <h4>Editing an image</h4>
+
+                    <p>
+                    To edit an image, <code>PUT</code> to
+                    <code>https://{{ request.site.domain }}{% url "main:api-image-detail" "image_id" %}</code>.
+                    You can currently only change the title by passing the <code>title</code> field. The request should
+                    be JSON-encoded with the appropriate content type.
+                    </p>
+
+                    <p>
+                    Example:
+                    </p>
+
+                    <p>
+                    <code>
+                        curl https://:{{ api_key }}@{{ request.site.domain }}{% url "main:api-image-detail" "iJKuc6HA" %} \<br>
+                        &nbsp;&nbsp;&nbsp;-H 'Content-Type: application/json' -X PUT -d '{"title": "This is me."}'
+                    </code>
+                    </p>
+
+                    <h4>Deleting an image</h4>
+
+                    <p>
+                    Unsurprisingly, <code>DELETE</code> to
+                    <code>https://{{ request.site.domain }}{% url "main:api-image-detail" "image_id" %}</code>.
+                    </p>
+
+                    <p>
+                    Example:
+                    </p>
+
+                    <p>
+                    <code>
+                        curl -X DELETE https://:{{ api_key }}@{{ request.site.domain }}{% url "main:api-image-detail" "iJKuc6HA" %}
+                    </code>
+                    </p>
+                </div>
+                <!--end col-md-12 -->
+
+            </div>
+            <!--end row -->
+
+        </div>
+        <!--end container -->
+
+    </section>
+    <!--end services section -->
+{% endblock %}

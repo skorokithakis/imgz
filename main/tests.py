@@ -22,6 +22,16 @@ PNG = base64.b64decode(
 )
 
 
+def http_auth(username: str, password: str) -> str:
+    """
+    Encode a username/password pair to Basic auth.
+    """
+    data = f"{username}:{password}"
+    credentials = base64.b64encode(data.encode("utf-8")).strip()
+    auth_string = f'Basic {credentials.decode("utf-8")}'
+    return auth_string
+
+
 class ViewTests(TestCase):
     def setUp(self):
         self.user1 = User.objects.create(
@@ -187,16 +197,18 @@ class ViewTests(TestCase):
         # Upload an image with an invalid API key.
         png = BytesIO(PNG)
         response = self.client.post(
-            reverse("main:api-image") + f"?api_key=hello",
+            reverse("main:api-image"),
             {"title": "My image", "image": png},
+            HTTP_AUTHORIZATION=http_auth("", "hello"),
         )
         self.assertEqual(response.status_code, 422)
 
         # Upload an image with a valid API key.
         png = BytesIO(PNG)
         response = self.client.post(
-            reverse("main:api-image") + f"?api_key={self.user1.api_key}",
+            reverse("main:api-image"),
             {"title": "My image", "image": png},
+            HTTP_AUTHORIZATION=http_auth("", self.user1.api_key),
         )
         self.assertEqual(response.status_code, 200)
         image_id = json.loads(response.content)["id"]
@@ -219,10 +231,10 @@ class ViewTests(TestCase):
 
         # Change the title.
         response = self.client.put(
-            reverse("main:api-image-detail", args=[image.id])
-            + f"?api_key={self.user1.api_key}",
+            reverse("main:api-image-detail", args=[image.id]),
             {"title": "A new title"},
             content_type="application/json",
+            HTTP_AUTHORIZATION=http_auth("", self.user1.api_key),
         )
         self.assertEqual(response.status_code, 200)
         image.refresh_from_db()
@@ -230,23 +242,24 @@ class ViewTests(TestCase):
 
         # Delete the image with the wrong API key.
         response = self.client.delete(
-            reverse("main:api-image-detail", args=[image.id]) + f"?api_key=heyo"
+            reverse("main:api-image-detail", args=[image.id]),
+            HTTP_AUTHORIZATION=http_auth("", "heyo"),
         )
         self.assertEqual(response.status_code, 422)
         self.assertEqual(Image.objects.count(), 1)
 
         # Delete the image with another user's API key.
         response = self.client.delete(
-            reverse("main:api-image-detail", args=[image.id])
-            + f"?api_key={self.expired.api_key}"
+            reverse("main:api-image-detail", args=[image.id]),
+            HTTP_AUTHORIZATION=http_auth("", self.expired.api_key),
         )
         self.assertEqual(response.status_code, 422)
         self.assertEqual(Image.objects.count(), 1)
 
         # Delete the image with the right API key.
         response = self.client.delete(
-            reverse("main:api-image-detail", args=[image.id])
-            + f"?api_key={self.user1.api_key}"
+            reverse("main:api-image-detail", args=[image.id]),
+            HTTP_AUTHORIZATION=http_auth("", self.user1.api_key),
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Image.objects.count(), 0)
@@ -255,21 +268,24 @@ class ViewTests(TestCase):
         # Upload an image when there's no space left.
         png = BytesIO(PNG)
         response = self.client.post(
-            reverse("main:api-image") + f"?api_key={self.no_space.api_key}",
+            reverse("main:api-image"),
             {"title": "My image", "image": png},
+            HTTP_AUTHORIZATION=http_auth("", self.no_space.api_key),
         )
         self.assertEqual(response.status_code, 422)
         self.assertIn(b"used up all your space", response.content)
 
         response = self.client.post(
-            reverse("main:api-image") + f"?api_key={self.user1.api_key}"
+            reverse("main:api-image"),
+            HTTP_AUTHORIZATION=http_auth("", self.user1.api_key),
         )
         self.assertEqual(response.status_code, 422)
         self.assertIn(b"forgot to give us", response.content)
 
         response = self.client.post(
-            reverse("main:api-image") + f"?api_key={self.user1.api_key}",
+            reverse("main:api-image"),
             {"title": "My image", "image": BytesIO(b"hi")},
+            HTTP_AUTHORIZATION=http_auth("", self.user1.api_key),
         )
         self.assertEqual(response.status_code, 422)
         self.assertIn(b"straight trash", response.content)

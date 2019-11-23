@@ -34,7 +34,7 @@ class User(AbstractUser):
     last_payment = models.DateField(default=datetime.date(1900, 1, 1))
     storage_space = models.PositiveIntegerField(default=0)
     api_key = models.CharField(
-        max_length=200, default=generate_moderate_id, db_index=True
+        max_length=200, default=generate_moderate_id, unique=True
     )
 
     @property

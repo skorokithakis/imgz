@@ -38,6 +38,7 @@ urlpatterns += [
 
 urlpatterns += [
     path("help/faq/", TemplateView.as_view(template_name="faq.html"), name="faq"),
+    path("help/api/", views.api_docs, name="api-docs"),
     path("help/terms/", TemplateView.as_view(template_name="terms.html"), name="terms"),
 ]
 
