@@ -205,17 +205,6 @@ version = "0.4.15"
 
 [[package]]
 category = "main"
-description = "A simple Python library for human readable file sizes (or anything sized in bytes)."
-name = "hurry.filesize"
-optional = false
-python-versions = "*"
-version = "0.9"
-
-[package.dependencies]
-setuptools = "*"
-
-[[package]]
-category = "main"
 description = "Internationalized Domain Names in Applications (IDNA)"
 name = "idna"
 optional = false
@@ -588,7 +577,7 @@ version = "4.1.4"
 brotli = ["brotli"]
 
 [metadata]
-content-hash = "4e116a359ab06e71c078f82b87745a17455dec0a40d57a4884bde5986885db43"
+content-hash = "675bcfc2bb3ec9f53a00901d9d462860a3e01ee81c7db2be7356c08c3228b848"
 python-versions = "^3.7"
 
 [metadata.files]
@@ -717,9 +706,6 @@ greenlet = [
     {file = "greenlet-0.4.15-cp37-cp37m-win32.whl", hash = "sha256:81fcd96a275209ef117e9ec91f75c731fa18dcfd9ffaa1c0adbdaa3616a86043"},
     {file = "greenlet-0.4.15-cp37-cp37m-win_amd64.whl", hash = "sha256:37c9ba82bd82eb6a23c2e5acc03055c0e45697253b2393c9a50cef76a3985304"},
     {file = "greenlet-0.4.15.tar.gz", hash = "sha256:9416443e219356e3c31f1f918a91badf2e37acf297e2fa13d24d1cc2380f8fbc"},
-]
-"hurry.filesize" = [
-    {file = "hurry.filesize-0.9.tar.gz", hash = "sha256:f5368329adbef86accd3bc9490522340bb79260455ae89b1a42c10f63801b9a6"},
 ]
 idna = [
     {file = "idna-2.8-py2.py3-none-any.whl", hash = "sha256:ea8b7f6188e6fa117537c3df7da9fc686d485087abf6ac197f9c46432f7e4a3c"},

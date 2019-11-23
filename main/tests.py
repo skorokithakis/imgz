@@ -319,3 +319,15 @@ class ViewTests(TestCase):
         self.assertTrue(u.is_upgraded)
         self.assertTrue(u.has_ever_paid)
         self.assertTrue(u.storage_space > 1_500_000_000)
+
+    def test_size_tag(self):
+        from main.templatetags.human_size import size
+
+        for num, display in (
+            (100, "100 bytes"),
+            (1_992_294, "1.9 MB"),
+            (10_048_577, "9.58 MB"),
+            (10_048_577_000, "9.36 GB"),
+            (1024 ** 3, "1 GB"),
+        ):
+            self.assertEqual(size(num), display)
