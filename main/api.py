@@ -108,11 +108,10 @@ class ImageView(APIView):
 
     def put(self, request, image_id=None):
         assert self.image
-        if not self.json.get("title"):
-            return self._construct_error_response(
-                4, "You didn't specify a title. Typical."
-            )
-        self.image.title = self.json["title"]
+        try:
+            self.image.set_title(self.json.get("title"))
+        except ValueError as e:
+            return self._construct_error_response(4, str(e))
         self.image.save()
         return self.image.as_dict()
 

@@ -6,6 +6,7 @@ import tempfile
 from io import BytesIO
 from typing import Any
 from typing import Dict
+from typing import Optional
 from typing import Tuple
 
 import shortuuid
@@ -182,6 +183,21 @@ class Image(models.Model):
             "main:image-show-thumb",
             kwargs={"image_id": self.id, "size": size, "extension": self.extension},
         )
+
+    def set_title(self, title: Optional[str]) -> None:
+        """
+        Set the image's title.
+
+        Raises ValueError if the title is too short or too long. Does not save the image.
+        """
+        if not title:
+            raise ValueError("A man needs a name.")
+        elif len(title) > self._meta.get_field("title").max_length:
+            raise ValueError(
+                "This image's title is huge. Try uploading the abridged version."
+            )
+        else:
+            self.title = title.replace("\n", " ").strip()
 
     def generate_thumbnails(self) -> None:
         """
