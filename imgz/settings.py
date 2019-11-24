@@ -31,7 +31,7 @@ DEBUG = True if os.getenv("NODEBUG") is None else False
 ALLOWED_HOSTS = (
     ["web", os.getenv("ALLOWED_HOST", "localhost")]
     if os.getenv("NODEBUG") is None
-    else [".imgz.org"]
+    else [".imgz.org", ".imgz.io"]
 )
 
 DEFAULT_FROM_EMAIL = "hello@imgz.org"
