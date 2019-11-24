@@ -1870,3 +1870,48 @@ p a {
 .left-text p {
     text-align: left;
 }
+
+.title-action {
+    margin-left: 10px;
+    font-size: 70%;
+    color: #bbb;
+}
+
+h2.section-title {
+	display: flex;
+	text-align: center;
+	align-items: center;
+	justify-content: center;
+}
+.section-title form {
+	display: flex;
+}
+.section-title button {
+	border: none;
+	background: none;
+	cursor: pointer;
+	color: #bbb;
+}
+.section-title button i {
+	pointer-events: none;
+}
+.section-title button:hover {
+	color: var(--color-2);
+	background: none;
+}
+#image-title {
+	outline: none;
+	border: 2px dashed transparent;
+	padding: 2px 10px;
+	box-sizing: border-box;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+#image-title[contenteditable="true"] {
+	border-color: var(--color-2);
+	cursor: text;
+}
+#image-title[contenteditable="true"] br {
+	display: none;
+}

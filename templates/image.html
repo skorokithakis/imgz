@@ -4,6 +4,83 @@
 
 {% block title %}{{ image.title }}{% endblock %}
 
+{% block head %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    let editForm    = document.querySelector('[data-form="edit-title"]');
+    let editButton  = document.querySelector('[data-action="edit"]');
+    let imageTitle  = document.querySelector('#image-title');
+    let inputField  = document.querySelector('[data-form="edit-title"] input');
+
+    var editModeEnabled = false;
+    var originalTitle = "{{ image.title }}";
+
+    let enableEditMode = () => {
+
+        if(editModeEnabled)
+            return;
+
+        editModeEnabled = true;
+        imageTitle.contentEditable = true;
+        imageTitle.focus();
+        editButton.innerHTML = '<i class="fas fa-check-circle"></i>';
+    };
+    let disableEditMode = () => {
+
+        if(!editModeEnabled)
+            return;
+
+        editModeEnabled = false;
+        imageTitle.contentEditable = false;
+        imageTitle.textContent = originalTitle;
+        editButton.innerHTML = '<i class="far fa-edit"></i>';
+    };
+    let editButtonClicked = () => {
+
+        if(editModeEnabled)
+            editForm.submit();
+        else
+            enableEditMode();
+    };
+
+    imageTitle.addEventListener('click', enableEditMode);
+    editButton.addEventListener('click', editButtonClicked);
+
+    imageTitle.addEventListener('keydown', (event) => {
+        if(event.keyCode == 13) {
+            editForm.submit();
+            event.preventDefault();
+            return false;
+        }
+    });
+
+    document.body.addEventListener('keydown', (event) => {
+        if (event.keyCode == 27) {
+            disableEditMode();
+        }
+    });
+
+    document.body.addEventListener('click', (event) => {
+
+        if(!editModeEnabled)
+            return;
+
+        let target = event.target;
+
+        if(target == imageTitle || target == editButton)
+            return;
+
+        disableEditMode();
+    });
+
+    imageTitle.addEventListener('keyup', (event) => {
+        inputField.value = imageTitle.innerText;
+    });
+});
+</script>
+{% endblock %}
+
 {% block content %}
     <section class="section-grey section-top-border" id="features">
 
@@ -16,29 +93,33 @@
                 <!--begin col-md-12-->
                 <div class="col-md-12 text-center padding-bottom-10">
 
-                    <h2 class="section-title">{{ image.title }}</h2>
+                    <h2 class="section-title">
+                        <div id="image-title">{{ image.title }}</div>
+                        {% if request.user == image.user or request.user.is_superuser %}
+                        <button data-action="edit" title="Edit image title" class="btn btn-secondary">
+                            <i class="far fa-edit"></i>
+                        </button>
+                        {% if request.user.is_superuser %}
+                        <button onclick="location.href = '{% url 'admin:main_image_change' image.id %}';" title="Admin" type="button" class="btn btn-secondary">
+                            <i class="fas fa-users-cog"></i>
+                        </button>
+                        {% endif %}
+                        <form
+                            onsubmit="return confirm('Are you sure you want to delete this embarrassment of an image?');"
+                            method="post"
+                            action="{% url "main:image-delete" image.id %}"
+                            >
+                            <button title="Delete image" type="submit" class="btn btn-secondary">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </form>
+                        {% endif %}
+                    </h2>
 
                     {% if request.user.is_superuser or image.user == request.user %}
-                    <div class="btn-toolbar image-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-                        <div class="btn-group" role="group" aria-label="First group">
-                            {% if request.user.is_superuser %}
-                            <a href="{% url 'admin:main_image_change' image.id %}">
-                                <button title="Admin" type="button" class="btn btn-secondary">
-                                    <i class="fas fa-users-cog"></i>
-                                </button>
-                            </a>
-                            {% endif %}
-                            <form
-                                onsubmit="return confirm('Are you sure you want to delete this embarrassment of an image?');"
-                                method="post"
-                                action="{% url "main:image-delete" image.id %}"
-                                >
-                                <button title="Delete image" type="submit" class="btn btn-secondary">
-                                    <i class="fas fa-trash-alt"></i>
-                                </button>
-                            </form>
-                        </div>
-                    </div>
+                    <form data-form="edit-title" style="display: none;" method="post" action="{% url "main:image-page" image.id %}">
+                        <input maxlength="200" type="text" name="title" value="{{ image.title }}" />
+                    </form>
                     {% endif %}
 
                     <p>

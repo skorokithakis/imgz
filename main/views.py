@@ -78,6 +78,24 @@ def image_page(
     Show an image page.
     """
     image = get_object_or_404(Image, pk=image_id)
+
+    if request.method == "POST":
+        if image.user != request.user:
+            messages.error(request, "No.")
+            return redirect(image)
+
+        try:
+            image.set_title(request.POST.get("title"))
+        except ValueError as e:
+            messages.error(request, str(e))
+            return redirect(image)
+
+        image.save()
+        messages.success(
+            request, "The previous title sucked, huh? Well this one isn't any better."
+        )
+        return redirect(image)
+
     image.increment_views()
     return render(request, "image.html", {"image": image})
 
@@ -127,7 +145,7 @@ def image_upload(request: HttpRequest) -> HttpResponse:
                 )
             except UploadError as e:
                 messages.error(request, str(e))
-                return redirect("main:index")
+                return redirect("main:image-upload")
             else:
                 return redirect(image)
     else:
