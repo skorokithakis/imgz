@@ -52,6 +52,7 @@
         </div>
         <!--end col-md-12 -->
 
+        {% if not request.user.is_paying %}
         <!--begin col-lg-3-->
         <div class="col-lg-3">
 
@@ -168,6 +169,7 @@
 
         </div>
         <!--end col-lg-3 -->
+        {% endif %}
     </div>
     <!--end row -->
 
