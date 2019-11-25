@@ -193,7 +193,7 @@ description = "An authentication backend that uses tokens sent over email to aut
 name = "django-tokenauth"
 optional = false
 python-versions = "*"
-version = "0.3.0"
+version = "0.4.0"
 
 [[package]]
 category = "main"
@@ -597,7 +597,7 @@ version = "4.1.4"
 brotli = ["brotli"]
 
 [metadata]
-content-hash = "bfd859583ebe75914f5b14cbb3b7c8de321df84cc4d4dbaf485be2085efdf2d4"
+content-hash = "91f403b099775da1c51a3152d90f2176aef5ee4ebf368155fe599acceb110cfe"
 python-versions = "^3.7"
 
 [metadata.files]
@@ -703,8 +703,8 @@ django-stubs = [
     {file = "django_stubs-1.2.0-py3-none-any.whl", hash = "sha256:ca565958a66c0772a11bf95e415d0bcd476eb59919a7ed1a417cc93315d68809"},
 ]
 django-tokenauth = [
-    {file = "django-tokenauth-0.3.0.tar.gz", hash = "sha256:86964e440af41392dd404c0c335a3175f5b451e723eeb9a598df11e769f61098"},
-    {file = "django_tokenauth-0.3.0-py2.py3-none-any.whl", hash = "sha256:45baf2e9cdf9584e5f46c704e22cc9192e401b4aa38ed63fd5bce0aee0e04a36"},
+    {file = "django-tokenauth-0.4.0.tar.gz", hash = "sha256:34fcff95068643c9721bfa74b673ed6980dc1d9d0e5a9c1bd6331e5908551e62"},
+    {file = "django_tokenauth-0.4.0-py2.py3-none-any.whl", hash = "sha256:f9f05c164d95aab3e840e4e8b90c3a9f7fdadfb00f678f1fa624c0d409155791"},
 ]
 djangoql = [
     {file = "djangoql-0.13.1.tar.gz", hash = "sha256:366293d7d4e416f9f7d6e2b98775c2129222fbb4dc660f3e6c7b9e35a3cf3fce"},
