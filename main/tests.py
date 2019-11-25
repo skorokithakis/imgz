@@ -297,20 +297,20 @@ class ViewTests(TestCase):
         u = User.objects.create(username=SU(), email="hi@hi.com", password="hi")
         self.assertTrue(u.is_upgraded)
         self.assertFalse(u.has_ever_paid)
-        self.assertTrue(u.storage_space < 1_000_000_000)
+        self.assertTrue(u.total_space < 1_000_000_000)
 
         u.upgrade()
 
         self.assertTrue(u.is_upgraded)
         self.assertTrue(u.has_ever_paid)
-        self.assertTrue(u.storage_space > 1_000_000_000)
+        self.assertTrue(u.total_space > 1_000_000_000)
         self.assertTrue(
             u.upgraded_until > datetime.date.today() + datetime.timedelta(385)
         )
 
         # Upgrade someone who already has lots of space.
         u = User.objects.create(username=SU(), email="hi@hi.com", password="hi")
-        u.storage_space = 1.5 * settings.GB
+        u.bonus_space = 0.5 * settings.GB
         self.assertTrue(u.is_upgraded)
         self.assertFalse(u.has_ever_paid)
 
@@ -318,7 +318,7 @@ class ViewTests(TestCase):
 
         self.assertTrue(u.is_upgraded)
         self.assertTrue(u.has_ever_paid)
-        self.assertTrue(u.storage_space > 1_500_000_000)
+        self.assertTrue(u.total_space > 1_500_000_000)
 
     def test_size_tag(self):
         from main.templatetags.human_size import size
