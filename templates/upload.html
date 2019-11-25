@@ -49,7 +49,7 @@
 
                     <p class="section-subtitle" style="margin-top: 60px">
                     Meanwhile, you're using
-                    {{ request.user.total_space_taken|human_size }} / {{ request.user.storage_space|human_size }} of space
+                    {{ request.user.total_space_taken|human_size }} / {{ request.user.total_space|human_size }} of space
                     <br> and your
                     {% if request.user.has_ever_paid %}
                         subscription expires

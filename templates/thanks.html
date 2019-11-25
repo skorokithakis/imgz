@@ -27,7 +27,7 @@
                     </p>
 
                     <p>
-                    <strong>Total available space:</strong> {{ request.user.storage_space|human_size }}
+                    <strong>Total available space:</strong> {{ request.user.total_space|human_size }}
                     <br>
                     <strong>Free space:</strong> {{ request.user.total_space_left|human_size }}
                     <br>

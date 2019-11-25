@@ -23,7 +23,14 @@ class MyUserAdmin(UserAdmin):
         ("Important dates", {"fields": ("last_login", "date_joined")}),
         (
             "Payment stuff",
-            {"fields": ("last_payment", "upgraded_until", "storage_space")},
+            {
+                "fields": (
+                    "last_payment",
+                    "upgraded_until",
+                    "storage_space",
+                    "bonus_space",
+                )
+            },
         ),
     )
     list_display = ("email", "upgraded_until", "is_staff", "date_joined")
