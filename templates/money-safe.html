@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+
+{% load staticfiles human_size %}
+
+{% block title %}Buy my wares{% endblock %}
+
+{% block content %}
+
+{% if stripe_session_id %}
+<script src="https://js.stripe.com/v3/"></script>
+
+<script>
+    var stripe = Stripe('{{ settings.STRIPE_PUBLIC_KEY }}');
+
+    stripe.redirectToCheckout({
+      sessionId: '{{ stripe_session_id }}'
+    }).then(function (result) {
+      alert(result.error.message);
+    });
+</script>
+{% endif %}
+
+<section class="section-grey" id="pricing">
+
+<!--begin container -->
+<div class="container">
+
+    <!--begin row -->
+    <div class="row">
+
+        <!--begin col-md-12 -->
+        <div class="col-md-8 offset-md-2 text-center padding-bottom-40">
+
+            <h2 class="section-title">Funds</h2>
+
+            {% if not request.user.is_paying %}
+            <p class="section-subtitle">
+            Here you can purchase our services.
+            </p>
+            {% else %}
+            <p class="section-subtitle">
+            You've already paid, there's nothing for you here.
+            </p>
+            {% endif %}
+
+        </div>
+        <!--end col-md-12 -->
+
+        {% if not request.user.is_paying %}
+        <!--begin col-lg-3-->
+        <div class="col-lg-3">
+
+            <div class="price-box">
+
+                <ul class="pricing-list">
+
+                    <li class="price-title white-text">CHEAP</li>
+
+                    <li class="price-value white-text">$5</li>
+
+                    <li class="price-subtitle white-text">Per Year</li>
+
+                    <li class="price-text"><i class="fas fa-check blue"></i><strong>1 GB</strong></li>
+
+                    <li class="price-text"><i class="fas fa-check blue"></i>Nothing else</li>
+
+                    <li class="price-tag-line"><a href="{% url "main:stripe-redirect" %}?plan=1GB">RENT NOW</a></li>
+                    <p><a href="{% url "main:btc-redirect" %}"><img src="{% static "images/btc.png" %}"></a></p>
+
+                </ul>
+
+            </div>
+
+        </div>
+        <!--end col-lg-3 -->
+
+        <!--begin col-lg-3-->
+        <div class="col-lg-3">
+
+            <div class="price-box">
+
+
+                <ul class="pricing-list">
+
+                    <li class="price-title white-text">PERSON</li>
+
+                    <li class="price-value white-text">$50</li>
+
+                    <li class="price-subtitle white-text">Per Year</li>
+
+                    <li class="price-text"><i class="fas fa-check blue"></i><strong>50 GB</strong></li>
+
+                    <li class="price-text"><i class="fas fa-check blue"></i>Still cheap</li>
+
+                    <li class="price-tag-line"><a href="{% url "main:stripe-redirect" %}?plan=50GB">RENT NOW</a></li>
+
+                </ul>
+
+            </div>
+
+        </div>
+        <!--end col-lg-3 -->
+
+        <!--begin col-lg-3-->
+        <div class="col-lg-3">
+
+            <div class="price-box">
+
+                <ul class="pricing-list">
+
+                    <li class="price-title white-text">AESTHETE</li>
+
+                    <li class="price-value white-text">$400</li>
+
+                    <li class="price-subtitle white-text">Per Year</li>
+
+                    <li class="price-text white-text"><i class="fas fa-check blue"></i><strong>500 GB</strong></li>
+
+                    <li class="price-text"><i class="fas fa-check blue"></i>More images</li>
+
+                    <li class="price-tag-line"><a href="{% url "main:stripe-redirect" %}?plan=500GB">RENT NOW</a></li>
+
+                </ul>
+
+            </div>
+
+        </div>
+        <!--end col-lg-3 -->
+
+        <div class="col-lg-3">
+
+            <div class="price-box">
+
+                <div class="ribbon blue"><span>Our choice</span></div>
+                <ul class="pricing-list">
+
+                    <li class="price-title white-text">BUY THE SITE</li>
+
+                    <li class="price-value white-text">$999,999.98</li>
+
+                    <li class="price-subtitle white-text">Per Year</li>
+
+                    <li class="price-text white-text"><i class="fas fa-check blue"></i><strong>1 GB</strong></li>
+
+                    <li class="price-text"><i class="fas fa-check blue"></i>Hello.</li>
+
+                    <li class="price-text"><i class="fas fa-check blue"></i>Still no support</li>
+
+                    <li class="price-tag-line"><a href="{% url "main:stripe-redirect" %}?plan=ALLOFIT">BUY NOW</a></li>
+
+                </ul>
+
+            </div>
+
+        </div>
+        <!--end col-lg-3 -->
+        {% endif %}
+    </div>
+    <!--end row -->
+
+</div>
+<!--end container -->
+
+</section>
+{% endblock %}

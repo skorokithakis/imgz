@@ -45,6 +45,11 @@ urlpatterns += [
 
 urlpatterns += [
     path("money/", TemplateView.as_view(template_name="money.html"), name="money"),
+    path(
+        "money-safe/",
+        TemplateView.as_view(template_name="money-safe.html"),
+        name="money-safe",
+    ),
     path("money/stripe/", views_payment.stripe_redirect, name="stripe-redirect"),
     path("money/stripe/webhook/", views_payment.stripe_webhook, name="stripe-webhook"),
     path("money/cryptocurrency/", views_payment.btc_redirect, name="btc-redirect"),
