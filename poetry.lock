@@ -196,6 +196,17 @@ python-versions = "*"
 version = "0.3.0"
 
 [[package]]
+category = "main"
+description = "DjangoQL: Advanced search language for Django"
+name = "djangoql"
+optional = false
+python-versions = "*"
+version = "0.13.1"
+
+[package.dependencies]
+ply = ">=3.8"
+
+[[package]]
 category = "dev"
 description = "Lightweight in-process concurrent programming"
 name = "greenlet"
@@ -335,6 +346,14 @@ name = "pillow"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 version = "6.2.1"
+
+[[package]]
+category = "main"
+description = "Python Lex & Yacc"
+name = "ply"
+optional = false
+python-versions = "*"
+version = "3.11"
 
 [[package]]
 category = "main"
@@ -578,7 +597,7 @@ version = "4.1.4"
 brotli = ["brotli"]
 
 [metadata]
-content-hash = "675bcfc2bb3ec9f53a00901d9d462860a3e01ee81c7db2be7356c08c3228b848"
+content-hash = "bfd859583ebe75914f5b14cbb3b7c8de321df84cc4d4dbaf485be2085efdf2d4"
 python-versions = "^3.7"
 
 [metadata.files]
@@ -687,6 +706,9 @@ django-tokenauth = [
     {file = "django-tokenauth-0.3.0.tar.gz", hash = "sha256:86964e440af41392dd404c0c335a3175f5b451e723eeb9a598df11e769f61098"},
     {file = "django_tokenauth-0.3.0-py2.py3-none-any.whl", hash = "sha256:45baf2e9cdf9584e5f46c704e22cc9192e401b4aa38ed63fd5bce0aee0e04a36"},
 ]
+djangoql = [
+    {file = "djangoql-0.13.1.tar.gz", hash = "sha256:366293d7d4e416f9f7d6e2b98775c2129222fbb4dc660f3e6c7b9e35a3cf3fce"},
+]
 greenlet = [
     {file = "greenlet-0.4.15-cp27-cp27m-manylinux1_x86_64.whl", hash = "sha256:99a26afdb82ea83a265137a398f570402aa1f2b5dfb4ac3300c026931817b163"},
     {file = "greenlet-0.4.15-cp27-cp27m-win32.whl", hash = "sha256:beeabe25c3b704f7d56b573f7d2ff88fc99f0138e43480cecdfcaa3b87fe4f87"},
@@ -792,6 +814,10 @@ pillow = [
     {file = "Pillow-6.2.1-pp272-pypy_41-win32.whl", hash = "sha256:5a47d2123a9ec86660fe0e8d0ebf0aa6bc6a17edc63f338b73ea20ba11713f12"},
     {file = "Pillow-6.2.1-pp372-pp372-win32.whl", hash = "sha256:c7be4b8a09852291c3c48d3c25d1b876d2494a0a674980089ac9d5e0d78bd132"},
     {file = "Pillow-6.2.1.tar.gz", hash = "sha256:bf4e972a88f8841d8fdc6db1a75e0f8d763e66e3754b03006cbc3854d89f1cb1"},
+]
+ply = [
+    {file = "ply-3.11-py2.py3-none-any.whl", hash = "sha256:096f9b8350b65ebd2fd1346b12452efe5b9607f7482813ffca50c22722a807ce"},
+    {file = "ply-3.11.tar.gz", hash = "sha256:00c7c1aaa88358b9c765b6d3000c6eec0ba42abca5351b095321aef446081da3"},
 ]
 prompt-toolkit = [
     {file = "prompt_toolkit-2.0.10-py2-none-any.whl", hash = "sha256:e7f8af9e3d70f514373bf41aa51bc33af12a6db3f71461ea47fea985defb2c31"},

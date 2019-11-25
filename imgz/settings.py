@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.humanize",
     "django_extensions",
+    "djangoql",
     "django_nose",
     "loginas",
     "tokenauth",

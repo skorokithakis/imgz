@@ -1,20 +1,21 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
+from djangoql.admin import DjangoQLSearchMixin
 
 from .models import Image
 from .models import User
 
 
 @admin.register(Image)
-class ImageAdmin(admin.ModelAdmin):
+class ImageAdmin(DjangoQLSearchMixin, admin.ModelAdmin):
     list_display = ["id", "title", "user", "uploaded", "processed"]
-    search_fields = ["id"]
+    search_fields = ["id", "title"]
     list_filter = ["uploaded"]
     ordering = ["-uploaded"]
 
 
 @admin.register(User)
-class MyUserAdmin(UserAdmin):
+class MyUserAdmin(DjangoQLSearchMixin, UserAdmin):
     change_form_template = "loginas/change_form.html"
     fieldsets = (
         ("Credentials", {"fields": ("username", "email", "password", "api_key")}),
