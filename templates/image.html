@@ -100,8 +100,13 @@ document.addEventListener('DOMContentLoaded', () => {
                             <i class="far fa-edit"></i>
                         </button>
                         {% if request.user.is_superuser %}
-                        <button onclick="location.href = '{% url 'admin:main_image_change' image.id %}';" title="Admin" type="button" class="btn btn-secondary">
-                            <i class="fas fa-users-cog"></i>
+                        <button onclick="location.href = '{% url 'admin:main_image_change' image.id %}';"
+                            title="Image admin" type="button" class="btn btn-secondary">
+                            <i class="fas fa-images"></i>
+                        </button>
+                        <button onclick="location.href = '{% url 'admin:main_user_change' image.user.id %}';"
+                            title="User admin " type="button" class="btn btn-secondary">
+                            <i class="fas fa-user-cog"></i>
                         </button>
                         {% endif %}
                         <form
