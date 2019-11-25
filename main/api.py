@@ -42,7 +42,11 @@ class APIView(View):
         return user
 
     def dispatch(self, *args, **kwargs):
-        if self.request.method != "POST":
+        self.image = None
+
+        if self.request.method in ("PUT", "DELETE") or (
+            self.request.method == "GET" and "image_id" in kwargs
+        ):
             self.image = Image.objects.filter(id=kwargs.get("image_id", "")).first()
             if not self.image:
                 return self._construct_error_response(
@@ -58,25 +62,23 @@ class APIView(View):
                     7, "Error while decoding your JSON content."
                 )
 
-        self.user = None
         assert self.request.method
         handler = getattr(self, self.request.method.lower(), None)
+
+        # Support optional auth.
+        self.user = self._get_auth()
         if getattr(handler, "needs_auth", True):
-            self.user = self._get_auth()
             if not self.user:
                 return self._construct_error_response(
                     1,
                     "Invalid API key, I guess? I don't know what you're trying to do.",
                 )
 
+        if self.user and self.image and self.image.user != self.user:
             # Check that the image belongs to this user.
-            if (
-                getattr(self, "image", None)
-                and self.image.user != self.user  # type: ignore
-            ):
-                return self._construct_error_response(
-                    2, "That's not your image, quit playing."
-                )
+            return self._construct_error_response(
+                2, "That's not your image, quit playing."
+            )
 
         data = super().dispatch(*args, **kwargs)
 
@@ -88,10 +90,22 @@ class APIView(View):
 
 class ImageView(APIView):
     def get(self, request, image_id=None):
-        assert self.image
-        return JsonResponse(
-            self.image.as_dict(), json_dumps_params={"indent": 2, "sort_keys": True}
-        )
+        if image_id:
+            assert self.image
+            return JsonResponse(
+                self.image.as_dict(), json_dumps_params={"indent": 2, "sort_keys": True}
+            )
+        else:
+            if not self.user:
+                return self._construct_error_response(
+                    1,
+                    "Invalid API key, I guess? I don't know what you're trying to do.",
+                )
+            return {
+                "images": [
+                    image.as_dict() for image in self.user.images.order_by("-uploaded")
+                ]
+            }
 
     get.needs_auth = False  # type: ignore
 

@@ -236,21 +236,42 @@ class ViewTests(TestCase):
         self.assertEqual(response.status_code, 422)
 
         # Upload an image with a valid API key.
-        png = BytesIO(PNG)
-        response = self.client.post(
-            reverse("main:api-image"),
-            {"title": "My image", "image": png},
-            HTTP_AUTHORIZATION=http_auth("", self.user1.api_key),
-        )
-        self.assertEqual(response.status_code, 200)
-        image_id = json.loads(response.content)["id"]
+        for _ in range(5):
+            png = BytesIO(PNG)
+            response = self.client.post(
+                reverse("main:api-image"),
+                {"title": "My image", "image": png},
+                HTTP_AUTHORIZATION=http_auth("", self.user1.api_key),
+            )
+            self.assertEqual(response.status_code, 200)
+            image_id = json.loads(response.content)["id"]
 
-        self.assertEqual(Image.objects.count(), 1)
+        self.assertEqual(Image.objects.count(), 5)
 
         image = Image.objects.get(pk=image_id)
 
         self.assertEqual(image.title, "My image")
         self.assertEqual(image.size, len(PNG))
+
+        # Get the image list without an API key.
+        response = self.client.get(reverse("main:api-image"))
+        self.assertEqual(response.status_code, 422)
+
+        # Get the image list with an API key.
+        response = self.client.get(
+            reverse("main:api-image"),
+            HTTP_AUTHORIZATION=http_auth("", self.user1.api_key),
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()["images"]), 5)
+
+        # Get the image list for another user.
+        response = self.client.get(
+            reverse("main:api-image"),
+            HTTP_AUTHORIZATION=http_auth("", self.superuser.api_key),
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), {"images": []})
 
         # Get the image detail page.
         response = self.client.get(reverse("main:api-image-detail", args=[image.id]))
@@ -278,7 +299,7 @@ class ViewTests(TestCase):
             HTTP_AUTHORIZATION=http_auth("", "heyo"),
         )
         self.assertEqual(response.status_code, 422)
-        self.assertEqual(Image.objects.count(), 1)
+        self.assertEqual(Image.objects.count(), 5)
 
         # Delete the image with another user's API key.
         response = self.client.delete(
@@ -286,7 +307,7 @@ class ViewTests(TestCase):
             HTTP_AUTHORIZATION=http_auth("", self.expired.api_key),
         )
         self.assertEqual(response.status_code, 422)
-        self.assertEqual(Image.objects.count(), 1)
+        self.assertEqual(Image.objects.count(), 5)
 
         # Delete the image with the right API key.
         response = self.client.delete(
@@ -294,7 +315,7 @@ class ViewTests(TestCase):
             HTTP_AUTHORIZATION=http_auth("", self.user1.api_key),
         )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(Image.objects.count(), 0)
+        self.assertEqual(Image.objects.count(), 4)
 
     def test_failure_modes(self):
         # Upload an image when there's no space left.
