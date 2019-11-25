@@ -2,7 +2,7 @@ from decimal import Decimal
 
 import stripe
 from django.conf import settings
-from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.shortcuts import render
@@ -15,10 +15,6 @@ from opennode import OpenNode
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 STRIPE_REF_ID = "IMGZ"
-
-
-def get_price() -> Decimal:
-    return Decimal(settings.ANNUAL_PRICE_PER_GB + (User.objects.all().count() / 1000))
 
 
 @require_http_methods(["POST"])
@@ -39,11 +35,14 @@ def stripe_webhook(request):
     refid = event.data.object.client_reference_id
     if not refid or not refid.startswith(f"{STRIPE_REF_ID}|"):
         return HttpResponse("K")
-    customer_id = refid.split("|")[1]
+    _, customer_id, plan = refid.split("|")
+
+    GB = 1024 ** 3
+    space = {"1GB": 1 * GB, "50GB": 50 * GB, "500GB": 500 * GB, "ALLOFIT": 1 * GB}[plan]
 
     user = User.objects.filter(pk=customer_id).first()
     if user:
-        user.upgrade()
+        user.upgrade(space)
     return HttpResponse("K")
 
 
@@ -70,7 +69,6 @@ def btc_webhook(request):
     return HttpResponse("K")
 
 
-@login_required
 def stripe_redirect(request):
     """
     Redirect to the Stripe URL.
@@ -79,28 +77,25 @@ def stripe_redirect(request):
     a rather heavy operation, so we don't want to do it on every load of the pricing
     page.
     """
+    if not request.user.is_authenticated:
+        messages.error(request, "You need to log in first, duh.")
+        return redirect("main:index")
+
+    plan = request.GET.get("plan", "1GB")
+    plan = plan if plan in ("1GB", "50GB", "500GB", "ALLOFIT") else "1GB"
     session = stripe.checkout.Session.create(
         customer_email=request.user.email,
-        client_reference_id=f"{STRIPE_REF_ID}|{request.user.id}",
+        client_reference_id=f"{STRIPE_REF_ID}|{request.user.id}|{plan}",
         payment_method_types=["card"],
-        line_items=[
-            {
-                "name": request.site.name,
-                "description": f"ONE YEAR OF {request.site.name}",
-                "amount": int(get_price() * 100),
-                "currency": "usd",
-                "quantity": 1,
-            }
-        ],
+        subscription_data={"items": [{"plan": plan, "quantity": 1}]},
         success_url=f"https://{request.site.domain}{reverse('main:payment-return')}?session_id={{CHECKOUT_SESSION_ID}}",
         cancel_url=f"https://{request.site.domain}{reverse('main:money')}",
     )
 
-    context = {"stripe_session_id": session.id, "price": get_price()}
+    context = {"stripe_session_id": session.id}
     return render(request, "money.html", context)
 
 
-@login_required
 def btc_redirect(request):
     """
     Redirect to the cryptocurrency processor URL.
@@ -109,6 +104,10 @@ def btc_redirect(request):
     a rather heavy operation, so we don't want to do it on every load of the pricing
     page.
     """
+    if not request.user.is_authenticated:
+        messages.error(request, "You need to log in first, duh.")
+        return redirect("main:index")
+
     opennode = OpenNode(
         settings.OPENNODE_API_KEY,
         f"https://{request.site.domain}{reverse('main:btc-webhook')}",
@@ -116,19 +115,11 @@ def btc_redirect(request):
         settings.DEBUG,
     )
     i = opennode.get_invoice(
-        get_price(),
+        Decimal(5),
         "USD",
         "One Gigabyte of IMGZ Please",
         "IMGZ...er?",
         request.user.email,
-        order_id=f"{get_price()}|{request.user.id}",
+        order_id=f"{5}|{request.user.id}",
     )
     return redirect(i["invoice_url"])
-
-
-def payment_view(request):
-    return render(request, "money.html", {"price": get_price()})
-
-
-def payment_return(request):
-    return render(request, "thanks.html")

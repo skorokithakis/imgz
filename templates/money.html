@@ -20,72 +20,159 @@
 </script>
 {% endif %}
 
-  	<!--begin services section -->
-    <section class="section-grey section-top-border" id="features">
+<section class="section-grey" id="pricing">
 
-        <!--begin container -->
-        <div class="container">
+<!--begin container -->
+<div class="container">
 
-            <!--begin row -->
-            <div class="row">
+    <!--begin row -->
+    <div class="row">
 
-                <div class="col-md-8 offset-md-2 text-center padding-bottom-10 left-text">
-                    <h3>Money</h3>
+        <!--begin col-md-12 -->
+        <div class="col-md-8 offset-md-2 text-center padding-bottom-40">
 
-                    {% if not request.user.is_paying %}
-                    <p>
-                    Let's talk money. As you may have noticed from the subtle but effective messaging, this service
-                    isn't free. That's because we want to avoid having to sell photos of your vagina to shady Russian
-                    oligarchs to pay for our servers and cocaine.
-                    </p>
+            <h2 class="section-title">Money</h2>
 
-                    <p>
-                    Right now all you can pay for is 1 GB of storage space, which should hold you until I build the rest
-                    of the tiers. If you need more space, contact me and we'll... figure something out.
-                    </p>
+            {% if not request.user.is_paying %}
+            <p class="section-subtitle">
+            Let's talk money. As you may have noticed from the subtle but effective messaging, this service
+            isn't free. That's because we want to avoid having to sell photos of your vagina to shady Russian
+            oligarchs to pay for our servers and cocaine.
+            </p>
+            {% else %}
+            <p class="section-subtitle">
+            You've already paid, there's nothing for you here. Thanks, I guess.
+            </p>
 
-                    <p>
-                    Oh, by the way, the price goes up the more users there are. No rush.
-                    </p>
-
-                </div>
-                <!--end col-md-12 -->
-
-                <div class="col-md-6 offset-md-3" style="text-align: center">
-                    <p style="font-size: 120%; font-weight: bold">
-                    ONE YEAR OF {{ request.site.name }}
-                    </p>
-
-                    <p style="font-size: 80%">
-                    That will be
-                    </p>
-
-                    <p style="font-size: 200%; font-weight: bold">
-                    ${{ price|floatformat:2 }} U.S. BUCKS
-                    </p>
-
-                    <p style="font-size: 80%; margin-bottom: 40px">
-                    ...for now.
-                    </p>
-
-                    <p><a href="{% url "main:stripe-redirect" %}"><img src="{% static "images/stripe.png" %}"></a></p>
-                    <p><a href="{% url "main:btc-redirect" %}"><img src="{% static "images/btc.png" %}"></a></p>
-                    {% else %}
-                    <p>
-                    You've already paid, there's nothing for you here. Thanks, I guess.
-                    </p>
-
-                    <p>
-                    Never forget your place.
-                    </p>
-                    {% endif %}
-                </div>
-            </div>
-            <!--end row -->
+            <p class="section-subtitle">
+            Never forget your place.
+            </p>
+            {% endif %}
 
         </div>
-        <!--end container -->
+        <!--end col-md-12 -->
 
-    </section>
-    <!--end services section -->
+        <!--begin col-lg-3-->
+        <div class="col-lg-3">
+
+            <div class="price-box">
+
+                <ul class="pricing-list">
+
+                    <li class="price-title white-text">CHEAPASS</li>
+
+                    <li class="price-value white-text">$5</li>
+
+                    <li class="price-subtitle white-text">Per Year</li>
+
+                    <li class="price-text"><i class="fas fa-check blue"></i><strong>1 GB</strong></li>
+
+                    <li class="price-text"><i class="fas fa-check blue"></i>Nothing else</li>
+
+                    <li class="price-text"><i class="fas fa-check blue"></i>You're cheap</li>
+
+                    <li class="price-text"><i class="fas fa-check blue"></i>1 GB only</li>
+
+                    <li class="price-tag-line"><a href="{% url "main:stripe-redirect" %}?plan=1GB">RENT NOW</a></li>
+                    <p><a href="{% url "main:btc-redirect" %}"><img src="{% static "images/btc.png" %}"></a></p>
+
+                </ul>
+
+            </div>
+
+        </div>
+        <!--end col-lg-3 -->
+
+        <!--begin col-lg-3-->
+        <div class="col-lg-3">
+
+            <div class="price-box">
+
+
+                <ul class="pricing-list">
+
+                    <li class="price-title white-text">PERSON</li>
+
+                    <li class="price-value white-text">$50</li>
+
+                    <li class="price-subtitle white-text">Per Year</li>
+
+                    <li class="price-text"><i class="fas fa-check blue"></i><strong>50 GB</strong></li>
+
+                    <li class="price-text"><i class="fas fa-check blue"></i>Your basic humanity will not be
+                    denied</li>
+
+                    <li class="price-text"><i class="fas fa-check blue"></i>Still cheap</li>
+
+                    <li class="price-tag-line"><a href="{% url "main:stripe-redirect" %}?plan=50GB">RENT NOW</a></li>
+
+                </ul>
+
+            </div>
+
+        </div>
+        <!--end col-lg-3 -->
+
+        <!--begin col-lg-3-->
+        <div class="col-lg-3">
+
+            <div class="price-box">
+
+                <ul class="pricing-list">
+
+                    <li class="price-title white-text">POSER</li>
+
+                    <li class="price-value white-text">$400</li>
+
+                    <li class="price-subtitle white-text">Per Year</li>
+
+                    <li class="price-text white-text"><i class="fas fa-check blue"></i><strong>500 GB</strong></li>
+
+                    <li class="price-text"><i class="fas fa-check blue"></i>You're just showing off</li>
+
+                    <li class="price-text"><i class="fas fa-check blue"></i>More images</li>
+
+                    <li class="price-tag-line"><a href="{% url "main:stripe-redirect" %}?plan=500GB">RENT NOW</a></li>
+
+                </ul>
+
+            </div>
+
+        </div>
+        <!--end col-lg-3 -->
+
+        <div class="col-lg-3">
+
+            <div class="price-box">
+
+                <div class="ribbon blue"><span>Our choice</span></div>
+                <ul class="pricing-list">
+
+                    <li class="price-title white-text">BUY THE SITE</li>
+
+                    <li class="price-value white-text">$999,999.98</li>
+
+                    <li class="price-subtitle white-text">Per Year</li>
+
+                    <li class="price-text white-text"><i class="fas fa-check blue"></i><strong>1 GB</strong></li>
+
+                    <li class="price-text"><i class="fas fa-check blue"></i>What do you care? You own the site.</li>
+
+                    <li class="price-text"><i class="fas fa-check blue"></i>Still no support</li>
+
+                    <li class="price-tag-line"><a href="{% url "main:stripe-redirect" %}?plan=ALLOFIT">BUY NOW</a></li>
+
+                </ul>
+
+            </div>
+
+        </div>
+        <!--end col-lg-3 -->
+    </div>
+    <!--end row -->
+
+</div>
+<!--end container -->
+
+</section>
 {% endblock %}

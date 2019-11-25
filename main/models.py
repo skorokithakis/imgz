@@ -107,14 +107,14 @@ class User(AbstractUser):
         """
         return self.total_space - self.total_space_taken
 
-    def upgrade(self) -> None:
+    def upgrade(self, space=settings.GB) -> None:
         """
         Upgrade the user's account for a year.
         """
-        self.storage_space = 1 * settings.GB
+        self.storage_space = space
         self.upgraded_until = max(
             datetime.date.today(), self.upgraded_until
-        ) + datetime.timedelta(365)
+        ) + datetime.timedelta(366)
         self.last_payment = datetime.date.today()
         self.save()
 
