@@ -1,3 +1,4 @@
+import datetime
 from typing import Optional
 
 from django import forms
@@ -15,8 +16,22 @@ from django.views.decorators.http import require_POST
 from loginas.utils import restore_original_login
 
 from .models import Image
+from .models import User
 from .utils import process_upload
 from .utils import UploadError
+
+
+def delete_all_their_shit(user: User) -> None:
+    """
+    Delete all the user's shit.
+    """
+    for image in Image.objects.filter(user=user):
+        image.delete()
+
+    user.upgraded_until = datetime.date(2000, 1, 1)
+    user.storage_space = 0
+    user.bonus_space = 0
+    user.save()
 
 
 @login_required
@@ -28,6 +43,18 @@ def logout(request):
     """
     restore_original_login(request)
     return redirect(settings.LOGOUT_REDIRECT_URL)
+
+
+@login_required
+def account(request):
+    if request.method == "POST":
+        if request.GET.get("delete") == "allmyshit":
+            delete_all_their_shit(request.user)
+            messages.success(request, "Good riddance.")
+            logout(request)
+        return redirect("main:index")
+
+    return render(request, "account.html")
 
 
 def api_docs(request: HttpRequest) -> HttpResponse:

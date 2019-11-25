@@ -75,8 +75,13 @@ class ViewTests(TestCase):
                         Template(f.read())
 
     def test_views(self):
-        response = self.client.get(reverse("main:index"))
-        self.assertEqual(response.status_code, 200)
+        for name in ("main:index", "main:faq", "main:terms", "main:money"):
+            response = self.client.get(reverse(name))
+            self.assertEqual(response.status_code, 200)
+
+        for name in ("main:account", "main:image-upload"):
+            response = self.client.get(reverse(name))
+            self.assertEqual(response.status_code, 302)
 
         self.client.force_login(self.user1)  # type: ignore
 
@@ -88,11 +93,12 @@ class ViewTests(TestCase):
         response = self.client.get(reverse("main:index"))
         self.assertEqual(response.status_code, 200)
 
+        for name in ("main:account", "main:image-upload"):
+            response = self.client.get(reverse(name))
+            self.assertEqual(response.status_code, 200)
+
         response = self.client.get(reverse("main:logout"))
         self.assertEqual(response.status_code, 302)
-
-        response = self.client.get(reverse("main:faq"))
-        self.assertEqual(response.status_code, 200)
 
     def test_invalid_user(self):
         self.client.force_login(self.expired)  # type: ignore
@@ -192,6 +198,32 @@ class ViewTests(TestCase):
         response = c3.post(reverse("main:image-delete", args=[image.id]))
         self.assertEqual(response.status_code, 302)
         self.assertEqual(Image.objects.count(), 0)
+
+    def test_account_deletion(self):
+        self.user1.bonus_space = 1024 ** 3
+        self.user1.save()
+
+        for _ in range(5):
+            png = BytesIO(PNG)
+            response = self.client.post(
+                reverse("main:api-image"),
+                {"title": "My image", "image": png},
+                HTTP_AUTHORIZATION=http_auth("", self.user1.api_key),
+            )
+            self.assertEqual(response.status_code, 200)
+
+        self.assertEqual(Image.objects.count(), 5)
+
+        self.client.force_login(self.user1)  # type: ignore
+
+        response = self.client.post(reverse("main:account") + "?delete=allmyshit")
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(Image.objects.count(), 0)
+
+        self.user1.refresh_from_db()
+
+        self.assertFalse(self.user1.is_upgraded)
+        self.assertEqual(self.user1.total_space_left, 0)
 
     def test_api(self):
         # Upload an image with an invalid API key.

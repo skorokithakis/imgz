@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% load human_size %}
+
+{% block title %}Your account{% endblock %}
+
+{% block content %}
+  	<!--begin services section -->
+    <section class="section-grey section-top-border" id="features">
+
+        <!--begin container -->
+        <div class="container">
+
+            <!--begin row -->
+            <div class="row">
+
+                <!--begin col-md-12-->
+                <div class="col-md-8 offset-md-2 text-center padding-bottom-10">
+                    <h2 class="section-title">
+                        Stuff about your account
+                    </h2>
+
+                    {% if request.user.is_upgraded %}
+                    <p class="section-subtitle" style="margin-top: 60px">
+                    You're using
+                    {{ request.user.total_space_taken|human_size }} / {{ request.user.total_space|human_size }} of space
+                    and your
+                    {% if request.user.has_ever_paid %}
+                        subscription expires
+                    {% else %}
+                        free trial ends
+                    {% endif %}
+                        on {{ request.user.upgraded_until }}.
+                    </p>
+
+                    <p>
+                    {% if not request.user.has_ever_paid %}
+                    Also, all your images will be deleted after your trial ends,
+                    <br> so make sure you pay!
+                    {% endif %}
+                    </p>
+
+                    <h4>API</h4>
+                    <p>
+                    If you want to use the API, your <code>api_key</code> is
+                    <code>{{ request.user.api_key }}</code>.
+                    </p>
+
+                    {% if request.user.has_ever_paid %}
+                    <h4>Subscription stuff</h4>
+
+                    <p>
+                    If you're paying for a subscription and want to cancel, I haven't written that code yet. Contact me
+                    or wait, like, two days.
+                    </p>
+                    {% endif %}
+                    {% endif %}
+
+                    <h4>Delete your account</h4>
+
+                    <p>
+                    You think I'm going to try to dissuade you? I don't even <strong>want</strong> you here!
+
+                    <form
+                        onsubmit="return confirm('Are you sure you want to delete all your shit? I\'m only asking for liability purposes.');"
+                        method="post" action="{% url "main:account" %}?delete=allmyshit">
+                        <button type="submit" class="btn btn-danger">Delete all my shit</button>
+                    </form>
+                    </p>
+                </div>
+                <!--end col-md-12 -->
+
+            </div>
+            <!--end row -->
+
+        </div>
+        <!--end container -->
+
+    </section>
+    <!--end services section -->
+{% endblock %}

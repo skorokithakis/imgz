@@ -10,6 +10,7 @@ from . import views_payment
 app_name = "main"
 urlpatterns = [
     path("", views.index, name="index"),
+    path("account/", views.account, name="account"),
     path("upload/", views.image_upload, name="image-upload"),
     path("latest/", views.latest, name="latest"),
     path("logout", views.logout, name="logout"),

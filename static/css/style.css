@@ -1915,3 +1915,7 @@ h2.section-title {
 #image-title[contenteditable="true"] br {
 	display: none;
 }
+
+h4 {
+    margin-top: 30px;
+}
