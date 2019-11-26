@@ -34,7 +34,7 @@ ALLOWED_HOSTS = (
     else [".imgz.org", ".imgz.io"]
 )
 
-DEFAULT_FROM_EMAIL = "IMGZ image host <hello@imgz.org>"
+DEFAULT_FROM_EMAIL = "IMGZ correspondence monkey <hello@imgz.org>"
 
 # Application definition
 
