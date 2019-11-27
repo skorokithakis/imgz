@@ -16,9 +16,12 @@ class Command(BaseCommand):
             last_payment=datetime.date(1900, 1, 1),
             upgraded_until__lt=datetime.date.today() - datetime.timedelta(days=30),
         ):
-            images, _ = user.images.all().delete()
+            icounter = 0
+            for image in user.images.include_expired().all():
+                image.delete()
+                icounter += 1
             print(
-                f"Deleted {images} images for user {user.email} (trial ended on {user.upgraded_until})..."
+                f"Deleted {icounter} images for user {user.email} (trial ended on {user.upgraded_until})..."
             )
             counter += 1
 

@@ -15,7 +15,9 @@ from django.contrib.auth.models import AbstractUser
 from django.contrib.sites.models import Site
 from django.db import models
 from django.db.models import Sum
+from django.db.models.query import QuerySet
 from django.urls import reverse
+from django.utils import timezone
 from PIL import Image as PILImage
 from PIL import ImageOps
 
@@ -120,6 +122,15 @@ class User(AbstractUser):
 
 
 class ImageManager(models.Manager):  # type: ignore
+    def get_queryset(self, hide_expired=True) -> QuerySet:  # type: ignore
+        qs = super().get_queryset()
+        if hide_expired:
+            qs = qs.exclude(expires__lt=timezone.now())
+        return qs
+
+    def include_expired(self) -> QuerySet:  # type: ignore
+        return self.get_queryset(hide_expired=False)
+
     def create(self, *args, **kwargs) -> "Image":
         if (
             len(kwargs.get("title", ""))
@@ -147,6 +158,7 @@ class Image(models.Model):
     format = models.CharField(max_length=100, blank=True)
     size = models.IntegerField(default=0)
     uploaded = models.DateTimeField(auto_now_add=True)
+    expires = models.DateTimeField(blank=True, null=True)
     views = models.PositiveIntegerField(default=0)
 
     processed = models.BooleanField(

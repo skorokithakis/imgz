@@ -100,6 +100,35 @@ class ViewTests(TestCase):
         response = self.client.get(reverse("main:logout"))
         self.assertEqual(response.status_code, 302)
 
+    def test_expired_images(self):
+        i = Image.objects.create(
+            title="Horatio, I am expired. Thou livest.",
+            user=self.user1,
+            data=PNG,
+            expires=datetime.datetime(
+                2003, 1, 2, 0, 0, 0, tzinfo=datetime.timezone.utc
+            ),
+        )
+        self.assertEqual(self.user1.images.count(), 0)
+        self.assertTrue(Image.objects.include_expired().filter(pk=i.id).exists())
+
+        i = Image.objects.create(
+            title="Horatio, I am expired. Thou livest.", user=self.user1, data=PNG
+        )
+        self.assertEqual(self.user1.images.count(), 1)
+        self.assertTrue(Image.objects.filter(pk=i.id).exists())
+
+        i = Image.objects.create(
+            title="Horatio, I am expired. Thou livest.",
+            user=self.user1,
+            data=PNG,
+            expires=datetime.datetime(
+                2203, 1, 2, 0, 0, 0, tzinfo=datetime.timezone.utc
+            ),
+        )
+        self.assertEqual(self.user1.images.count(), 2)
+        self.assertTrue(Image.objects.filter(pk=i.id).exists())
+
     def test_invalid_user(self):
         self.client.force_login(self.expired)  # type: ignore
 
