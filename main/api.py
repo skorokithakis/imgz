@@ -116,7 +116,7 @@ class ImageView(APIView):
                 request.FILES,
                 self.user,
                 title=request.POST.get("title"),
-                expires_in=request.POST.get("expires"),
+                expires_in=request.POST.get("expires_in"),
             )
         except UploadError as e:
             return self._construct_error_response(3, str(e))

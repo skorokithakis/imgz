@@ -42,7 +42,9 @@
                     To upload an image, simply <code>POST</code> to
                     <code>https://{{ request.site.domain }}{% url "main:api-image" %}</code> as a
                     <code>multipart/form-data</code> content type, with your image in the <code>image</code> field and
-                    the title in the <code>title</code> field.
+                    the title in the <code>title</code> field.<br>
+                    You can also set the <code>expires_in</code> field to the number of minutes you want the image to
+                    expire in.
                     </p>
 
                     <p>
@@ -52,7 +54,7 @@
                     <p>
                     <code>
                         curl https://:{{ api_key }}@{{ request.site.domain }}{% url "main:api-image" %} \<br>
-                            &nbsp;&nbsp;&nbsp;&nbsp;-F "image=@/some/image/path.png" \<br>
+                            &nbsp;&nbsp;&nbsp;-F "image=@/some/image/path.png" \<br>
                             &nbsp;&nbsp;&nbsp;-F "title=I am alone."
                     </code>
                     </p>
