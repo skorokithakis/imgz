@@ -113,7 +113,10 @@ class ImageView(APIView):
         assert self.user
         try:
             image = process_upload(
-                request.FILES, self.user, title=request.POST.get("title")
+                request.FILES,
+                self.user,
+                title=request.POST.get("title"),
+                expires_in=request.POST.get("expires"),
             )
         except UploadError as e:
             return self._construct_error_response(3, str(e))

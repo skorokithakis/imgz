@@ -158,9 +158,23 @@ def image_delete(
 @login_required
 def image_upload(request: HttpRequest) -> HttpResponse:
     class ImageUploadForm(forms.Form):
+        EXPIRATION = [
+            [10, "ten minutes"],
+            [60, "an hour"],
+            [24 * 60, "a day"],
+            [7 * 24 * 60, "a week"],
+            [14 * 24 * 60, "two weeks"],
+            [30 * 24 * 60, "a month"],
+            [None, "never"],
+        ]
+
         title = forms.CharField(
             max_length=200, help_text="The title of the image.", required=False
         )
+        expires = forms.ChoiceField(
+            choices=EXPIRATION, initial=None, label="Expires in", required=False
+        )
+
         image = forms.FileField()
 
     if request.method == "POST":
@@ -168,7 +182,12 @@ def image_upload(request: HttpRequest) -> HttpResponse:
         if form.is_valid():
             try:
                 image = process_upload(
-                    request.FILES, request.user, title=form.cleaned_data["title"]
+                    request.FILES,
+                    request.user,
+                    title=form.cleaned_data["title"],
+                    expires_in=int(form.cleaned_data["expires"])
+                    if form.cleaned_data["expires"]
+                    else None,
                 )
             except UploadError as e:
                 messages.error(request, str(e))

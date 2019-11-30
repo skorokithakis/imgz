@@ -1,9 +1,11 @@
+import datetime
 from typing import Any
 from typing import List
 from typing import Optional
 
 import requests
 from django.conf import settings
+from django.utils.timezone import now
 
 import main
 
@@ -17,7 +19,10 @@ class UploadError(Exception):
 
 
 def process_upload(
-    request_files: Any, user: "main.models.User", title: Optional[str] = None
+    request_files: Any,
+    user: "main.models.User",
+    title: Optional[str] = None,
+    expires_in: Optional[int] = None,
 ) -> "main.models.Image":
     """
     Process an uploaded file from request.FILES.
@@ -36,8 +41,10 @@ def process_upload(
 
     from .models import Image
 
+    expires = (now() + datetime.timedelta(minutes=expires_in)) if expires_in else None
+
     try:
-        image = Image.objects.create(data=data, user=user, title=title)
+        image = Image.objects.create(data=data, user=user, title=title, expires=expires)
     except OSError:
         raise UploadError("That file was straight trash, try uploading something else.")
     except ValueError as e:
