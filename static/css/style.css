@@ -1908,7 +1908,6 @@ h2.section-title {
 	border: 2px dashed transparent;
 	padding: 2px 10px;
 	box-sizing: border-box;
-	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
