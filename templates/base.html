@@ -29,7 +29,7 @@
     <meta name="msapplication-config" content="{% static "images/icons/browserconfig.xml" %}">
     <meta name="theme-color" content="#ffffff">
 
-    {% if image %}
+    {% if image and not nopreview %}
     <link rel="canonical" href="https://{{ request.site.domain }}{{ image.get_absolute_url }}" />
 
     <meta property="og:title" content="{{ image.title }}">

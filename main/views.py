@@ -124,7 +124,9 @@ def image_page(
         return redirect(image)
 
     image.increment_views()
-    return render(request, "image.html", {"image": image})
+    return render(
+        request, "image.html", {"image": image, "nopreview": request.GET.get("np")}
+    )
 
 
 def image_show(
