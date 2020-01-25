@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% load i18n staticfiles %}
+
+{% block content %}
+    <!--begin home section -->
+    <section class="home-section" id="home">
+
+        <!--begin container -->
+        <div class="container">
+
+            <!--begin row -->
+            <div class="row">
+
+                <!--begin col-md-7-->
+                <div class="col-md-7 padding-top-70">
+
+                    <h1>You pay us, we host your images.</h1>
+
+                    <p>
+                    That's it. You want to share memes with your friends or whatever? You pay us and we host the images.
+                    We don't fuck you over, because you're paying us.
+                    </p>
+
+                    <p>
+                    Simple.
+                    </p>
+                </div>
+                <!--end col-md-7-->
+
+                <!--begin col-md-5-->
+                <div class="col-md-5 wow bounceIn">
+
+                    <!--begin register-form-wrapper-->
+                    <div class="register-form-wrapper wow bounceIn" data-wow-delay="0.1s" style="visibility: visible; animation-delay: 0.1s; animation-name: bounceIn;">
+
+                        <h3>Free trial! Sign up now!</h3>
+
+                        <!--begin form-->
+                        <div>
+                            <p style="color: #7c8595">You will receive an email with a secure login link.</p>
+
+                            <form id="register-form" class="register-form register" action="{% url "tokenauth:login" %}?next={{ request.GET.next }}" method="post">{% csrf_token %}
+
+                                <input class="register-input white-input" required="" name="email" placeholder="Enter your email address" type="email">
+
+                                <input value="Sign up! Free shit!" class="register-submit" type="submit">
+
+                            </form>
+                            <!--end register form -->
+
+                        </div>
+                        <!--end form-->
+
+                    </div>
+                    <!--end register-form-wrapper-->
+
+                </div>
+                <!--end col-md-5-->
+
+            </div>
+            <!--end row -->
+
+        </div>
+        <!--end container -->
+
+    </section>
+    <!--end home section -->
+
+	<!--begin section-white -->
+    <section class="section-white">
+
+        <!--begin container-->
+        <div class="container">
+
+            <!--begin row-->
+            <div class="row">
+
+                <!--begin col-md-12 -->
+                <div class="col-md-12 text-center padding-top-50 padding-bottom-20">
+
+                    <h3>What more do you want?</h3>
+                    <p>We host images, that's it. It's a simple service, sign up above.</p>
+
+                </div>
+                <!--end col-md-12 -->
+            </div>
+            <!--end row-->
+
+        </div>
+        <!--end container-->
+
+    </section>
+    <!--end section-white-->
+{% endblock %}

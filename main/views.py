@@ -72,7 +72,10 @@ def latest(request: HttpRequest) -> HttpResponse:
 
 def index(request: HttpRequest) -> HttpResponse:
     if not request.user.is_authenticated:
-        return render(request, "index.html")
+        if request.GET.get("v") == "s":
+            return render(request, "simple_landing.html")
+        else:
+            return render(request, "index.html")
 
     if not request.user.is_upgraded:
         return render(request, "unpaid.html")
