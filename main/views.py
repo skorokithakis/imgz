@@ -74,6 +74,8 @@ def index(request: HttpRequest) -> HttpResponse:
     if not request.user.is_authenticated:
         if request.GET.get("v") == "s":
             return render(request, "simple_landing.html")
+        elif request.GET.get("v") == "c":
+            return render(request, "complex_landing.html")
         else:
             return render(request, "index.html")
 

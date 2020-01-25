@@ -1,0 +1,251 @@
+{% extends "base.html" %}
+
+{% load i18n staticfiles %}
+
+{% block content %}
+    <!--begin home section -->
+    <section class="home-section" id="home">
+
+        <!--begin container -->
+        <div class="container">
+
+            <!--begin row -->
+            <div class="row">
+
+                <!--begin col-md-7-->
+                <div class="col-md-7 padding-top-70">
+
+                    <h1>Supercharge your visual pipeline.</h1>
+
+                    <p>
+                    Shift your visual pipeline into overdrive leveraging the worldwide content-delivery capabilities of
+                    {{ request.site.name }}. {{ request.site.name }} operates on a distributed, fault-tolerant data
+                    dissemination cloud that allows you to optimize synergies between optical data and state-of-the-art
+                    compression algorithm to produce best-of-breed data warehousing performance.
+                    </p>
+
+                    <p>
+                    {{ request.site.name }} is unique in its class, as it is the only BSaaS that promises unparalleled
+                    fiduciary responsibility with a unique combination of providing a guaranteed annoyance-free
+                    experience and a monetary policy of compensation by the customer.
+                    </p>
+                </div>
+                <!--end col-md-7-->
+
+                <!--begin col-md-5-->
+                <div class="col-md-5 wow bounceIn">
+
+                    <!--begin register-form-wrapper-->
+                    <div class="register-form-wrapper wow bounceIn" data-wow-delay="0.1s" style="visibility: visible; animation-delay: 0.1s; animation-name: bounceIn;">
+
+                        <h3>Receive our whitepaper</h3>
+
+                        <!--begin form-->
+                        <div>
+                            <p style="color: #7c8595">Enter your email below to receive our 923-page whitepaper.</p>
+
+                            <form id="register-form" class="register-form register" action="{% url "tokenauth:login" %}?next={{ request.GET.next }}" method="post">{% csrf_token %}
+
+                                <input class="register-input white-input" required="" name="email" placeholder="Enter your email address" type="email">
+
+                                <input value="Procure whitepaper" class="register-submit" type="submit">
+
+                            </form>
+                            <!--end register form -->
+
+                        </div>
+                        <!--end form-->
+
+                    </div>
+                    <!--end register-form-wrapper-->
+
+                </div>
+                <!--end col-md-5-->
+
+            </div>
+            <!--end row -->
+
+        </div>
+        <!--end container -->
+
+    </section>
+    <!--end home section -->
+
+  	<!--begin services section -->
+    <section class="section-grey section-top-border" id="features">
+
+        <!--begin container -->
+        <div class="container">
+
+            <!--begin row -->
+            <div class="row">
+
+                <!--begin col-md-12-->
+                <div class="col-md-12 text-center padding-bottom-10">
+
+                    <h2 class="section-title">Hyperlocal synergies</h2>
+
+                    <p class="section-subtitle">
+                    Discover how {{ request.site.name }} can help your enterprise today.
+                    </p>
+
+                </div>
+                <!--end col-md-12 -->
+
+            </div>
+            <!--end row -->
+
+            <!--begin row -->
+            <div class="row">
+
+                <div class="col-md-4">
+                    <div class="feature-box">
+                        <i class="fab fa-rocketchat"></i>
+                        <h4>Laser-focused focus</h4>
+                        <p>
+                        We are 100% committed to improving your KPRs through our world-class sesquipedalianism.
+                        </p>
+                    </div>
+                </div>
+
+                <!--begin col-md-4-->
+                <div class="col-md-4">
+
+                    <div class="feature-box">
+                        <i class="fas fa-chart-line"></i>
+                        <h4>Granular monetization policies</h4>
+                        <p>
+                        With our per-letter monetization policies, the longer our copy, the larger our reward.
+                        </p>
+                    </div>
+                </div>
+                <!--end col-md-4 -->
+
+                <!--begin col-md 4-->
+                <div class="col-md-4">
+
+                    <div class="feature-box">
+
+                        <i class="fas fa-desktop"></i>
+
+                        <h4>Convoluted value prop</h4>
+
+                        <p>
+                        Monetization possibilities are unbounded if understanding of the offered service is impossible.
+                        </p>
+
+                    </div>
+                </div>
+                <!--end col-md-4 -->
+
+            </div>
+            <!--end row -->
+
+            <!--begin row -->
+            <div class="row">
+
+                <!--begin col-md-4-->
+                <div class="col-md-4">
+
+                    <div class="feature-box">
+
+                        <i class="fas fa-hand-holding-usd"></i>
+
+                        <h4>Financial revolution</h4>
+
+                        <p>
+                        Reduce your month-to-month operating costs by as much as 37% MRR while increasing your opex.
+                        </p>
+
+                    </div>
+                </div>
+                <!--end col-md-4 -->
+
+                <!--begin col-md-4-->
+                <div class="col-md-4">
+
+                    <div class="feature-box">
+
+                        <i class="fas fa-rocket"></i>
+
+                        <h4>Cloud-native</h4>
+
+                        <p>
+                        With avian-like cloud suitability, none of your main competitors will be more cloud.
+                        </p>
+
+                    </div>
+                </div>
+                <!--end col-md-4 -->
+
+                <!--begin col-md-4-->
+                <div class="col-md-4">
+
+                    <div class="feature-box">
+
+                        <i class="fas fa-tachometer-alt"></i>
+
+                        <h4>Real-time performance guarantees</h4>
+
+                        <p>
+                        With hard-real-time performance, you will be one step ahead of the competition.
+                        </p>
+
+                    </div>
+                </div>
+                <!--end col-md-4 -->
+
+
+            </div>
+            <!--end row -->
+
+        </div>
+        <!--end container -->
+
+    </section>
+    <!--end services section -->
+
+	<!--begin section-white -->
+    <section class="section-white">
+
+        <!--begin container-->
+        <div class="container">
+
+            <!--begin row-->
+            <div class="row">
+
+                <!--begin col-md-6-->
+                <div class="col-md-6 padding-top-20">
+
+                	<h3>Trusted by the Fortune .500</h3>
+
+                    <p>
+                    Our superior usability is relied upon by the biggest companies in the world.
+                    </p>
+
+                	<ul class="benefits">
+						<li><i class="fa fa-check"></i> Leveraging blockchain technologies for monetization.</li>
+						<li><i class="fa fa-check"></i> Utilizing state-of-the-art ML and AI techniques for nothing.</li>
+						<li><i class="fa fa-check"></i> Hype-driven development.</li>
+					</ul>
+
+                </div>
+                <!--end col-md-6-->
+
+                <!--begin col-md-6-->
+                <div class="col-md-6">
+
+                    <img src="{% static "images/polaroid.png" %}" class="hero-image width-100 box-shadow" alt="pic">
+
+                </div>
+                <!--end col-sm-6-->
+
+            </div>
+            <!--end row-->
+
+        </div>
+        <!--end container-->
+
+    </section>
+    <!--end section-white-->
+{% endblock %}
