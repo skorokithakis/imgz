@@ -1732,12 +1732,12 @@ ul.partners-mentions li img:hover {
 
 .image-wrapper {
     margin: 1em auto;
-    max-width: 90%;
     text-align: center;
 }
 
 .image-wrapper img {
     max-height: 80vh;
+    max-width: 90%;
 }
 
 /* ========================================================== */
@@ -1772,7 +1772,7 @@ ul.partners-mentions li img:hover {
 
 @media (max-width: 768px) {
 
-    .image-wrapper {
+    .image-wrapper img {
         max-width: 98%;
     }
 
