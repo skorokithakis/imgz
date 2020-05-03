@@ -1740,6 +1740,43 @@ ul.partners-mentions li img:hover {
     max-width: 90%;
 }
 
+.stupid-separator {
+	padding-top: 97px;
+}
+
+body.image .navbar-fixed-top {
+	position: static !important;
+	z-index: auto;
+	padding: 0;
+}
+body.image .navbar-fixed-top > .container > .navbar {
+	padding: 0;
+	z-index: auto;
+
+}
+body.image .navbar-fixed-top .navbar-nav > li > a {
+	padding: 5px 10px !important;
+}
+body.image .navbar-fixed-top .navbar-nav > li > a.discover-btn {
+	padding: 5px 10px !important;
+}
+body.image .stupid-separator {
+	padding: 0;
+}
+body.image .section-grey {
+	padding-top: 0;
+}
+body.image h2.section-title {
+	margin: 10px 0;
+	align-items: end;
+}
+body.image h2.section-title button {
+	margin-bottom: 4px;
+}
+body.image .image-wrapper {
+	margin-top: 0;
+}
+
 /* ========================================================== */
 /* 			             14. MEDIA QUERIES                    */
 /* ========================================================== */
