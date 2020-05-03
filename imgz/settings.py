@@ -29,7 +29,7 @@ SECRET_KEY = os.getenv("SECRET_KEY", "override me")
 DEBUG = True if os.getenv("NODEBUG") is None else False
 
 ALLOWED_HOSTS = (
-    ["web", os.getenv("ALLOWED_HOST", "localhost")]
+    ["web", "localhost", os.getenv("ALLOWED_HOST", "localhost")]
     if os.getenv("NODEBUG") is None
     else [".imgz.org", ".imgz.io"]
 )

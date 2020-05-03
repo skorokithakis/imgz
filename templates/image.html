@@ -136,9 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <!--end container -->
 
         <div class="image-wrapper">
-            <p>
-            <a href="{{ image.get_image_url }}"><img src="{{ image.get_image_url }}" /></a>
-            </p>
+            <a href="{{ image.get_image_url }}"><img src="{% url "main:image-show-resized" image.id 1280 image.extension %}" /></a>
         </div>
 
         <!--begin container -->

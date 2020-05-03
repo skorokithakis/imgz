@@ -21,6 +21,11 @@ urlpatterns = [
         name="image-delete",
     ),
     re_path(
+        r"^(?P<image_id>i[a-zA-Z0-9]{7})-(?P<size>\d+)\.(?P<extension>\w+)$",
+        views.image_show_resized,
+        name="image-show-resized",
+    ),
+    re_path(
         r"^(?P<image_id>i[a-zA-Z0-9]{7})_(?P<size>\d+)\.(?P<extension>\w+)$",
         views.image_show_thumbnail,
         name="image-show-thumb",

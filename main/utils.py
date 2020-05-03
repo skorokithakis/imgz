@@ -1,4 +1,5 @@
 import datetime
+from io import BytesIO
 from typing import Any
 from typing import List
 from typing import Optional
@@ -6,6 +7,8 @@ from typing import Optional
 import requests
 from django.conf import settings
 from django.utils.timezone import now
+from PIL import Image as PILImage
+from PIL import ImageOps
 
 import main
 
@@ -16,6 +19,33 @@ class UploadError(Exception):
     """
 
     pass
+
+
+def resize_image(data: bytes, size: int) -> bytes:
+    """
+    Resize the given image data.
+    """
+    with BytesIO(data) as inp, BytesIO() as outp:
+        img = PILImage.open(inp)
+        format = img.format
+        img.thumbnail((size, size))
+        img.save(outp, format=format)
+        outp.seek(0)
+        return outp.read()
+
+
+def generate_thumbnail(data: bytes) -> bytes:
+    """
+    Generate a thumbnail for the given image data.
+    """
+    with BytesIO(data) as inp:
+        img = PILImage.open(inp)
+        thumb = ImageOps.fit(img, (512, 512), method=PILImage.ANTIALIAS)
+
+    with BytesIO() as outp:
+        thumb.save(outp, format=img.format)
+        outp.seek(0)
+        return outp.read()
 
 
 def process_upload(

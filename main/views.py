@@ -18,6 +18,7 @@ from loginas.utils import restore_original_login
 from .models import Image
 from .models import User
 from .utils import process_upload
+from .utils import resize_image
 from .utils import UploadError
 
 
@@ -87,16 +88,35 @@ def index(request: HttpRequest) -> HttpResponse:
     )
 
 
+def image_show_resized(
+    request: HttpRequest, image_id: str, size: str, extension: Optional[str] = None
+) -> HttpResponse:
+    """
+    Show a resized image.
+    """
+    image = get_object_or_404(Image, pk=image_id)
+    s = int(size)
+    if s != 1280:
+        return HttpResponseNotFound("Size not found.")
+
+    data = resize_image(image.data, s)
+    response = HttpResponse(data, content_type=f"image/{image.format}")
+    response["Content-Length"] = len(data)
+    return response
+
+
 def image_show_thumbnail(
     request: HttpRequest, image_id: str, size: str, extension: Optional[str] = None
 ) -> HttpResponse:
     """
-    Show a bare image.
+    Show an image's thumbnail.
     """
     image = get_object_or_404(Image, pk=image_id)
-    if size != "512":
+    s = int(size)
+    if s != 512:
         return HttpResponseNotFound("Thumbnail not found.")
 
+    # We're going to do this on the fly and rely on caching to save the day.
     data = bytes(image.thumbnail_512)
     response = HttpResponse(data, content_type=f"image/{image.format}")
     response["Content-Length"] = len(data)

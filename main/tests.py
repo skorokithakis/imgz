@@ -204,7 +204,7 @@ class ViewTests(TestCase):
         response = self.client.get(image.get_thumbnail_url(512))
         self.assertEqual(response.status_code, 200)
 
-        response = self.client.get(image.get_thumbnail_url(513))
+        response = self.client.get(image.get_thumbnail_url(100))
         self.assertEqual(response.status_code, 404)
 
         # Let expired try to delete user1's image.

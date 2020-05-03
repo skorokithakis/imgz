@@ -3,7 +3,6 @@ import imghdr
 import os
 import subprocess
 import tempfile
-from io import BytesIO
 from typing import Any
 from typing import Dict
 from typing import Optional
@@ -18,9 +17,8 @@ from django.db.models import Sum
 from django.db.models.query import QuerySet
 from django.urls import reverse
 from django.utils import timezone
-from PIL import Image as PILImage
-from PIL import ImageOps
 
+from .utils import generate_thumbnail
 from .utils import purge_cloudflare_cache_urls
 
 
@@ -204,6 +202,9 @@ class Image(models.Model):
         )
 
     def get_thumbnail_url(self, size: int = 512) -> str:
+        """
+        Return the URL to the image thumbnail.
+        """
         return reverse(
             "main:image-show-thumb",
             kwargs={"image_id": self.id, "size": size, "extension": self.extension},
@@ -230,14 +231,7 @@ class Image(models.Model):
 
         It does not save the Image object.
         """
-        with BytesIO(self.data) as inp:
-            img = PILImage.open(inp)
-            thumb = ImageOps.fit(img, (512, 512), method=PILImage.ANTIALIAS)
-
-        with BytesIO() as outp:
-            thumb.save(outp, format=img.format)
-            outp.seek(0)
-            self.thumbnail_512 = outp.read()
+        self.thumbnail_512 = generate_thumbnail(self.data)
 
     def strip_exif(self) -> None:
         """
