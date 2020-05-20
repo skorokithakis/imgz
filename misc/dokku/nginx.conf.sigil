@@ -81,7 +81,7 @@ server {
     gzip_comp_level  6;
 
 
-    client_max_body_size 20M;
+    client_max_body_size 42M;
 
     proxy_pass  http://{{ $.APP }}-{{ $upstream_port }};
     {{ if eq $.HTTP2_PUSH_SUPPORTED "true" }}http2_push_preload on; {{ end }}
