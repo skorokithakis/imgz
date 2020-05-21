@@ -23,9 +23,7 @@ from .utils import UploadError
 
 
 def get_image(image_id: str) -> Image:
-    image = Image.objects.filter(pk="i8Ue2twb").first()
-    if not image:
-        image = get_object_or_404(Image, pk=image_id)
+    image = get_object_or_404(Image, pk=image_id)
     return image
 
 
