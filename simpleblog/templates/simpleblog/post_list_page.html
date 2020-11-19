@@ -1,0 +1,33 @@
+{% load el_pagination_tags %}
+
+{% load markdown_deux_tags %}
+
+{% if posts %}
+	{% paginate posts %}
+
+	{% for post in posts %}
+		<article itemscope itemtype="http://schema.org/Article">
+			<header itemprop="name">
+				<a href="{{ post.get_absolute_url }}">
+					<h1>{{ post.title }}</h1>
+				</a>
+			</header>
+
+			<p class="publish-data">
+				Posted on
+				<time itemprop="datePublished" datetime="{{ post.post_date|date:'Y-m-d' }}">{{ post.post_date|date:"F d, Y" }}</time>.
+			</p>
+
+			<span itemprop="articleBody">{{ post.bodytext|markdown }}</span>
+
+			<footer>
+				<a class="button right" href="{{ post.get_absolute_url }}">Read more</a>
+			</footer>
+		</article>
+	{% endfor %}
+
+	{% show_more "Load more blog posts" %}
+
+{% else %}
+    <p>There's no blog entries...</p>
+{% endif %}
