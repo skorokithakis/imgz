@@ -1,5 +1,4 @@
 # mypy: ignore-errors
-from django.contrib.sites.models import Site
 from django.contrib.syndication.views import Feed
 from django.shortcuts import redirect
 from django.views.generic.dates import DateDetailView
@@ -12,7 +11,7 @@ from .models import Post
 
 
 class LatestEntriesFeed(Feed):
-    title = "%s blog entries" % (Site.objects.get_current())
+    title = "IMGZ blog entries"
     description = "The latest blog entries"
     link = "/siteposts/"
 
