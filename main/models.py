@@ -1,8 +1,6 @@
 import datetime
 import imghdr
-import os
-import subprocess
-import tempfile
+from io import BytesIO
 from typing import Any
 from typing import Dict
 from typing import Optional
@@ -17,6 +15,7 @@ from django.db.models import Sum
 from django.db.models.query import QuerySet
 from django.urls import reverse
 from django.utils import timezone
+from PIL import Image as PILImage
 
 from .utils import generate_thumbnail
 from .utils import purge_cloudflare_cache_urls
@@ -239,16 +238,18 @@ class Image(models.Model):
 
         Does not save the Image object.
         """
-        fd, filename = tempfile.mkstemp()
-        with open(filename, "wb") as f:
-            f.write(self.data)
+        with BytesIO(self.data) as inp:
+            img = PILImage.open(inp)
+            format = img.format
+            image_without_exif = PILImage.new(img.mode, img.size)
+            image_without_exif.putdata(img.getdata())
 
-        subprocess.run(["mogrify", "-auto-orient", "-strip", f.name])
-        with open(filename, "rb") as f:
-            self.data = f.read()
+        del img
 
-        os.close(fd)
-        os.remove(filename)
+        with BytesIO() as outp:
+            image_without_exif.save(outp, format=format)
+            outp.seek(0)
+            self.data = outp.read()
 
     def increment_views(self) -> None:
         """
