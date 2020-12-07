@@ -64,7 +64,7 @@
 
                     <p>
                     This doesn't even need auth. Just make a <code>GET</code> request to
-                    <code>https://:{{ api_key }}@{{ request.site.domain }}{% url "main:api-image-detail" "image_id" %}</code>
+                    <code>https://{{ request.site.domain }}{% url "main:api-image-detail" "image_id" %}</code>
                     </p>
 
                     <p>
