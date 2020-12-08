@@ -53,6 +53,10 @@ def size(bytes: int, system=alternative) -> str:
     """
     Human-readable file size.
     """
+    # Sometimes `bytes` is an empty string here, try to work around that.
+    if not bytes:
+        bytes = 0
+
     for factor, suffix in system:
         if bytes >= factor:
             break
