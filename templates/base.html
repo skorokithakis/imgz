@@ -41,7 +41,7 @@
     <meta property="og:image:width" content="512">
     <meta property="og:image:height" content="512">
     {% else %}
-    <meta property="og:title" content="Image sharing. No bullshit.">
+    <meta property="og:title" content="{% block ogtitle %}Image sharing. No bullshit.{% endblock %} - {{ request.site.name }}">
     <meta property="og:site_name" content="{{ request.site.name }}">
     <meta property="og:url" content="https://{{ request.site.domain }}">
     <meta property="og:description" content="{{ request.site.name}} shares images.">
