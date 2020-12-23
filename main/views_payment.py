@@ -27,9 +27,11 @@ def stripe_webhook(request):
         )
     except ValueError:
         # Invalid payload
+        print("Invalid payload")
         return HttpResponse(status=400)
     except stripe.error.SignatureVerificationError:
         # Invalid signature
+        print("Invalid signature")
         return HttpResponse(status=400)
 
     refid = event.data.object.client_reference_id
@@ -42,6 +44,7 @@ def stripe_webhook(request):
 
     user = User.objects.filter(pk=customer_id).first()
     if user:
+        user.stripe_subscription_id = event.data.object.subscription
         user.upgrade(space)
     return HttpResponse("K")
 

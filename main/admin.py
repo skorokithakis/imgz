@@ -28,6 +28,7 @@ class MyUserAdmin(DjangoQLSearchMixin, UserAdmin):
                 "fields": (
                     "last_payment",
                     "upgraded_until",
+                    "stripe_subscription_id",
                     "storage_space",
                     "bonus_space",
                 )

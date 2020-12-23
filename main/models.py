@@ -31,6 +31,7 @@ def generate_image_id() -> str:
 
 class User(AbstractUser):
     upgraded_until = models.DateField(default=datetime.date(1900, 1, 1))
+    stripe_subscription_id = models.CharField(max_length=200, blank=True)
     last_payment = models.DateField(default=datetime.date(1900, 1, 1))
     storage_space = models.BigIntegerField(
         default=0, help_text="The user's base storage space (from their payment plan)."
