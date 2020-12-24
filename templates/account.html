@@ -27,7 +27,7 @@
                     {{ request.user.total_space_taken|human_size }} / {{ request.user.total_space|human_size }} of space
                     and your
                     {% if request.user.has_ever_paid %}
-                        subscription expires
+                        current upgrade expires
                     {% else %}
                         free trial ends
                     {% endif %}
@@ -47,11 +47,9 @@
                     <code>{{ request.user.api_key }}</code>.
                     </p>
 
-                    {% if request.user.has_ever_paid %}
+                    {% if request.user.stripe_subscription_id %}
                     <h4>Subscription stuff</h4>
 
-                    {% if request.user.stripe_subscription_id %}
-                    {% if request.user.stripe_subscription_active %}
                     <p>
                     Alright you can cancel your subscription here. This will only affect your subsequent payments, what
                     you've paid for so far will still be available until your subscription expires, on
@@ -63,19 +61,6 @@
                         method="post" action="{% url "main:account" %}?unsub=scribeme">
                         <button type="submit" class="btn btn-danger">Cancel my subscription</button>
                     </form>
-                    {% else %}
-                    <p>
-                    Your subscription is inactive and you're riding the coattails of your previous payment until
-                    {{ request.user.upgraded_until }}, when that, too, will cease.
-                    </p>
-                    {% endif %}
-                    {% else %}
-                    <p>
-                    Alright listen, I fucked up and forgot to store the subscription ID for you. That means I can't
-                    automatically cancel your subscription, but drop me a line at <a
-                        href="mailto:hi@stavros.io">hi@stavros.io</a> and I will sort you out right away.
-                    </p>
-                    {% endif %}
                     {% endif %}
                     {% endif %}
 

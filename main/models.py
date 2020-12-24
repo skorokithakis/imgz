@@ -35,7 +35,6 @@ def generate_image_id() -> str:
 class User(AbstractUser):
     upgraded_until = models.DateField(default=datetime.date(1900, 1, 1))
     stripe_subscription_id = models.CharField(max_length=200, blank=True)
-    stripe_subscription_active = models.BooleanField(default=False)
     last_payment = models.DateField(default=datetime.date(1900, 1, 1))
     storage_space = models.BigIntegerField(
         default=0, help_text="The user's base storage space (from their payment plan)."
@@ -116,13 +115,12 @@ class User(AbstractUser):
     ) -> None:
         """Start a Stripe subscription, given a subscription ID and space."""
         self.stripe_subscription_id = subscription_id
-        self.stripe_subscription_active = True
         self.upgrade(space)
 
     def stop_stripe_subscription(self) -> None:
         """Stop a Stripe subscription."""
         stripe.Subscription.delete(self.stripe_subscription_id)
-        self.stripe_subscription_active = False
+        self.stripe_subscription_id = ""
         self.save()
 
     def upgrade(self, space=settings.GB) -> None:
