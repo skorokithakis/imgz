@@ -50,14 +50,32 @@
                     {% if request.user.has_ever_paid %}
                     <h4>Subscription stuff</h4>
 
+                    {% if request.user.stripe_subscription_id %}
+                    {% if request.user.stripe_subscription_active %}
                     <p>
-                    If you're paying for a subscription and want to cancel, I haven't written that code yet. Contact me
-                    or wait, like, two days.
+                    Alright you can cancel your subscription here. This will only affect your subsequent payments, what
+                    you've paid for so far will still be available until your subscription expires, on
+                    {{ request.user.upgraded_until }}.
                     </p>
+
+                    <form
+                        onsubmit="return confirm('Are you sure you want to cancel your subscription? You subscribed to begin with so your judgement is questionable.');"
+                        method="post" action="{% url "main:account" %}?unsub=scribeme">
+                        <button type="submit" class="btn btn-danger">Cancel my subscription</button>
+                    </form>
+                    {% else %}
                     <p>
-                    EDIT: Okay this took a bit longer, but I have your subscription ID now and will be able to cancel it
-                    via the API soon, I just didn't expect anyone to actually pay.
+                    Your subscription is inactive and you're riding the coattails of your previous payment until
+                    {{ request.user.upgraded_until }}, when that, too, will cease.
                     </p>
+                    {% endif %}
+                    {% else %}
+                    <p>
+                    Alright listen, I fucked up and forgot to store the subscription ID for you. That means I can't
+                    automatically cancel your subscription, but drop me a line at <a
+                        href="mailto:hi@stavros.io">hi@stavros.io</a> and I will sort you out right away.
+                    </p>
+                    {% endif %}
                     {% endif %}
                     {% endif %}
 

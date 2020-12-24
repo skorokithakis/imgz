@@ -7,6 +7,7 @@ from typing import Optional
 from typing import Tuple
 
 import shortuuid
+import stripe
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.contrib.sites.models import Site
@@ -20,6 +21,8 @@ from PIL import Image as PILImage
 from .utils import generate_thumbnail
 from .utils import purge_cloudflare_cache_urls
 
+stripe.api_key = settings.STRIPE_SECRET_KEY
+
 
 def generate_moderate_id() -> str:
     return shortuuid.ShortUUID().random(12)
@@ -32,6 +35,7 @@ def generate_image_id() -> str:
 class User(AbstractUser):
     upgraded_until = models.DateField(default=datetime.date(1900, 1, 1))
     stripe_subscription_id = models.CharField(max_length=200, blank=True)
+    stripe_subscription_active = models.BooleanField(default=False)
     last_payment = models.DateField(default=datetime.date(1900, 1, 1))
     storage_space = models.BigIntegerField(
         default=0, help_text="The user's base storage space (from their payment plan)."
@@ -106,6 +110,20 @@ class User(AbstractUser):
         Return the total space the user has left on their account.
         """
         return self.total_space - self.total_space_taken
+
+    def start_stripe_subscription(
+        self, subscription_id: str, space: int = settings.GB
+    ) -> None:
+        """Start a Stripe subscription, given a subscription ID and space."""
+        self.stripe_subscription_id = subscription_id
+        self.stripe_subscription_active = True
+        self.upgrade(space)
+
+    def stop_stripe_subscription(self) -> None:
+        """Stop a Stripe subscription."""
+        stripe.Subscription.delete(self.stripe_subscription_id)
+        self.stripe_subscription_active = False
+        self.save()
 
     def upgrade(self, space=settings.GB) -> None:
         """

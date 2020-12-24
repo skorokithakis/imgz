@@ -58,6 +58,11 @@ def account(request):
             delete_all_their_shit(request.user)
             messages.success(request, "Good riddance.")
             logout(request)
+        elif request.GET.get("unsub") == "scribeme":
+            request.user.stop_stripe_subscription()
+            messages.success(
+                request, "Okay your subscription has been canceled. I think."
+            )
         return redirect("main:index")
 
     return render(request, "account.html")

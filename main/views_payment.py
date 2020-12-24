@@ -44,8 +44,8 @@ def stripe_webhook(request):
 
     user = User.objects.filter(pk=customer_id).first()
     if user:
-        user.stripe_subscription_id = event.data.object.subscription
-        user.upgrade(space)
+        user.start_stripe_subscription(event.data.object.subscription, space)
+
     return HttpResponse("K")
 
 
