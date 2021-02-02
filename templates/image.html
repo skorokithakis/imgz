@@ -156,6 +156,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 <!--end col-md-12 -->
 
+                <!--begin col-md-12-->
+                <div class="col-md-12 text-center padding-bottom-10 link-boxes">
+                    <h4>Image links</h4>
+                    <p>
+                        <label for="id_original">Original size:</label>
+                        <input id="id_original" type="text" readonly="true" onclick="this.select()" value="https://{{ request.site.domain }}{{ image.get_image_url }}"></input>
+                    </p>
+
+                    <p>
+                        <label for="id_resized">Resized:</label>
+                        <input id="id_resized" type="text" readonly="true" onclick="this.select()" value="https://{{ request.site.domain }}{% url "main:image-show-resized" image.id 1280 image.extension %}"></input>
+                    </p>
+                </div>
+                <!--end col-md-12 -->
+
             </div>
             <!--end row -->
 
