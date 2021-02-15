@@ -3,7 +3,7 @@ stages:
   - deploy
 
 test:
-  image: jjanzic/docker-python3-opencv
+  image: python:3.7
   variables:
     PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
   cache:
@@ -11,6 +11,7 @@ test:
       - .cache/pip
       - venv/
   before_script:
+    - apt update && apt install -y libopencv-dev
     - pip install --pre virtualenv poetry pre-commit
     - virtualenv venv
     - source venv/bin/activate
