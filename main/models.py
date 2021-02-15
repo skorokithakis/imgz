@@ -241,32 +241,15 @@ class Image(models.Model):
         else:
             self.title = title.replace("\n", " ").strip()
 
-    def generate_thumbnails(self) -> None:
-        """
-        Generate and store this image's thumbnails.
-
-        It does not save the Image object.
-        """
-        self.thumbnail_512 = generate_thumbnail(self.data)
-
-    def strip_exif(self) -> None:
+    def strip_exif(self, image: PILImage) -> PILImage:
         """
         Strip EXIF data from the image and auto-orient it.
 
         Does not save the Image object.
         """
-        with BytesIO(self.data) as inp:
-            img = PILImage.open(inp)
-            format = img.format
-            image_without_exif = PILImage.new(img.mode, img.size)
-            image_without_exif.putdata(img.getdata())
-
-        del img
-
-        with BytesIO() as outp:
-            image_without_exif.save(outp, format=format)
-            outp.seek(0)
-            self.data = outp.read()
+        image_without_exif = PILImage.new(image.mode, image.size)
+        image_without_exif.putdata(image.getdata())
+        return image_without_exif
 
     def increment_views(self) -> None:
         """
@@ -285,13 +268,21 @@ class Image(models.Model):
         if self.processed:
             return
 
-        self.strip_exif()
-
         format = imghdr.what(None, h=self.data)
         self.format = format if format else ""
 
+        with BytesIO(self.data) as inp:
+            img = PILImage.open(inp).copy()
+
+        img = self.strip_exif(img)
+
+        with BytesIO() as outp:
+            img.save(outp, format=self.format)
+            outp.seek(0)
+            self.data = outp.read()
+
+        self.thumbnail_512 = generate_thumbnail(img, format=self.format)
         self.size = len(self.data)
-        self.generate_thumbnails()
         self.processed = True
 
     def purge_cache(self) -> None:

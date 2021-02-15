@@ -34,19 +34,17 @@ def resize_image(data: bytes, size: int) -> bytes:
         return outp.read()
 
 
-def generate_thumbnail(data: bytes) -> bytes:
+def generate_thumbnail(image: PILImage, format: str) -> bytes:
     """
     Generate a thumbnail for the given image data.
 
     Ironically, this is done with `.fit()` because we want the thumbnail to
     be square with a cropped top/bottom.
     """
-    with BytesIO(data) as inp:
-        img = PILImage.open(inp)
-        thumb = ImageOps.fit(img, (512, 512), method=PILImage.ANTIALIAS)
+    thumb = ImageOps.fit(image, (512, 512), method=PILImage.ANTIALIAS)
 
     with BytesIO() as outp:
-        thumb.save(outp, format=img.format)
+        thumb.save(outp, format=format)
         outp.seek(0)
         return outp.read()
 
