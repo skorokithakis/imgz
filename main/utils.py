@@ -37,6 +37,9 @@ def resize_image(data: bytes, size: int) -> bytes:
 def generate_thumbnail(data: bytes) -> bytes:
     """
     Generate a thumbnail for the given image data.
+
+    Ironically, this is done with `.fit()` because we want the thumbnail to
+    be square with a cropped top/bottom.
     """
     with BytesIO(data) as inp:
         img = PILImage.open(inp)
