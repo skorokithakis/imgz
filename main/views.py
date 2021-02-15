@@ -22,6 +22,16 @@ from .utils import resize_image
 from .utils import UploadError
 
 
+def get_image_response(image: bytes, format: str) -> HttpResponse:
+    """Return an HttpResponse for a given image."""
+    # We cast to bytes here because this is a memoryview on Postgres
+    # but just bytes on SQLite.
+    data = bytes(image)
+    response = HttpResponse(data, content_type=f"image/{format}")
+    response["Content-Length"] = len(data)
+    return response
+
+
 def get_image(image_id: str) -> Image:
     image = get_object_or_404(Image, pk=image_id)
     return image
@@ -110,9 +120,7 @@ def image_show_resized(
         return HttpResponseNotFound("Size not found.")
 
     data = resize_image(image.data, s)
-    response = HttpResponse(data, content_type=f"image/{image.format}")
-    response["Content-Length"] = len(data)
-    return response
+    return get_image_response(data, image.format)
 
 
 def image_show_thumbnail(
@@ -126,11 +134,7 @@ def image_show_thumbnail(
     if s != 512:
         return HttpResponseNotFound("Thumbnail not found.")
 
-    # We're going to do this on the fly and rely on caching to save the day.
-    data = bytes(image.thumbnail_512)
-    response = HttpResponse(data, content_type=f"image/{image.format}")
-    response["Content-Length"] = len(data)
-    return response
+    return get_image_response(image.thumbnail_512, image.format)
 
 
 def image_page(
@@ -171,12 +175,7 @@ def image_show(
     Show a bare image.
     """
     image = get_image(image_id)
-    # We cast to bytes here because this is a memoryview on Postgres
-    # but just bytes on SQLite.
-    data = bytes(image.data)
-    response = HttpResponse(data, content_type=f"image/{image.format}")
-    response["Content-Length"] = len(data)
-    return response
+    return get_image_response(image.data, image.format)
 
 
 @login_required
