@@ -1,10 +1,9 @@
-image: python:3.7
-
 stages:
   - test
   - deploy
 
 test:
+  image: jjanzic/docker-python3-opencv
   variables:
     PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
   cache:
