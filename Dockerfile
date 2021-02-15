@@ -1,4 +1,4 @@
-FROM python:3.7
+FROM python:3.7.9-slim
 ENV PYTHONUNBUFFERED 1
 RUN apt-get update && apt-get install -y swig libssl-dev dpkg-dev netcat imagemagick libopencv-dev
 
