@@ -1,5 +1,6 @@
 import datetime
 import imghdr
+import re
 from io import BytesIO
 from typing import Any
 from typing import Dict
@@ -18,6 +19,8 @@ from django.urls import reverse
 from django.utils import timezone
 from PIL import Image as PILImage
 
+from .fancy_ml import detect_faces
+from .fancy_ml import protect_faces
 from .utils import generate_thumbnail
 from .utils import purge_cloudflare_cache_urls
 
@@ -46,6 +49,7 @@ class User(AbstractUser):
     api_key = models.CharField(
         max_length=200, default=generate_moderate_id, unique=True
     )
+    features = models.CharField(max_length=2000, blank=True)
 
     def __str__(self) -> str:
         return self.email
@@ -59,6 +63,13 @@ class User(AbstractUser):
         they've reached their storage quota.
         """
         return self.is_upgraded and self.has_space_left
+
+    @property
+    def is_on_trial(self) -> bool:
+        """
+        Return whether this user has only ever been on trial.
+        """
+        return not self.has_ever_paid
 
     @property
     def has_ever_paid(self) -> bool:
@@ -109,6 +120,10 @@ class User(AbstractUser):
         Return the total space the user has left on their account.
         """
         return self.total_space - self.total_space_taken
+
+    def has_feature(self, feature: str) -> bool:
+        """Return whether a user currently has a given feature enabled."""
+        return feature in re.split(r"\W+", self.features)
 
     def start_stripe_subscription(
         self, subscription_id: str, space: int = settings.GB
@@ -275,6 +290,13 @@ class Image(models.Model):
             img = PILImage.open(inp).copy()
 
         img = self.strip_exif(img)
+
+        if self.user.has_feature("privacy"):
+            # This user's image needs protection.
+            faces = detect_faces(
+                "./misc/models/haarcascade_frontalface_default.xml", img
+            )
+            img = protect_faces(faces, img, "./static/images/ad.png")
 
         with BytesIO() as outp:
             img.save(outp, format=self.format)

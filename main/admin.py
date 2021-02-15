@@ -22,6 +22,7 @@ class MyUserAdmin(DjangoQLSearchMixin, UserAdmin):
         ("Personal info", {"fields": ("first_name", "last_name")}),
         ("Permissions", {"fields": ("is_active", "is_staff", "is_superuser")}),
         ("Important dates", {"fields": ("last_login", "date_joined")}),
+        ("Miscellaneous", {"fields": ("features",)}),
         (
             "Payment stuff",
             {
