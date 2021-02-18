@@ -381,7 +381,7 @@ class ViewTests(TestCase):
         self.assertFalse(u.has_ever_paid)
         self.assertTrue(u.total_space < 1_000_000_000)
 
-        u.upgrade()
+        u.upgrade(1 * settings.GB)
 
         self.assertTrue(u.is_upgraded)
         self.assertTrue(u.has_ever_paid)
@@ -396,7 +396,7 @@ class ViewTests(TestCase):
         self.assertTrue(u.is_upgraded)
         self.assertFalse(u.has_ever_paid)
 
-        u.upgrade()
+        u.upgrade(1 * settings.GB)
 
         self.assertTrue(u.is_upgraded)
         self.assertTrue(u.has_ever_paid)

@@ -39,8 +39,8 @@ def stripe_webhook(request):
         return HttpResponse("K")
     _, customer_id, plan = refid.split("|")
 
-    GB = 1024 ** 3
-    space = {"1GB": 1 * GB, "50GB": 50 * GB, "500GB": 500 * GB, "ALLOFIT": 1 * GB}[plan]
+    GB = settings.GB
+    space = {"2GB": 2 * GB, "50GB": 50 * GB, "500GB": 500 * GB, "ALLOFIT": 1 * GB}[plan]
 
     user = User.objects.filter(pk=customer_id).first()
     if user:
@@ -68,7 +68,7 @@ def btc_webhook(request):
     _, user_id = request.POST["order_id"].split("|")
     user = User.objects.filter(pk=user_id).first()
     if user:
-        user.upgrade()
+        user.upgrade(2 * settings.GB)
     return HttpResponse("K")
 
 
@@ -84,8 +84,8 @@ def stripe_redirect(request):
         messages.error(request, "You need to log in first, duh.")
         return redirect("main:index")
 
-    plan = request.GET.get("plan", "1GB")
-    plan = plan if plan in ("1GB", "50GB", "500GB", "ALLOFIT") else "1GB"
+    plan = request.GET.get("plan", "2GB")
+    plan = plan if plan in ("2GB", "50GB", "500GB", "ALLOFIT") else "2GB"
     session = stripe.checkout.Session.create(
         customer_email=request.user.email,
         client_reference_id=f"{STRIPE_REF_ID}|{request.user.id}|{plan}",
@@ -118,11 +118,11 @@ def btc_redirect(request):
         settings.DEBUG,
     )
     i = opennode.get_invoice(
-        Decimal(5),
+        Decimal(12),
         "USD",
-        "One Gigabyte of IMGZ Please",
+        "Two Gigabytes of IMGZ Please",
         "IMGZ...er?",
         request.user.email,
-        order_id=f"{5}|{request.user.id}",
+        order_id=f"{12}|{request.user.id}",
     )
     return redirect(i["invoice_url"])

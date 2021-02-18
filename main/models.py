@@ -138,7 +138,7 @@ class User(AbstractUser):
         self.stripe_subscription_id = ""
         self.save()
 
-    def upgrade(self, space=settings.GB) -> None:
+    def upgrade(self, space: int) -> None:
         """
         Upgrade the user's account for a year.
         """

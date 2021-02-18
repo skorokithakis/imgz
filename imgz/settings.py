@@ -113,8 +113,6 @@ GB = 1024 * MB
 
 # Maximum allowed image size.
 MAX_IMAGE_SIZE = 20 * MB
-ANNUAL_USER_SPACE = 1 * GB
-ANNUAL_PRICE_PER_GB = 5
 
 if os.getenv("IN_DOCKER"):
     DATABASES = {
