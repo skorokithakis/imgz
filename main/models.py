@@ -291,7 +291,7 @@ class Image(models.Model):
 
         img = self.strip_exif(img)
 
-        if self.user.has_feature("privacy"):
+        if self.user.is_on_trial or self.user.has_feature("privacy"):
             # This user's image needs protection.
             faces = detect_faces(
                 "./misc/models/haarcascade_frontalface_default.xml", img
