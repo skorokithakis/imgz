@@ -1261,19 +1261,19 @@ p.contact_success_box{
 /* 			               10. OTHER ELEMENTS                 */
 /* ========================================================== */
 
-/* -----  a) Newsletter ----- */
-.newsletter_form_wrapper{
+/* -----  a) somethingelse ----- */
+.somethingelse_form_wrapper{
 	width:100%;
 	text-align:center;
 	margin-bottom:30px;
 }
 
-.newsletter_form_box{
+.somethingelse_form_box{
 	margin:0 auto;
 	max-width:730px;
 }
 
-#newsletter-form #email_newsletter {
+#somethingelse-form #email_somethingelse {
 	width:100%;
 	max-width:450px;
 	height:65px;
@@ -1288,7 +1288,7 @@ p.contact_success_box{
 	margin:0;
 }
 
-#newsletter-form #submit-button-newsletter {
+#somethingelse-form #submit-button-somethingelse {
     width: 165px;
 	height:65px;
     background: #fff;
@@ -1307,7 +1307,7 @@ p.contact_success_box{
    -webkit-transition: background-color .25s ease-in-out;
 }
 
-#newsletter-form #submit-button-newsletter:hover {
+#somethingelse-form #submit-button-somethingelse:hover {
 	cursor: pointer;
 	color: var(--color-1);
     background-color:#fff;
@@ -1316,20 +1316,20 @@ p.contact_success_box{
    -webkit-transition: background-color .25s ease-in-out;
 }
 
-input#email_newsletter::-webkit-input-placeholder { /* WebKit browsers */
+input#email_somethingelse::-webkit-input-placeholder { /* WebKit browsers */
     color:#fff;
 }
-input#email_newsletter:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+input#email_somethingelse:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
     color:#fff;
 }
-input#email_newsletter::-moz-placeholder { /* Mozilla Firefox 19+ */
+input#email_somethingelse::-moz-placeholder { /* Mozilla Firefox 19+ */
     color:#fff;
 }
-input#email_newsletter:-ms-input-placeholder { /* Internet Explorer 10+ */
+input#email_somethingelse:-ms-input-placeholder { /* Internet Explorer 10+ */
     color:#fff;
 }
 
-.newsletter_success_box{
+.somethingelse_success_box{
 	font-size:18px;
 	font-style:italic;
 	color:#fff;
@@ -1818,7 +1818,7 @@ body.image .image-wrapper {
 	  	padding-bottom: 110px;
 	}
 
-	#newsletter-form #email_newsletter {
+	#somethingelse-form #email_somethingelse {
         width: 80%;
     	max-width: 320px;
     }
@@ -1844,13 +1844,13 @@ body.image .image-wrapper {
 	    border: 1px solid #9f9f9f!important;
 	}
 
-	#newsletter-form #email_newsletter {
+	#somethingelse-form #email_somethingelse {
 	    -moz-border-radius: 5px 5px 5px 5px!important;
 	    -webkit-border-radius: 5px 5px 5px 5px!important;
 	    border-radius: 5px 5px 5px 5px!important;
 	}
 
-	#newsletter-form #submit-button-newsletter {
+	#somethingelse-form #submit-button-somethingelse {
 	    display: inline-block;
 		margin-top:10px!important;
 	    -moz-border-radius: 5px 5px 5px 5px!important;
@@ -1858,11 +1858,11 @@ body.image .image-wrapper {
 	    border-radius: 5px 5px 5px 5px!important;
 	}
 
-	#newsletter-section .padding-top-60{
+	#somethingelse-section .padding-top-60{
 		padding-top: 0!important;
 	}
 
-	#newsletter-section h3{
+	#somethingelse-section h3{
 		font-size: 24px!important;
 	}
 
@@ -1897,11 +1897,11 @@ body.image .image-wrapper {
 
 @media (max-width: 320px) {
 
-	.newsletter-input {
+	.somethingelse-input {
 		width: 60%;
 	}
 
-	.btn-newsletter{
+	.btn-somethingelse{
   		width: 38%;
   		height: 60px;
   		margin-top: 12px;

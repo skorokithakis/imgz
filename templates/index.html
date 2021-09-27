@@ -213,7 +213,7 @@
     </section>
     <!--end services section -->
 
-    <!--begin newsletter section -->
+    <!--begin somethingelse section -->
     <section class="section-blue small-paddings" id="login">
 
         <!--begin container -->
@@ -234,25 +234,25 @@
                 <!--begin col-md-12-->
                 <div class="col-md-12 padding-bottom-40">
 
-                    <!--begin newsletter_form_wrapper -->
-                    <div class="newsletter_form_wrapper">
+                    <!--begin somethingelse_form_wrapper -->
+                    <div class="somethingelse_form_wrapper">
 
-                        <!--begin newsletter_form_box -->
-                        <div class="newsletter_form_box">
-                            <!--begin newsletter-form -->
-                            <form id="newsletter-form" class="newsletter-form" action="{% url "tokenauth:login" %}?next={{ request.GET.next }}" method="post">{% csrf_token %}
+                        <!--begin somethingelse_form_box -->
+                        <div class="somethingelse_form_box">
+                            <!--begin somethingelse-form -->
+                            <form id="somethingelse-form" class="somethingelse-form" action="{% url "tokenauth:login" %}?next={{ request.GET.next }}" method="post">{% csrf_token %}
 
-                                <input id="email_newsletter" type="email" name="email" placeholder="Enter your email address">
+                                <input id="email_somethingelse" type="email" name="email" placeholder="Enter your email address">
 
-                                <input type="submit" value="Log in" id="submit-button-newsletter">
+                                <input type="submit" value="Log in" id="submit-button-somethingelse">
                             </form>
-                            <!--end newsletter-form -->
+                            <!--end somethingelse-form -->
 
                         </div>
-                        <!--end newsletter_form_box -->
+                        <!--end somethingelse_form_box -->
 
                     </div>
-                    <!--end newsletter_form_wrapper -->
+                    <!--end somethingelse_form_wrapper -->
 
                 </div>
                 <!--end col-md-12 -->
@@ -264,7 +264,7 @@
         <!--end container -->
 
     </section>
-    <!--end newsletter section -->
+    <!--end somethingelse section -->
 
 	<!--begin section-white -->
     <section class="section-white">
