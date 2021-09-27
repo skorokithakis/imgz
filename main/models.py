@@ -289,7 +289,7 @@ class Image(models.Model):
         with BytesIO(self.data) as inp:
             # We first need to detect whether this is an animated GIF.
             img = PILImage.open(inp)
-            animated = img.is_animated
+            animated = getattr(img, "is_animated", False)
             # Copy the image so we can access it after we close the file.
             img = img.copy()
 
