@@ -287,21 +287,27 @@ class Image(models.Model):
         self.format = format if format else ""
 
         with BytesIO(self.data) as inp:
-            img = PILImage.open(inp).copy()
+            # We first need to detect whether this is an animated GIF.
+            img = PILImage.open(inp)
+            animated = img.is_animated
+            # Copy the image so we can access it after we close the file.
+            img = img.copy()
 
-        img = self.strip_exif(img)
+        if not animated:
+            # Don't touch animated GIFs.
+            img = self.strip_exif(img)
 
-        if self.user.has_feature("privacy"):
-            # This user's image needs protection.
-            faces = detect_faces(
-                "./misc/models/haarcascade_frontalface_default.xml", img
-            )
-            img = protect_faces(faces, img, "./static/images/ad.png")
+            if self.user.has_feature("privacy"):
+                # This user's image needs protection.
+                faces = detect_faces(
+                    "./misc/models/haarcascade_frontalface_default.xml", img
+                )
+                img = protect_faces(faces, img, "./static/images/ad.png")
 
-        with BytesIO() as outp:
-            img.save(outp, format=self.format)
-            outp.seek(0)
-            self.data = outp.read()
+            with BytesIO() as outp:
+                img.save(outp, format=self.format)
+                outp.seek(0)
+                self.data = outp.read()
 
         self.thumbnail_512 = generate_thumbnail(img, format=self.format)
         self.size = len(self.data)
