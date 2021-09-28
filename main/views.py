@@ -86,8 +86,13 @@ def api_docs(request: HttpRequest) -> HttpResponse:
 def latest(request: HttpRequest) -> HttpResponse:
     if not request.user.is_superuser:
         raise Http404()
+    try:
+        items = int(request.GET.get("items", ""))
+    except Exception:
+        items = 100
+
     return render(
-        request, "latest.html", {"images": Image.objects.order_by("-uploaded")[:50]}
+        request, "latest.html", {"images": Image.objects.order_by("-uploaded")[:items]}
     )
 
 
