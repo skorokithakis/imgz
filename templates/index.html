@@ -309,6 +309,43 @@
         </div>
         <!--end container-->
 
+
+        <!--begin container -->
+        <div class="container">
+
+            <!--begin row -->
+            <div class="row">
+
+                <!--begin col-md-12-->
+                <div class="offset-md-2 col-md-8" style="padding-top: 50px">
+
+                    <h2 class="section-title">Alternative</h2>
+
+                    <p class="section-subtitle">
+                    As <a href="https://news.ycombinator.com/item?id=28681085">antihero said on HN</a>:<br>
+                    If you don't mind using AWS you can just set up an S3 bucket and a point a CloudFront distro to
+                    it (takes &lt;5mins) and then just do
+<code>
+    <pre>
+    upload() {
+      aws s3 cp ${@:2} $1 s3://$BUCKET_NAME
+      echo https://$CLOUDFRONT_DOMAIN/$1 | pbcopy
+    }
+    </pre>
+</code>
+                    </p>
+                    <p>
+                    Piece of cake!
+                    </p>
+
+                </div>
+                <!--end col-md-12 -->
+
+            </div>
+            <!--end row -->
+
+        </div>
+        <!--end container -->
     </section>
     <!--end section-white-->
 {% endblock %}
