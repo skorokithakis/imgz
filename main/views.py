@@ -183,8 +183,8 @@ def image_show(
     return get_image_response(image.data, image.format)
 
 
-@login_required
-@require_POST
+@login_required  # type: ignore
+@require_POST  # type: ignore
 def image_delete(
     request: HttpRequest, image_id: str, extension: Optional[str] = None
 ) -> HttpResponse:
@@ -196,7 +196,7 @@ def image_delete(
     return redirect("main:index")
 
 
-@login_required
+@login_required  # type: ignore
 def image_upload(request: HttpRequest) -> HttpResponse:
     class ImageUploadForm(forms.Form):
         EXPIRATION = [

@@ -233,9 +233,7 @@ def TOKENAUTH_NORMALIZE_EMAIL(e):
 
 SITE_ID = 1
 
-sentry_sdk.init(  # type: ignore
-    dsn=os.getenv("SENTRY_DSN"), integrations=[DjangoIntegration()]
-)
+sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[DjangoIntegration()])
 
 LOGGING = {
     "version": 1,

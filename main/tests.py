@@ -66,7 +66,7 @@ class ViewTests(TestCase):
         self.superuser.save()
 
     def test_compile_templates(self):
-        for template_dir in settings.TEMPLATES[0]["DIRS"]:  # type: ignore
+        for template_dir in settings.TEMPLATES[0]["DIRS"]:
             for basepath, dirs, filenames in os.walk(template_dir):
                 for filename in filenames:
                     path = os.path.join(basepath, filename)
@@ -83,12 +83,12 @@ class ViewTests(TestCase):
             response = self.client.get(reverse(name))
             self.assertEqual(response.status_code, 302)
 
-        self.client.force_login(self.user1)  # type: ignore
+        self.client.force_login(self.user1)
 
         response = self.client.get(reverse("main:index"))
         self.assertEqual(response.status_code, 200)
 
-        self.client.force_login(self.expired)  # type: ignore
+        self.client.force_login(self.expired)
 
         response = self.client.get(reverse("main:index"))
         self.assertEqual(response.status_code, 200)
@@ -130,7 +130,7 @@ class ViewTests(TestCase):
         self.assertTrue(Image.objects.filter(pk=i.id).exists())
 
     def test_invalid_user(self):
-        self.client.force_login(self.expired)  # type: ignore
+        self.client.force_login(self.expired)
 
         # Try to upload a valid image.
         png = BytesIO(PNG)
@@ -142,7 +142,7 @@ class ViewTests(TestCase):
         self.assertEqual(Image.objects.count(), 0)
 
     def test_valid_user(self):
-        self.client.force_login(self.user1)  # type: ignore
+        self.client.force_login(self.user1)
 
         # Load the upload page.
         response = self.client.get(reverse("main:image-upload"))
@@ -209,7 +209,7 @@ class ViewTests(TestCase):
 
         # Let expired try to delete user1's image.
         c2 = Client()
-        c2.force_login(self.expired)  # type: ignore
+        c2.force_login(self.expired)
         response = c2.post(reverse("main:image-delete", args=[image.id]))
         self.assertEqual(response.status_code, 404)
         self.assertEqual(Image.objects.count(), 2)
@@ -223,13 +223,13 @@ class ViewTests(TestCase):
         image = Image.objects.all().order_by("uploaded").first()
         assert image
         c3 = Client()
-        c3.force_login(self.superuser)  # type: ignore
+        c3.force_login(self.superuser)
         response = c3.post(reverse("main:image-delete", args=[image.id]))
         self.assertEqual(response.status_code, 302)
         self.assertEqual(Image.objects.count(), 0)
 
     def test_account_deletion(self):
-        self.user1.bonus_space = 1024 ** 3
+        self.user1.bonus_space = 1024**3
         self.user1.save()
 
         for _ in range(5):
@@ -243,7 +243,7 @@ class ViewTests(TestCase):
 
         self.assertEqual(Image.objects.count(), 5)
 
-        self.client.force_login(self.user1)  # type: ignore
+        self.client.force_login(self.user1)
 
         response = self.client.post(reverse("main:account") + "?delete=allmyshit")
         self.assertEqual(response.status_code, 302)
@@ -387,7 +387,7 @@ class ViewTests(TestCase):
         self.assertTrue(u.has_ever_paid)
         self.assertTrue(u.total_space > 1_000_000_000)
         self.assertTrue(
-            u.upgraded_until > datetime.date.today() + datetime.timedelta(385)
+            u.upgraded_until > datetime.date.today() + datetime.timedelta(375)
         )
 
         # Upgrade someone who already has lots of space.
@@ -410,6 +410,6 @@ class ViewTests(TestCase):
             (1_992_294, "1.9 MB"),
             (10_048_577, "9.58 MB"),
             (10_048_577_000, "9.36 GB"),
-            (1024 ** 3, "1 GB"),
+            (1024**3, "1 GB"),
         ):
             self.assertEqual(size(num), display)
