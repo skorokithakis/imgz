@@ -143,21 +143,25 @@ class User(AbstractUser):
         Upgrade the user's account for a year.
         """
         self.storage_space = space
+        # Set upgraded_until to either a year after today, or after the next upgrade date, capped at two weeks.
         self.upgraded_until = max(
-            datetime.date.today(), self.upgraded_until
+            datetime.date.today(),
+            min(
+                self.upgraded_until, datetime.date.today() + datetime.timedelta(days=15)
+            ),
         ) + datetime.timedelta(366)
         self.last_payment = datetime.date.today()
         self.save()
 
 
-class ImageManager(models.Manager):  # type: ignore
-    def get_queryset(self, hide_expired=True) -> QuerySet:  # type: ignore
+class ImageManager(models.Manager):
+    def get_queryset(self, hide_expired=True) -> QuerySet:
         qs = super().get_queryset()
         if hide_expired:
             qs = qs.exclude(expires__lt=timezone.now())
         return qs
 
-    def include_expired(self) -> QuerySet:  # type: ignore
+    def include_expired(self) -> QuerySet:
         return self.get_queryset(hide_expired=False)
 
     def create(self, *args, **kwargs) -> "Image":

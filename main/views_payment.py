@@ -34,19 +34,66 @@ def stripe_webhook(request):
         print("Invalid signature")
         return HttpResponse(status=400)
 
-    refid = event.data.object.client_reference_id
-    if not refid or not refid.startswith(f"{STRIPE_REF_ID}|"):
-        return HttpResponse("K")
-    _, customer_id, plan = refid.split("|")
+    if event.type != "charge.succeeded":
+        return HttpResponse("Wrong type.")
+
+    invoice = stripe.Invoice.retrieve(event.data.object.invoice)
+    subscription_id = invoice.subscription
+    subscription = stripe.Subscription.retrieve(subscription_id)
+
+    if subscription.metadata.property != STRIPE_REF_ID:
+        return HttpResponse("Wrong property.")
+
+    plan_id = subscription.metadata.plan
+    user_id = subscription.metadata.user_id
+
+    user = User.objects.filter(pk=user_id).first()
+
+    if not user:
+        return HttpResponse("No user.")
 
     GB = settings.GB
-    space = {"2GB": 2 * GB, "50GB": 50 * GB, "500GB": 500 * GB, "ALLOFIT": 1 * GB}[plan]
+    space = {"2GB": 2 * GB, "50GB": 50 * GB, "500GB": 500 * GB, "ALLOFIT": 1 * GB}[
+        plan_id
+    ]
 
-    user = User.objects.filter(pk=customer_id).first()
-    if user:
-        user.start_stripe_subscription(event.data.object.subscription, space)
+    user.start_stripe_subscription(subscription_id, space)
 
     return HttpResponse("K")
+
+
+def stripe_redirect(request):
+    """
+    Redirect to the Stripe URL.
+
+    This is done because we need to generate an invoice on the Stripe side, which is
+    a rather heavy operation, so we don't want to do it on every load of the pricing
+    page.
+    """
+    if not request.user.is_authenticated:
+        messages.error(request, "You need to log in first, duh.")
+        return redirect("main:index")
+
+    plan = request.GET.get("plan", "2GB")
+    plan = plan if plan in ("2GB", "50GB", "500GB", "ALLOFIT") else "2GB"
+    session = stripe.checkout.Session.create(
+        customer_email=request.user.email,
+        client_reference_id=f"{STRIPE_REF_ID}|{request.user.id}|{plan}",
+        payment_method_types=["card"],
+        subscription_data={
+            "metadata": {
+                "property": STRIPE_REF_ID,
+                "user_id": request.user.id,
+                "plan": plan,
+            },
+            "items": [{"plan": plan, "quantity": 1}],
+        },
+        success_url=f"https://{request.site.domain}{reverse('main:payment-return')}?session_id={{CHECKOUT_SESSION_ID}}",
+        cancel_url=f"https://{request.site.domain}{reverse('main:money')}",
+    )
+
+    context = {"stripe_session_id": session.id}
+    return render(request, "money.html", context)
 
 
 @require_http_methods(["POST"])
@@ -70,33 +117,6 @@ def btc_webhook(request):
     if user:
         user.upgrade(2 * settings.GB)
     return HttpResponse("K")
-
-
-def stripe_redirect(request):
-    """
-    Redirect to the Stripe URL.
-
-    This is done because we need to generate an invoice on the Stripe side, which is
-    a rather heavy operation, so we don't want to do it on every load of the pricing
-    page.
-    """
-    if not request.user.is_authenticated:
-        messages.error(request, "You need to log in first, duh.")
-        return redirect("main:index")
-
-    plan = request.GET.get("plan", "2GB")
-    plan = plan if plan in ("2GB", "50GB", "500GB", "ALLOFIT") else "2GB"
-    session = stripe.checkout.Session.create(
-        customer_email=request.user.email,
-        client_reference_id=f"{STRIPE_REF_ID}|{request.user.id}|{plan}",
-        payment_method_types=["card"],
-        subscription_data={"items": [{"plan": plan, "quantity": 1}]},
-        success_url=f"https://{request.site.domain}{reverse('main:payment-return')}?session_id={{CHECKOUT_SESSION_ID}}",
-        cancel_url=f"https://{request.site.domain}{reverse('main:money')}",
-    )
-
-    context = {"stripe_session_id": session.id}
-    return render(request, "money.html", context)
 
 
 def btc_redirect(request):
