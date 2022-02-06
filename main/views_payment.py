@@ -37,6 +37,9 @@ def stripe_webhook(request):
     if event.type != "charge.succeeded":
         return HttpResponse("Wrong type.")
 
+    if not event.data.object.invoice:
+        return HttpResponse("No invoice.")
+
     invoice = stripe.Invoice.retrieve(event.data.object.invoice)
     subscription_id = invoice.subscription
     subscription = stripe.Subscription.retrieve(subscription_id)
