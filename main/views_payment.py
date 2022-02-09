@@ -56,9 +56,13 @@ def stripe_webhook(request):
         return HttpResponse("No user.")
 
     GB = settings.GB
-    space = {"2GB": 2 * GB, "50GB": 50 * GB, "500GB": 500 * GB, "ALLOFIT": 1 * GB}[
-        plan_id
-    ]
+    space = {
+        "1GB": 1 * GB,
+        "2GB": 2 * GB,
+        "50GB": 50 * GB,
+        "500GB": 500 * GB,
+        "ALLOFIT": 1 * GB,
+    }[plan_id]
 
     user.start_stripe_subscription(subscription_id, space)
 
