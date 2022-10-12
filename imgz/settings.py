@@ -104,9 +104,6 @@ AUTH_USER_MODEL = "main.User"
 # Adjust this to taste.
 SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
 
-# Keep connections in the pool for an hour.
-CONN_MAX_AGE = 60 * 60
-
 KB = 1024
 MB = 1024 * KB
 GB = 1024 * MB
@@ -123,6 +120,8 @@ if os.getenv("IN_DOCKER"):
             "PASSWORD": "password",
             "HOST": "db",
             "PORT": 5432,
+            # Keep connections in the pool for an hour.
+            "CONN_MAX_AGE": 60 * 60,
         }
     }
 
@@ -151,6 +150,8 @@ elif os.getenv("DATABASE_URL"):
             "PASSWORD": PASSWORD,
             "HOST": HOST,
             "PORT": int(PORT),
+            # Keep connections in the pool for an hour.
+            "CONN_MAX_AGE": 60 * 60,
         }
     }
 
