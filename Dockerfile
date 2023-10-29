@@ -2,7 +2,7 @@ FROM python:3.7.9-slim
 ENV PYTHONUNBUFFERED 1
 RUN apt-get update && apt-get install -y swig libssl-dev dpkg-dev netcat imagemagick libopencv-dev
 
-RUN pip install -U --pre pip poetry
+RUN pip install -U --pre pip poetry==1.5.1
 ADD poetry.lock /code/
 ADD pyproject.toml /code/
 RUN poetry config virtualenvs.create false
