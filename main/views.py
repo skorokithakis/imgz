@@ -92,7 +92,13 @@ def latest(request: HttpRequest) -> HttpResponse:
         items = 100
 
     return render(
-        request, "latest.html", {"images": Image.objects.order_by("-uploaded")[:items]}
+        request,
+        "latest.html",
+        {
+            "images": Image.objects.defer("data", "thumbnail_512").order_by(
+                "-uploaded"
+            )[:items]
+        },
     )
 
 
@@ -109,7 +115,13 @@ def index(request: HttpRequest) -> HttpResponse:
         return render(request, "unpaid.html")
 
     return render(
-        request, "home.html", {"images": request.user.images.order_by("-uploaded")}
+        request,
+        "home.html",
+        {
+            "images": request.user.images.defer("data", "thumbnail_512").order_by(
+                "-uploaded"
+            )
+        },
     )
 
 

@@ -1610,6 +1610,10 @@ p.testimonial-single{
     color: var(--color-p);
 }
 
+.card-img-top {
+    aspect-ratio: 1 / 1;
+}
+
 /* f) Carousel */
 
 .carousel-indicators {
