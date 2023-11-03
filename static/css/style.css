@@ -1579,8 +1579,19 @@ p.testimonial-single{
 
 /* e) Accordion Tabs */
 
-.card{
-	border:none;
+.col--image-list {
+    /* Flex the column in the list so that we can grow the image card. */
+    display: flex;
+    flex-direction: column;
+}
+
+.card {
+    /* Grow the image card and flex it, so that the footer can be pushed to
+    the vertical bottom of the row. */
+    display: flex;
+    flex: 1 0 auto;
+    flex-direction: column;
+    border: none;
 }
 
 .card-header {
@@ -1608,6 +1619,12 @@ p.testimonial-single{
     font-family: 'Open Sans', sans-serif;
     font-size: 17px;
     color: var(--color-p);
+}
+
+.card-footer {
+    /* Push the footer of the card to the bottom of the row, keeping them all
+    at the same bottom vertical alignment. */
+    margin-top: auto;
 }
 
 .card-img-top {
