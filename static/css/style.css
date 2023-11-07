@@ -2027,8 +2027,18 @@ h4 {
 }
 .link-boxes input {
     width: 25em;
+    max-width: 100%;
 }
 .link-boxes label {
-    text-align: right;
     width: 8em;
+    max-width: 100%;
+    text-align: center;
+}
+
+/* 768px is bootstrap's "md" query, at which the labels/inputs go to a
+side-by side layout */
+@media (min-width: 768px) {
+    .link-boxes label {
+        text-align: right;
+    }
 }
