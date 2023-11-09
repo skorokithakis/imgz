@@ -1,16 +1,12 @@
-from __future__ import unicode_literals
-
 from django.conf import settings
 from django.db import models
 from django.db.models.signals import post_save
 from django.urls import reverse
-from django.utils.encoding import python_2_unicode_compatible
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from .signals import save_comment
 
 
-@python_2_unicode_compatible
 class Post(models.Model):
     title = models.CharField(max_length=200, verbose_name=_("title"))
     slug = models.SlugField()
@@ -49,7 +45,6 @@ class Post(models.Model):
         return reverse("blog_detail", kwargs=kwargs)
 
 
-@python_2_unicode_compatible
 class Comment(models.Model):
     post = models.ForeignKey(
         Post, related_name="comments", verbose_name=_("post"), on_delete=models.CASCADE
