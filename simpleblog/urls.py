@@ -1,7 +1,4 @@
-try:
-    from django.urls import re_path
-except ModuleNotFoundError:
-    from django.conf.urls import url as re_path
+from django.urls import re_path
 
 from .views import BlogDetailView
 from .views import BlogListView
