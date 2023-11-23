@@ -75,13 +75,25 @@ class ViewTests(TestCase):
                         Template(f.read())
 
     def test_views(self):
-        for name in ("main:index", "main:faq", "main:terms", "main:money"):
+        for name in (
+            "main:index",
+            "main:faq",
+            "main:terms",
+            "main:money",
+            "main:money-safe",
+            "main:payment-return",
+        ):
             response = self.client.get(reverse(name))
             self.assertEqual(response.status_code, 200)
 
         for name in ("main:account", "main:image-upload"):
             response = self.client.get(reverse(name))
             self.assertEqual(response.status_code, 302)
+
+        # Check the "complex landing" branch.
+        response = self.client.get(reverse("main:index"), data={"v": "c"})
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b"Supercharge your visual pipeline", response.content)
 
         self.client.force_login(self.user1)
 
