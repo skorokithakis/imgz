@@ -22,7 +22,7 @@ test:
     - python manage.py collectstatic --noinput
   script:
     - pre-commit run -a
-    - python manage.py test
+    - pytest
   stage: test
 
 deploy to production:
