@@ -2,6 +2,7 @@ import datetime
 
 from django.core.management.base import BaseCommand
 
+from main.models import Image
 from main.models import User
 
 
@@ -16,11 +17,13 @@ class Command(BaseCommand):
             last_payment=datetime.date(1900, 1, 1),
             upgraded_until__lt=datetime.date.today() - datetime.timedelta(days=30),
         ):
+            # We use a loop here because we want the `delete` method to be
+            # called, which is necessary to clear the cache.
             icounter = 0
-            for image in user.images.include_expired().all():
+            for image in Image.objects.include_expired().filter(user=user):
                 image.delete()
                 icounter += 1
-            print(
+            self.stdout.write(
                 f"Deleted {icounter} images for user {user.email} (trial ended on {user.upgraded_until})..."
             )
             counter += 1
