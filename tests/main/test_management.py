@@ -1,5 +1,6 @@
 from datetime import date
 from datetime import timedelta
+from io import StringIO
 
 import pytest
 from django.core.management import call_command
@@ -38,27 +39,23 @@ def test_delete_expired_images():
 
 
 @pytest.mark.django_db
-@pytest.mark.xfail  # the management command is broken
 def test_delete_inactive_users():
     """
     Test that "./manage.py delete_inactive_users" does what you think it does.
-
-    It doesn't! This test is xfailed because the management command is broken.
-    It fails with:
-
-    TypeError: create_reverse_many_to_one_manager.<locals>.RelatedManager.get_queryset() got an unexpected keyword argument 'hide_expired'
     """
-
     # A user who has never paid, and has been on trial more than 30 days.
     # Delete their stuff.
     expired_trial_user = UserFactory(with_expired_trial=True)
+    # Check that nothing breaks if we have an expired trial user with no
+    # images.
+    expired_trial_user_no_images = UserFactory(with_expired_trial=True)
 
     on_trial = UserFactory(last_payment=date(1900, 1, 1))
     on_trial.upgraded_until == date.today() - timedelta(days=29)
     on_trial.save()
 
     # A user who has paid recently and has upgrade time remaining.
-    paid_user = UserFactory(last_payment=date.today() - timedelta(days=1))
+    paid_user = UserFactory(with_active_subscription=True)
     paid_user.upgraded_until = date.today() + timedelta(days=10)
     paid_user.save()
 
@@ -79,10 +76,24 @@ def test_delete_inactive_users():
     ImageFactory.create(user=expired_trial_user)
     ImageFactory.create(user=expired_trial_user, expires=now() - timedelta(days=2))
 
-    call_command("delete_inactive_users")
+    stdout = StringIO()
+    call_command("delete_inactive_users", stdout=stdout)
 
     assert Image.objects.include_expired().count() == len(canaries) * 2
     assert Image.objects.include_expired().filter(user=expired_trial_user).count() == 0
+
+    # To be sure, check the stdout of the process to ensure that we only
+    # deleted stuff for the users that we thought we did.
+    lines = [line for line in stdout.getvalue().split("\n") if line]
+    assert len(lines) == 2
+    assert (
+        f"Deleted 0 images for user {expired_trial_user_no_images} (trial ended on {expired_trial_user_no_images.upgraded_until})..."
+        in lines
+    )
+    assert (
+        f"Deleted 2 images for user {expired_trial_user} (trial ended on {expired_trial_user.upgraded_until})..."
+        in lines
+    )
 
 
 @pytest.mark.django_db
