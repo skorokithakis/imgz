@@ -98,7 +98,7 @@
                             <li><a href="{% url "main:faq" %}">FAQ</a></li>
                             <li><a href="/blog/">Blog</a></li>
                             {% if not user.is_paying %}
-                            <li><a href="{% url "main:money" %}">Money</a></li>
+                            <li><a href="{% url "main:money" %}">Pricing</a></li>
                             {% endif %}
                             <li><a href="{% url "main:image-upload" %}">Upload</a></li>
                             <li><a href="{% url "main:account" %}">Account</a></li>
@@ -106,7 +106,7 @@
                             {% else %}
                             <li><a href="/blog/">Blog</a></li>
                             <li><a href="{% url "main:faq" %}">FAQ</a></li>
-                            <li><a href="{% url "main:money" %}">Money</a></li>
+                            <li><a href="{% url "main:money" %}">Pricing</a></li>
                             <li class="discover-link"><a href="/#login" class="external discover-btn">Log in</a></li>
                             {% endif %}
 
