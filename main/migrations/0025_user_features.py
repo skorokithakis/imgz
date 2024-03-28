@@ -4,7 +4,6 @@ from django.db import models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [("main", "0024_remove_user_stripe_subscription_active")]
 
     operations = [

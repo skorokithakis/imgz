@@ -4,7 +4,6 @@ from django.db import models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [("main", "0009_user_storage_space")]
 
     operations = [

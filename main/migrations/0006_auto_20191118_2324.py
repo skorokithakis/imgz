@@ -6,7 +6,6 @@ from django.db import models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [("main", "0005_user_upgraded_until")]
 
     operations = [

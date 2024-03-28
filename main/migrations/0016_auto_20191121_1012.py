@@ -3,7 +3,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [("main", "0015_user_last_payment")]
 
     operations = [

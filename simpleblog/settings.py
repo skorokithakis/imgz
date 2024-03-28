@@ -1,6 +1,7 @@
 """
 Django Simple Blog settings file.
 """
+
 from django.conf import settings
 
 # How long the length of the textarea should be.

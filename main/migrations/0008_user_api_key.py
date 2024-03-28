@@ -6,7 +6,6 @@ import main.models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [("main", "0007_image_name")]
 
     operations = [

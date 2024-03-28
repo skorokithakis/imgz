@@ -4,7 +4,6 @@ from django.db import models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [("main", "0013_image_processed")]
 
     operations = [

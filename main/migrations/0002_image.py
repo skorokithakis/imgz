@@ -8,7 +8,6 @@ import main.models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [("main", "0001_initial")]
 
     operations = [

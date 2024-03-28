@@ -3,7 +3,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [("main", "0023_user_stripe_subscription_active")]
 
     operations = [

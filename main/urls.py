@@ -1,4 +1,5 @@
 """The main application's URLs."""
+
 from django.urls import path
 from django.urls import re_path
 from django.views.generic import TemplateView
