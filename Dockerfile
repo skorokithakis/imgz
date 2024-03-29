@@ -1,4 +1,4 @@
-FROM python:3.8-slim
+FROM python:3.8-slim-bullseye
 ENV PYTHONUNBUFFERED 1
 RUN apt-get update && apt-get install -y swig libssl-dev dpkg-dev netcat-openbsd imagemagick libopencv-dev
 
