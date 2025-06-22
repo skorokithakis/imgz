@@ -44,11 +44,14 @@ def stripe_webhook(request):
     subscription_id = invoice.subscription
     subscription = stripe.Subscription.retrieve(subscription_id)
 
-    if subscription.metadata.property != STRIPE_REF_ID:
+    # Ignore any subscription that does not belong to IMGZ
+    if subscription.metadata.get("property") != STRIPE_REF_ID:
         return HttpResponse("Wrong property.")
 
-    plan_id = subscription.metadata.plan
-    user_id = subscription.metadata.user_id
+    # Safe access – still assumes the keys exist for IMGZ subscriptions,
+    # but won’t crash if they are missing.
+    plan_id = subscription.metadata.get("plan")
+    user_id = subscription.metadata.get("user_id")
 
     user = User.objects.filter(pk=user_id).first()
 
