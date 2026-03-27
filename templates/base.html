@@ -149,6 +149,106 @@
 {% block content %}
 {% endblock %}
 
+{% if user.is_authenticated %}
+<div class="drop-overlay">Drop to upload</div>
+<script>
+(function () {
+    var overlay = document.querySelector('.drop-overlay');
+    var dragDepth = 0;
+
+    // Read the CSRF token from the cookie Django sets, since we're using fetch
+    // rather than a form submission and have no {% csrf_token %} tag here.
+    function getCsrfToken() {
+        var match = document.cookie.match(/csrftoken=([^;]+)/);
+        return match ? match[1] : '';
+    }
+
+    function uploadFile(file) {
+        var data = new FormData();
+        data.append('image', file);
+        return fetch('/upload/', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'X-CSRFToken': getCsrfToken(),
+            },
+            body: data,
+        }).then(function (response) {
+            // Bail out early with a readable message rather than letting
+            // response.json() throw a cryptic SyntaxError on HTML error pages.
+            var contentType = response.headers.get('content-type') || '';
+            if (!response.ok || !contentType.includes('application/json')) {
+                throw new Error('Upload failed (server returned ' + response.status + ')');
+            }
+            return response.json();
+        }).then(function (json) {
+            if (json.error) {
+                throw new Error(json.error);
+            }
+            return json.url;
+        });
+    }
+
+    document.addEventListener('dragenter', function (e) {
+        if (!e.dataTransfer.types.includes('Files')) {
+            return;
+        }
+        e.preventDefault();
+        dragDepth += 1;
+        overlay.classList.add('active');
+    });
+
+    document.addEventListener('dragover', function (e) {
+        if (!e.dataTransfer.types.includes('Files')) {
+            return;
+        }
+        e.preventDefault();
+    });
+
+    document.addEventListener('dragleave', function (e) {
+        if (!e.dataTransfer.types.includes('Files')) {
+            return;
+        }
+        // Clamp to zero so stray extra dragleave events (which browsers
+        // occasionally fire) can't drive the counter negative and break
+        // the overlay toggle on the next drag.
+        dragDepth = Math.max(dragDepth - 1, 0);
+        if (dragDepth === 0) {
+            overlay.classList.remove('active');
+        }
+    });
+
+    document.addEventListener('drop', function (e) {
+        if (!e.dataTransfer.types.includes('Files')) {
+            return;
+        }
+        e.preventDefault();
+        dragDepth = 0;
+
+        var files = Array.from(e.dataTransfer.files);
+        if (files.length === 0) {
+            overlay.classList.remove('active');
+            return;
+        }
+
+        overlay.textContent = 'Uploading\u2026';
+        overlay.classList.add('uploading');
+
+        // Upload all files in parallel and redirect to the URL from the last
+        // response. Parallel uploads are fine because the server handles
+        // concurrency, and this is faster than sequential for multiple files.
+        Promise.all(files.map(uploadFile)).then(function (urls) {
+            window.location.href = urls[urls.length - 1];
+        }).catch(function (error) {
+            overlay.textContent = 'Drop to upload';
+            overlay.classList.remove('active', 'uploading');
+            alert(error.message);
+        });
+    });
+}());
+</script>
+{% endif %}
+
     <!--begin footer -->
     <div class="footer">
 

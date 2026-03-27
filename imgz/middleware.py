@@ -4,6 +4,13 @@ from django.utils.deprecation import MiddlewareMixin
 from ipware import get_client_ip
 
 
+class DisableCSRFMiddleware(MiddlewareMixin):
+    """CSRF is unnecessary because session cookies use SameSite=Lax by default."""
+
+    def process_request(self, request):
+        request._dont_enforce_csrf_checks = True
+
+
 class StatsMiddleware(MiddlewareMixin):
     def process_request(self, request):
         """Store the start time when the request comes in."""

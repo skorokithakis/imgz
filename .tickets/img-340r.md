@@ -1,6 +1,6 @@
 ---
 id: img-340r
-status: open
+status: closed
 deps: []
 links: []
 created: 2026-03-27T20:40:11Z

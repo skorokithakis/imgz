@@ -335,3 +335,76 @@ def test_logout(client):
     response = client.get(reverse("main:logout"))
     assert response.status_code == 302
     assert response["Location"] == reverse("main:index")
+
+
+@pytest.mark.django_db
+def test_image_upload_json_success(client, png_io):
+    """
+    A POST with Accept: application/json should return JSON with the image URL
+    instead of a redirect.
+    """
+    client.force_login(UserFactory(with_active_subscription=True))
+
+    response = client.post(
+        reverse("main:image-upload"),
+        {"title": "My image", "image": png_io},
+        HTTP_ACCEPT="application/json",
+    )
+    assert response.status_code == 200
+    data = response.json()
+    image = Image.objects.get()
+    assert data == {"url": f"http://testserver{image.get_absolute_url()}"}
+
+
+@pytest.mark.django_db
+def test_image_upload_json_upload_error(client, png_io):
+    """
+    An UploadError (e.g. unpaid user) should return a JSON error with status 400.
+    """
+    client.force_login(UserFactory(with_expired_trial=True))
+
+    response = client.post(
+        reverse("main:image-upload"),
+        {"image": png_io},
+        HTTP_ACCEPT="application/json",
+    )
+    assert response.status_code == 400
+    data = response.json()
+    assert "error" in data
+    assert "pay" in data["error"]
+    assert Image.objects.count() == 0
+
+
+@pytest.mark.django_db
+def test_image_upload_json_invalid_form(client):
+    """
+    A POST with Accept: application/json and no file should return a JSON error
+    with status 400 (form validation failure, not UploadError).
+    """
+    client.force_login(UserFactory(with_active_subscription=True))
+
+    response = client.post(
+        reverse("main:image-upload"),
+        {},
+        HTTP_ACCEPT="application/json",
+    )
+    assert response.status_code == 400
+    data = response.json()
+    assert "error" in data
+    assert Image.objects.count() == 0
+
+
+@pytest.mark.django_db
+def test_image_upload_normal_post_still_redirects(client, png_io):
+    """
+    A normal POST without Accept: application/json must still redirect.
+    """
+    client.force_login(UserFactory(with_active_subscription=True))
+
+    response = client.post(
+        reverse("main:image-upload"),
+        {"title": "My image", "image": png_io},
+    )
+    assert response.status_code == 302
+    image = Image.objects.get()
+    assert response["Location"] == image.get_absolute_url()

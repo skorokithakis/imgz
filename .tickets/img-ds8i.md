@@ -1,6 +1,6 @@
 ---
 id: img-ds8i
-status: open
+status: closed
 deps: [img-340r]
 links: []
 created: 2026-03-27T20:40:20Z

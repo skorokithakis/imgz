@@ -1,6 +1,6 @@
 ---
 id: img-7wdj
-status: open
+status: closed
 deps: [img-ds8i]
 links: []
 created: 2026-03-27T20:40:35Z

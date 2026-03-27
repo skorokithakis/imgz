@@ -9,6 +9,7 @@ from django.http import Http404
 from django.http import HttpRequest
 from django.http import HttpResponse
 from django.http import HttpResponseNotFound
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
 from django.shortcuts import render
@@ -230,6 +231,8 @@ def image_upload(request: HttpRequest) -> HttpResponse:
 
         image = forms.FileField()
 
+    wants_json = "application/json" in request.headers.get("Accept", "")
+
     if request.method == "POST":
         form = ImageUploadForm(request.POST, request.FILES)
         if form.is_valid():
@@ -243,10 +246,22 @@ def image_upload(request: HttpRequest) -> HttpResponse:
                     else None,
                 )
             except UploadError as e:
+                if wants_json:
+                    return JsonResponse({"error": str(e)}, status=400)
                 messages.error(request, str(e))
                 return redirect("main:image-upload")
             else:
+                if wants_json:
+                    return JsonResponse(
+                        {"url": request.build_absolute_uri(image.get_absolute_url())}
+                    )
                 return redirect(image)
+        elif wants_json:
+            # Collect all form errors into a single string for the JSON response.
+            errors = "; ".join(
+                f"{field}: {', '.join(errs)}" for field, errs in form.errors.items()
+            )
+            return JsonResponse({"error": errors}, status=400)
     else:
         form = ImageUploadForm()
     return render(request, "upload.html", {"form": form})

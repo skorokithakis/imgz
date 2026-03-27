@@ -61,6 +61,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "imgz.middleware.DisableCSRFMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "imgz.middleware.StatsMiddleware",
     "imgz.middleware.RealIPMiddleware",

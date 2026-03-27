@@ -2019,6 +2019,37 @@ h4 {
     color: white;
 }
 
+/* The overlay is hidden by default and made visible via JS by toggling the
+"active" class. A z-index above the navbar (9999) ensures it covers everything. */
+.drop-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    background-color: rgba(58, 80, 107, 0.85);
+    color: #fff;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Dosis', sans-serif;
+    font-size: 36px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    pointer-events: none;
+}
+
+.drop-overlay.active {
+    display: flex;
+}
+
+.drop-overlay.uploading {
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 0.85; }
+    50% { opacity: 0.6; }
+}
+
 .blog article img {
     width: 100%;
 }
