@@ -1,0 +1,7 @@
+.venv
+.git
+.tickets
+.github
+__pycache__
+*.pyc
+misc/dbdata

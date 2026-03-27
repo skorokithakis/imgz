@@ -1,15 +1,15 @@
 # AGENTS.md - Coding agent instructions for imgz
 
-This is a Django 2.2 image hosting application. The main app is `main/` with a
+This is a Django 4.2 image hosting application. The main app is `main/` with a
 custom User model at `main.models.User`.
 
 ## Build/lint/test commands
 
-Package manager: **Poetry**
+Package manager: **uv**
 
 ```bash
 # Install dependencies
-poetry install
+uv sync
 
 # Run all pre-commit hooks (linting, formatting, type checking, migrations check)
 pre-commit run --all-files

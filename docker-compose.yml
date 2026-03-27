@@ -17,7 +17,8 @@ services:
                do sleep 0.1;
                done;
 
-               ./manage.py migrate;
+               uv sync &&
+               ./manage.py migrate &&
                exec ./manage.py runserver 0.0.0.0:8000"
     image: "imgz"
     build: .

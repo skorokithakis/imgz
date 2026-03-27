@@ -101,6 +101,8 @@ AUTHENTICATION_BACKENDS = (
 
 AUTH_USER_MODEL = "main.User"
 
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
+
 # Adjust this to taste.
 SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
 
@@ -207,8 +209,6 @@ TIME_ZONE = "UTC"
 
 USE_I18N = True
 
-USE_L10N = True
-
 USE_TZ = True
 
 CLOUDFLARE_ZONE_ID = os.getenv("CLOUDFLARE_ZONE_ID")
@@ -250,5 +250,12 @@ LOGGING = {
 
 STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "_static")
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]

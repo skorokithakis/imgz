@@ -17,7 +17,7 @@ repos:
   - id: migrations-check
     language: system
     name: Check for uncreated migrations.
-    entry: bash -c "./manage.py makemigrations --check --dry-run"
+    entry: bash -c "uv run ./manage.py makemigrations --check --dry-run"
     types: ["python"]
     pass_filenames: false
     stages: [pre-commit]

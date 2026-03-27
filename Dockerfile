@@ -1,13 +1,14 @@
-FROM python:3.8-slim-bullseye
+FROM python:3.12-slim-bookworm
 ENV PYTHONUNBUFFERED 1
 RUN apt-get update && apt-get install -y swig libssl-dev dpkg-dev netcat-openbsd imagemagick libopencv-dev
 
-RUN pip install -U --pre pip poetry==1.5.1
-ADD poetry.lock /code/
+COPY --from=ghcr.io/astral-sh/uv:0.7.2 /uv /uvx /bin/
+ENV UV_COMPILE_BYTECODE=1
+ADD uv.lock /code/
 ADD pyproject.toml /code/
-RUN poetry config virtualenvs.create false
 WORKDIR /code
-RUN poetry install --no-dev --no-interaction --no-root
+RUN uv sync --frozen --no-dev --no-editable
+ENV PATH="/code/.venv/bin:$PATH"
 
 ADD misc/dokku/CHECKS /app/
 ADD misc/dokku/* /code/

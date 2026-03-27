@@ -1,5 +1,4 @@
 import datetime
-import imghdr
 import re
 from io import BytesIO
 from typing import Any
@@ -134,7 +133,7 @@ class User(AbstractUser):
 
     def stop_stripe_subscription(self) -> None:
         """Stop a Stripe subscription."""
-        stripe.Subscription.delete(self.stripe_subscription_id)
+        stripe.Subscription.cancel(self.stripe_subscription_id)
         self.stripe_subscription_id = ""
         self.save()
 
@@ -287,12 +286,12 @@ class Image(models.Model):
         if self.processed:
             return
 
-        format = imghdr.what(None, h=self.data)
-        self.format = format if format else ""
-
         with BytesIO(self.data) as inp:
             # We first need to detect whether this is an animated GIF.
             img = PILImage.open(inp)
+            # PIL reports format names in uppercase (e.g. "JPEG"), but the rest of
+            # the codebase expects lowercase to match what imghdr used to return.
+            self.format = img.format.lower() if img.format else ""
             animated = getattr(img, "is_animated", False)
             # Copy the image so we can access it after we close the file.
             img = img.copy()

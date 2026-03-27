@@ -41,7 +41,7 @@ def generate_thumbnail(image: PILImage, format: str) -> bytes:
     Ironically, this is done with `.fit()` because we want the thumbnail to
     be square with a cropped top/bottom.
     """
-    thumb = ImageOps.fit(image, (512, 512), method=PILImage.ANTIALIAS)
+    thumb = ImageOps.fit(image, (512, 512), method=PILImage.LANCZOS)
 
     with BytesIO() as outp:
         thumb.save(outp, format=format)

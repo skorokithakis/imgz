@@ -12,7 +12,7 @@ def detect_faces(model: str, image: Image) -> List[List[int]]:
     assert os.path.exists(model)
     img = ImageOps.grayscale(image)
     # Resize the image so detection is faster.
-    img.thumbnail((512,) * 2, Image.ANTIALIAS)
+    img.thumbnail((512,) * 2, Image.LANCZOS)
     # Calculate how much the image was resized so we can restore
     # the bounding box dimensions later.
     scaling_factor = (1.0 * image.size[0]) / img.size[0]
@@ -40,7 +40,7 @@ def protect_faces(faces: List[List[int]], image: Image, ad_filename: str) -> Ima
     im = image.copy()
     for x, y, w, h in faces:
         thumb = ad.copy()
-        thumb.thumbnail((w, h), Image.ANTIALIAS)
+        thumb.thumbnail((w, h), Image.LANCZOS)
         im.paste(thumb, (x + int((w - thumb.size[0]) / 2), y))
 
     return im
