@@ -103,3 +103,70 @@ def test_strip_exif_removes_exif():
         processed = image.strip_exif(source)
 
     assert ExifTag.ImageDescription not in processed.getexif()
+
+
+def test_strip_exif_applies_orientation():
+    exif = PILImage.Exif()
+    exif[ExifTag.Orientation] = 6
+    with BytesIO() as output:
+        source = PILImage.new("RGB", (2, 3))
+        source.putdata(
+            [
+                (255, 0, 0),
+                (0, 255, 0),
+                (0, 0, 255),
+                (255, 255, 0),
+                (0, 255, 255),
+                (255, 0, 255),
+            ]
+        )
+        source.save(output, format="PNG", exif=exif)
+        image = ImageFactory.build(data=output.getvalue())
+
+    with BytesIO(image.data) as input_file:
+        source = PILImage.open(input_file)
+        processed = image.strip_exif(source)
+
+    assert processed.size == (3, 2)
+    assert [processed.getpixel((x, y)) for y in range(2) for x in range(3)] == [
+        (0, 255, 255),
+        (0, 0, 255),
+        (255, 0, 0),
+        (255, 0, 255),
+        (255, 255, 0),
+        (0, 255, 0),
+    ]
+
+
+def test_strip_exif_preserves_palette_colours():
+    source = PILImage.new("P", (2, 1))
+    source.putpalette([255, 0, 0, 0, 255, 0] + [0] * 762)
+    source.putdata([0, 1])
+    source.info["transparency"] = 1
+    image = ImageFactory.build()
+
+    processed = image.strip_exif(source)
+
+    assert [processed.convert("RGB").getpixel((x, 0)) for x in range(2)] == [
+        source.convert("RGB").getpixel((x, 0)) for x in range(2)
+    ]
+    with BytesIO() as output:
+        processed.save(output, format="PNG")
+        output.seek(0)
+        assert PILImage.open(output).info["transparency"] == 1
+
+
+def test_strip_exif_rotates_and_removes_exif():
+    exif = PILImage.Exif()
+    exif[ExifTag.Orientation] = 6
+    exif[ExifTag.ImageDescription] = "private metadata"
+    with BytesIO() as output:
+        source = PILImage.new("RGB", (1, 2), color="red")
+        source.save(output, format="PNG", exif=exif)
+        image = ImageFactory.build(data=output.getvalue())
+
+    with BytesIO(image.data) as input_file:
+        processed = image.strip_exif(PILImage.open(input_file))
+
+    assert processed.size == (2, 1)
+    assert not processed.getexif()

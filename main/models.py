@@ -17,6 +17,7 @@ from django.db.models.query import QuerySet
 from django.urls import reverse
 from django.utils import timezone
 from PIL import Image as PILImage
+from PIL import ImageOps
 
 from .fancy_ml import detect_faces
 from .fancy_ml import protect_faces
@@ -259,18 +260,24 @@ class Image(models.Model):
         else:
             self.title = title.replace("\n", " ").strip()
 
-    def strip_exif(self, image: PILImage) -> PILImage:
+    def strip_exif(self, image: PILImage.Image) -> PILImage.Image:
         """
-        Strip EXIF data from the image and auto-orient it.
+        Auto-orient the image and strip its EXIF data.
 
         Does not save the Image object.
         """
-        # Pasting into a blank image copies the pixels in C and leaves "info"
-        # empty, which is what drops the EXIF. image.copy() would carry "info"
-        # over, and the putdata(getdata()) recipe materialises every pixel as a
-        # Python object.
-        image_without_exif = PILImage.new(image.mode, image.size)
-        image_without_exif.paste(image)
+        # exif_transpose returns a new image, so the caller's one is untouched,
+        # and it keeps the palette, unlike copying the pixels into a blank
+        # image. It does leave the remaining EXIF both in "info" and on the
+        # image itself, so we have to clear the two of them.
+        image_without_exif = ImageOps.exif_transpose(image)
+        transparency = image.info.get("transparency")
+        image_without_exif.info.clear()
+        image_without_exif.getexif().clear()
+        # Palette transparency is the one thing we put back, because it is not
+        # metadata about the photo, it is needed to render the pixels.
+        if transparency is not None:
+            image_without_exif.info["transparency"] = transparency
         return image_without_exif
 
     def increment_views(self) -> None:
