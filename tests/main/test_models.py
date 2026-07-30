@@ -5,6 +5,8 @@ import pytest
 from django.conf import settings
 from PIL import Image as PILImage
 from PIL.ExifTags import Base as ExifTag
+from PIL.ExifTags import GPS
+from PIL.ExifTags import IFD
 
 from main.models import Image
 from main.models import User
@@ -170,3 +172,40 @@ def test_strip_exif_rotates_and_removes_exif():
 
     assert processed.size == (2, 1)
     assert not processed.getexif()
+
+
+@pytest.mark.django_db
+def test_stored_image_keeps_no_identifying_metadata():
+    artist = "fake-artist-7f3a"
+    software = "fake-camera-software-2b91"
+    date_time = "2001:02:03 04:05:06"
+    date_time_original = "2001:02:03 04:05:07"
+    exif = PILImage.Exif()
+    exif[ExifTag.Artist] = artist
+    exif[ExifTag.Software] = software
+    exif[ExifTag.DateTime] = date_time
+    exif.get_ifd(IFD.Exif)[ExifTag.DateTimeOriginal] = date_time_original
+    exif.get_ifd(IFD.GPSInfo)[GPS.GPSLatitude] = (1, 2, 3)
+    exif.get_ifd(IFD.GPSInfo)[GPS.GPSLongitude] = (4, 5, 6)
+    with BytesIO() as output:
+        PILImage.new("RGB", (8, 8), color="red").save(output, format="JPEG", exif=exif)
+        data = output.getvalue()
+
+    # Without this the test could pass on an upload that never had any EXIF.
+    with BytesIO(data) as input_file:
+        uploaded_exif = PILImage.open(input_file).getexif()
+        assert uploaded_exif[ExifTag.Artist] == artist
+        assert uploaded_exif.get_ifd(IFD.GPSInfo)[GPS.GPSLatitude] == (1, 2, 3)
+
+    image = ImageFactory(data=data)
+
+    markers = [artist, software, date_time, date_time_original]
+    for stored in (image.data, image.thumbnail_512):
+        with BytesIO(stored) as input_file:
+            stored_exif = PILImage.open(input_file).getexif()
+        assert not stored_exif
+        assert not stored_exif.get_ifd(IFD.Exif)
+        assert not stored_exif.get_ifd(IFD.GPSInfo)
+        # Search the bytes too, because metadata can survive in a segment that
+        # getexif() does not read back.
+        assert all(marker.encode() not in stored for marker in markers)
