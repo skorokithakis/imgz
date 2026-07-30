@@ -531,6 +531,37 @@ iframe {
 	background: var(--color-1);
 }
 
+/* The long selector is deliberate. The generic nav link rule above marks its
+   colour and padding !important, so a shorter selector loses to it and the
+   button ends up with dark text on the dark background. */
+.navbar-fixed-top .navbar-nav > li > a.upload-btn,
+.navbar-fixed-top .mobile-upload-btn {
+	color: #fff !important;
+	background: var(--color-1);
+	border: 1px solid var(--color-1);
+	border-radius: 8px 8px;
+	padding: 12px 18px !important;
+	margin-left: 10px;
+	margin-right: 15px;
+	font-family: 'Dosis', sans-serif;
+}
+
+.navbar-fixed-top .navbar-nav > li > a.upload-btn:hover,
+.navbar-fixed-top .mobile-upload-btn:hover {
+	color: var(--color-1) !important;
+	background: #fff;
+}
+
+.navbar-fixed-top .navbar-nav > li > a.upload-btn:focus-visible,
+.navbar-fixed-top .mobile-upload-btn:focus-visible {
+	outline: 3px solid var(--color-2);
+	outline-offset: 2px;
+}
+
+.navbar-fixed-top .mobile-upload-btn {
+	display: none;
+}
+
 /* ========================================================== */
 /* 			                03. FOOTER                        */
 /* ========================================================== */
@@ -1778,7 +1809,9 @@ body.image .navbar-fixed-top > .container > .navbar {
 body.image .navbar-fixed-top .navbar-nav > li > a {
 	padding: 5px 10px !important;
 }
-body.image .navbar-fixed-top .navbar-nav > li > a.discover-btn {
+body.image .navbar-fixed-top .navbar-nav > li > a.discover-btn,
+body.image .navbar-fixed-top .navbar-nav > li > a.upload-btn,
+body.image .navbar-fixed-top .mobile-upload-btn {
 	padding: 5px 10px !important;
 }
 body.image .stupid-separator {
@@ -1824,6 +1857,33 @@ body.image .image-wrapper {
 	    padding: 8px 12px!important;
 	    margin-left: 20px;
 	    font-size: 17px!important;
+	}
+
+}
+
+@media (max-width: 991.98px) {
+
+	.navbar-fixed-top .navbar-nav > li > a.upload-btn {
+		display: none;
+	}
+
+	.navbar-fixed-top .mobile-upload-btn {
+		display: block;
+		padding: 8px 10px!important;
+		margin-left: 4px;
+		margin-right: 4px;
+		font-size: 17px!important;
+	}
+
+}
+
+@media (max-width: 479.98px) {
+
+	.navbar-fixed-top .mobile-upload-btn {
+		padding: 6px 8px!important;
+		margin-left: 2px;
+		margin-right: 2px;
+		font-size: 15px!important;
 	}
 
 }

@@ -228,6 +228,17 @@ def test_authenticated_home(client):
 
 
 @pytest.mark.django_db
+def test_upload_navigation_buttons_are_only_shown_to_authenticated_users(client):
+    response = client.get(reverse("main:index"))
+    assert b"upload-btn" not in response.content
+
+    client.force_login(UserFactory())
+    response = client.get(reverse("main:index"))
+    assert response.content.count(b'class="upload-btn"') == 1
+    assert response.content.count(b'class="upload-btn mobile-upload-btn"') == 1
+
+
+@pytest.mark.django_db
 def test_image_delete_with_wrong_user(client):
     image = ImageFactory()
 

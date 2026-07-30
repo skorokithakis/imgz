@@ -82,6 +82,10 @@
                     <a class="navbar-brand" href="/"><img src="{% static "images/logo.png" %}"/> {{ request.site.name }}</a>
                     <!--end logo -->
 
+                    {% if request.user.is_authenticated %}
+                    <a href="{% url "main:image-upload" %}" class="upload-btn mobile-upload-btn"><i class="fas fa-cloud-upload-alt" aria-hidden="true"></i> Upload</a>
+                    {% endif %}
+
                     <!--begin navbar-toggler -->
                     <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"><i class="fas fa-bars"></i></span>
@@ -100,7 +104,7 @@
                             {% if not user.is_paying %}
                             <li><a href="{% url "main:money" %}">Pricing</a></li>
                             {% endif %}
-                            <li><a href="{% url "main:image-upload" %}">Upload</a></li>
+                            <li><a href="{% url "main:image-upload" %}" class="upload-btn"><i class="fas fa-cloud-upload-alt" aria-hidden="true"></i> Upload</a></li>
                             <li><a href="{% url "main:account" %}">Account</a></li>
                             <li><a href="{% url "main:logout" %}">Log out</a></li>
                             {% else %}
