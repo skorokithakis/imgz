@@ -1,7 +1,10 @@
 import datetime
+from io import BytesIO
 
 import pytest
 from django.conf import settings
+from PIL import Image as PILImage
+from PIL.ExifTags import Base as ExifTag
 
 from main.models import Image
 from main.models import User
@@ -85,3 +88,18 @@ def test_image_manager_expired_images():
     )
     assert user.images.count() == 2
     assert Image.objects.filter(id=image.pk).exists()
+
+
+def test_strip_exif_removes_exif():
+    exif = PILImage.Exif()
+    exif[ExifTag.ImageDescription] = "private metadata"
+    with BytesIO() as output:
+        PILImage.new("RGB", (2, 2), color="red").save(output, format="JPEG", exif=exif)
+        image = ImageFactory.build(data=output.getvalue())
+
+    with BytesIO(image.data) as input_file:
+        source = PILImage.open(input_file)
+        assert source.getexif().get(ExifTag.ImageDescription) == "private metadata"
+        processed = image.strip_exif(source)
+
+    assert ExifTag.ImageDescription not in processed.getexif()

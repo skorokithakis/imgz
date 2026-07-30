@@ -265,8 +265,12 @@ class Image(models.Model):
 
         Does not save the Image object.
         """
+        # Pasting into a blank image copies the pixels in C and leaves "info"
+        # empty, which is what drops the EXIF. image.copy() would carry "info"
+        # over, and the putdata(getdata()) recipe materialises every pixel as a
+        # Python object.
         image_without_exif = PILImage.new(image.mode, image.size)
-        image_without_exif.putdata(image.getdata())
+        image_without_exif.paste(image)
         return image_without_exif
 
     def increment_views(self) -> None:

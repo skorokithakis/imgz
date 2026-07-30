@@ -181,6 +181,8 @@ ENV/
 # End of https://www.gitignore.io/api/django,python,pycharm,ansible
 
 _static/
+# Track the Python version targeted by the Dockerfile.
+!.python-version
 misc/ipfs/
 misc/dbdata/
 .mypy_cache/

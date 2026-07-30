@@ -12,7 +12,7 @@ dependencies = [
     "django-redis",
     "django-tokenauth>=0.5.0",
     "ipython",
-    "pillow>=8.3.1",
+    "pillow>=11",
     "psycopg2-binary>=2.9",
     "python-dotenv",
     "requests>=2.22.0,<3",
