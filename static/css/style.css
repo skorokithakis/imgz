@@ -1997,6 +1997,16 @@ h4 {
     display: none;
 }
 
+.take-photo {
+    display: none;
+}
+
+@media (pointer: coarse) {
+    .take-photo {
+        display: inline-block;
+    }
+}
+
 .drag-drop{
     width: 100%;
     /* height: 100px; */
